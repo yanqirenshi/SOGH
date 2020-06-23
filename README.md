@@ -1,0 +1,2 @@
+# SOGH
+Scrum on Github
