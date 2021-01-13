@@ -1,0 +1,15 @@
+{
+  "name": "sogh",
+  "version": "0.0.1",
+  "description": "Scram on Github",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com.sub:yanqirenshi/SOGH.git"
+  },
+  "author": "yanqirenshi <yanqirenshi@gmail.com> (https://www.npmjs.com/~yanqirenshi)",
+  "license": "MIT"
+}
