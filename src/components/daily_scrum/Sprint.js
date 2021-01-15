@@ -6,11 +6,11 @@ export default function Sprint (props) {
 
     return (
         <div className="box"
-             style={{width: cols.w*size, height: cols.h*size}}>
+             style={{width: cols.w*size, height: cols.h*size, marginLeft:22}}>
           <h1 className="title is-5">Sprint</h1>
 
           <div className="contents">
-            <p>【スプリント】2021-01-13 〜 2021-01-18</p>
+            <p>{props.milestone.title}</p>
           </div>
         </div>
     );

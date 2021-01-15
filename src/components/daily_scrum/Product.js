@@ -1,7 +1,7 @@
 import React from 'react';
 
 export default function Product (props) {
-    const cols = { w: 2, h: 1};
+    const cols = { w: 3, h: 1};
     const size = 111;
 
     return (
@@ -10,7 +10,7 @@ export default function Product (props) {
           <h1 className="title is-5">Product</h1>
 
           <div className="contents">
-            <p>docs.Bookpass</p>
+            <p>{props.repository.owner} / {props.repository.name}</p>
           </div>
         </div>
     );
