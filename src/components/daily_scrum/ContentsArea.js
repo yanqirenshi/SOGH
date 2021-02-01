@@ -1,19 +1,22 @@
-import React, { useState } from 'react';
+import React from 'react';
 
-import Core from './Core.js';
+import ButtonRefresh from '../common/ButtonRefresh.js';
+import ProductBacklogs from '../common/ProductBacklogs.js';
 
-import SprintBacklogs  from './SprintBacklogs.js';
-import ProductBacklogs from './ProductBacklogs.js';
+import ListProductBacklogs from './ListProductBacklogs.js';
 import ProductAndMilestone from './ProductAndMilestone.js';
 import Filter from './Filter.js';
 
 import style from './Style.js';
 
 export default function ContentsArea (props) {
-    const [core] = useState(new Core());
+    const sogh = props.sogh;
 
-    const issues_filterd = core.filteringIssue(props.filter, props.issues);
-    const projects = core.issues2projects(issues_filterd);
+    const projects = props.projects;
+    const projects_filterd = props.projects_filterd;
+
+    const sorted_projects = sogh.sortProjectsByPriority(projects.list);
+    const sorted_projects_filterd = sogh.sortProjectsByPriority(projects_filterd.list);
 
     return (
         <div style={style.contents_area.root}>
@@ -22,20 +25,30 @@ export default function ContentsArea (props) {
                                  milestone={props.milestone} />
           </div>
 
-          <div style={style.contents_area.filter}>
+          <div style={style.contents_area.controller}>
+            <div>
+              <ButtonRefresh callbacks={props.callbacks} />
+            </div>
+
             <Filter issues={props.issues}
                     filter={props.filter}
-                    callbacks={props.callbacks} />
+                    callbacks={props.callbacks}
+                    sogh={sogh} />
           </div>
 
           <div style={style.contents_area.body}>
 
             <div style={{width:333, marginRight:11}}>
-              <ProductBacklogs projects={projects}/>
+              <ListProductBacklogs projects={sorted_projects}
+                                   filter={props.filter}
+                                   callbacks={props.callbacks} />
             </div>
 
             <div style={{flexGrow:1, marginLeft: 11}}>
-              {projects.list.sort((a,b)=>a.title<b.title?-1:1).map(d => <SprintBacklogs key={d.id} project={d} />)}
+              <ProductBacklogs projects={sorted_projects_filterd}
+                               close_projects={props.close_projects}
+                               callbacks={props.callbacks}
+                               sogh={sogh} />
             </div>
           </div>
         </div>

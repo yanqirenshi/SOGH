@@ -4,9 +4,10 @@ export default function FilterStatus (props) {
     const style = {
         ...props.style,
         ...{
-            padding: 11,
-            height: 46,
+            padding: 8,
+            height: 33,
             marginBottom: 0,
+            fontSize: 12,
         },
     };
 

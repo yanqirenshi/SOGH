@@ -17,7 +17,7 @@ const style = {
     },
 };
 
-const labelStyle = (d) => {
+function labelStyle (d) {
     return {
         background: '#' + d.color,
         whiteSpace: 'nowrap',
@@ -30,7 +30,7 @@ const labelStyle = (d) => {
     };
 }
 
-const aStyle = (hexcolor) => {
+function aStyle (hexcolor) {
     var r = parseInt( hexcolor.substr( 1, 2 ), 16 ) ;
     var g = parseInt( hexcolor.substr( 3, 2 ), 16 ) ;
     var b = parseInt( hexcolor.substr( 5, 2 ), 16 ) ;
@@ -40,6 +40,18 @@ const aStyle = (hexcolor) => {
     return { color: color };
 };
 
+function diff (plan, result) {
+    return plan - result;
+}
+
+function prjColumn (issue) {
+    return issue.projectCards.nodes.map(d=>{
+        return <p key={d.column.id}>
+                 {d.column.name}
+               </p>;
+    });
+}
+
 function makeTrs (issue) {
 
     return <tr key={issue.id}>
@@ -47,6 +59,9 @@ function makeTrs (issue) {
                <a href={issue.url}>
                  {issue.number}
                </a>
+             </td>
+             <td>
+               {prjColumn(issue)}
              </td>
              <td>{issue.title}</td>
              <td>{issue.labels.nodes.map(l => {
@@ -69,13 +84,16 @@ function makeTrs (issue) {
              </td>
              <td style={style.right}>{issue.point.plan}</td>
              <td style={style.right}>{issue.point.result}</td>
+             <td style={style.right}>
+               {diff(issue.point.plan, issue.point.result)}
+             </td>
              <td style={style.nowrap}>{dt(issue.createdAt)}</td>
              <td style={style.nowrap}>{dt(issue.updatedAt)}</td>
              <td style={style.nowrap}>{dt(issue.closedAt)}</td>
            </tr>;
 }
 
-export default function SprintBacklogsTable (props) {
+export default function TableSprintBacklogs (props) {
     const project = props.project;
 
     return (
@@ -84,10 +102,11 @@ export default function SprintBacklogsTable (props) {
           <thead>
             <tr>
               <th rowSpan="2">#</th>
+              <th rowSpan="2">Col</th>
               <th rowSpan="2">Title</th>
               <th rowSpan="2">Labels</th>
               <th rowSpan="2">Assignees</th>
-              <th colSpan="2">Point</th>
+              <th colSpan="3">Point</th>
               <th>Create</th>
               <th>Update</th>
               <th>Close</th>
@@ -95,6 +114,7 @@ export default function SprintBacklogsTable (props) {
             <tr>
               <th>Plan</th>
               <th>Result</th>
+              <th>Diff</th>
               <th>At</th>
               <th>At</th>
               <th>At</th>

@@ -41,6 +41,14 @@ const query = `{
               }
             }
           }
+          milestone {
+            id
+            url
+            title
+            state
+            number
+            dueOn
+          }
           assignees(first: 10) {
             nodes {
               email
