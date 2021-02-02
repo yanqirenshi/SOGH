@@ -1,0 +1,22 @@
+*.fasl
+*.dx32fsl
+*.dx64fsl
+*.lx32fsl
+*.lx64fsl
+*.x86f
+.#*
+
+
+#####
+##### emacs
+#####
+*~
+\#*\#
+
+
+#####
+##### node
+#####
+example/node_modules
+node_modules
+dist/
