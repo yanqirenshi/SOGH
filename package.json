@@ -1,6 +1,6 @@
 {
     "name": "@yanqirenshi/sogh",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "description": "Scram on Github",
     "main": "src/index.js",
     "scripts": {
@@ -22,7 +22,8 @@
         "@fortawesome/react-fontawesome": "^0.1.14",
         "moment": "^2.29.1",
         "react-masonry-component": "^6.2.1",
-        "react-measure": "^2.5.2"
+        "react-measure": "^2.5.2",
+        "react": "^17.0.1"
     },
     "devDependencies": {
         "@babel/cli": "^7.12.10",
@@ -30,7 +31,6 @@
         "@babel/preset-env": "^7.12.11",
         "@babel/preset-react": "^7.12.10",
         "babel-loader": "^8.2.2",
-        "react": "^17.0.1",
         "react-dom": "^17.0.1"
     }
 }
