@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 
 import Sogh from '../js/Sogh.js';
+import Filter from '../js/Filter.js';
 
 import ProductBacklogs from './common/ProductBacklogs.js';
 
@@ -13,15 +14,12 @@ import style from  './sprint_planning/Styles.js';
 
 export default function SprintPlanning (props) {
     const [sogh] = useState(new Sogh(props.token));
+    const [filter] = useState(new Filter());
     const [milestones, setMilestones] = useState([]);
     const [milestone, setMilestone] = useState(undefined);
     const [issues, setIssues] = useState([]);
     const [projects, setProjects] = useState({ht:{},list:[]});
     const [closeProjects, setCloseProjects] = useState({});
-    const [filter] = useState({
-        assignee: [],
-        status: { Open: true, Close: true },
-    });
 
     const changeMilestone = (m) => {
         setIssues([]);

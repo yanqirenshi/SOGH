@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 
 import Sogh from '../js/Sogh.js';
+import Filter from '../js/Filter.js';
 import ContentsArea  from './daily_scrum/ContentsArea.js';
 import SprintListArea from './daily_scrum/SprintListArea.js';
 
@@ -12,57 +13,25 @@ function targetMilestone (milestones) {
     const now = moment().add('d', '7');
 
     let trg = null;
-    for (const m of sorted) {
+    for (const m of sorted)
         if (now.isSameOrBefore(moment(m.dueOn)))
             return trg;
         else
             trg = m;
-    }
 
     return null;
 }
 
-function xxx (key, id, filter) {
-    const new_filter = {...filter};
-    const new_element = [...new_filter[key]];
-
-    const pos = new_element.indexOf(id);
-
-    if (pos===-1)
-        new_element.push(id);
-    else
-        new_element.splice(pos, 1);
-
-    new_filter[key] = new_element;
-
-    return new_filter;
-}
-
-function yyy (key, id, filter) {
-    const new_filter = {...filter};
-    const new_element = {...new_filter[key]};
-
-    new_element[id] = !new_element[id];
-
-    new_filter[key] = new_element;
-
-    return new_filter;
-}
-
 export default function DailyScrum (props) {
     const [sogh] = useState(new Sogh(props.token));
+    const [filter] = useState(new Filter());
+    const [changed, setChanged] = useState(null);
     const [milestones, setMilestones] = useState([]);
     const [milestone, setMilestone] = useState(null);
     const [issues, setIssues] = useState([]);
     const [issues_filterd, setIssuesFilterd] = useState([]);
     const [projects, setProjects] = useState({ht:[],list:[]});
     const [projects_filterd, setProjectsFilterd] = useState({ht:[],list:[]});
-    const [filter, setFilter] = useState({
-        assignee: [],
-        project: [],
-        status: { Open: true, Close: true },
-        others: { Yesterday: false, Waiting: false, EmptyPlan: false },
-    });
     const [closeProjects, setCloseProjects] = useState({});
 
     const refresh = () => {
@@ -76,37 +45,34 @@ export default function DailyScrum (props) {
 
     useEffect(refresh, [sogh]);
     useEffect(() => setMilestone(targetMilestone (milestones)), [milestones]);
+
     useEffect(() => {
-        sogh.getIssuesByMilestone(milestone, (ret_issues) => {
-            setIssues(issues.concat(ret_issues));
-        });
+        sogh.getIssuesByMilestone(milestone, (ret_issues) => setIssues(ret_issues));
     }, [milestone]);
+
     useEffect(() => {
         setProjects(sogh.issues2projects(issues));
         setIssuesFilterd(sogh.filteringIssue(filter, issues));
-    }, [issues, sogh, filter]);
+    }, [issues, sogh, changed]);
+
     useEffect(() => {
         setProjectsFilterd(sogh.issues2projects(issues_filterd));
     }, [sogh, issues_filterd]);
 
+    const changeFilter = (type, id) => {
+        filter.change(type, id);
+        setChanged(new Date());
+    };
+
+    const setFilter = (type, v) => {
+        filter.set(type, v);
+        setChanged(new Date());
+    };
+
     const callbacks = {
-        refresh: () => {
-            refresh();
-        },
+        refresh: () => refresh(),
         filter: {
-            click: (type, id) => {
-                if (type==='assignee')
-                    setFilter(xxx('assignee', id, filter));
-
-                if (type==='project')
-                    setFilter(xxx('project', id, filter));
-
-                if (type==='status')
-                    setFilter(yyy('status', id, filter));
-
-                if (type==='others')
-                    setFilter(yyy('others', id, filter));
-            }
+            click: (type, id) => changeFilter(type, id),
         },
         clickOpenAllProductBacklogs: () => setCloseProjects({}),
         clickCloseAllProductBacklogs: () => setCloseProjects(projects.list.reduce((ht,d)=>{
@@ -129,16 +95,8 @@ export default function DailyScrum (props) {
             setCloseProjects(ht);
         },
         list_pb: {
-            cleaAll: () => {
-                const new_filter = {...filter};
-                new_filter.project = projects.list.map(d=>d.id);
-                setFilter(new_filter);
-            },
-            checkAll: () => {
-                const new_filter = {...filter};
-                new_filter.project = [];
-                setFilter(new_filter);
-            },
+            cleaAll:  () => setFilter('projects', projects.list.map(d=>d.id)),
+            checkAll: () => setFilter('projects', []),
         }
     };
 

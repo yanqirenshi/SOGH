@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 
 function isChecked (project, filter) {
-    return filter.project.find(id=>id===project.id) ? false : true;
+    return filter.projects().find(id=>id===project.id) ? false : true;
 };
 
 export default function ListProductBacklogs (props) {

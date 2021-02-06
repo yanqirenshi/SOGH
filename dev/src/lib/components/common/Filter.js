@@ -24,16 +24,16 @@ export default function Filter (props) {
               return <FilterDevelopers key={d.id}
                                        style={{marginLeft: i===0 ? 0 : 22}}
                                        assignee={d}
-                                       filter={props.filter.assignee}
+                                       filter={props.filter.assignees()}
                                        callbacks={props.callbacks} />;
           })}
 
           {filter.statuses.list.map((d)=>{
               return <FilterStatus key={d.title}
-                                          style={{marginLeft: 22}}
-                                          status={d}
-                                          filter={props.filter.status}
-                                          callbacks={props.callbacks} />;
+                                   style={{marginLeft: 22}}
+                                   status={d}
+                                   filter={props.filter.assignees()}
+                                   callbacks={props.callbacks} />;
           })}
         </div>
     );

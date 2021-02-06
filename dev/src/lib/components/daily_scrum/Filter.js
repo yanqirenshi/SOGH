@@ -27,24 +27,24 @@ export default function Filter (props) {
               return <FilterDevelopers key={d.id}
                                        style={{marginLeft: i===0 ? 0 : 22}}
                                        assignee={d}
-                                       filter={props.filter.assignee}
+                                       filter={props.filter.assignees()}
                                        callbacks={props.callbacks} />;
           })}
 
           {filter.statuses.list.map((d)=>{
               return <FilterStatus key={d.title}
-                                          style={{marginLeft: 22}}
-                                          status={d}
-                                          filter={props.filter.status}
-                                          callbacks={props.callbacks} />;
+                                   style={{marginLeft: 22}}
+                                   status={d}
+                                   filter={props.filter.statuses()}
+                                   callbacks={props.callbacks} />;
           })}
 
           {others.list.map((d)=>{
               return <FilterOthers key={d.key}
-                      style={{marginLeft: 22}}
-                      other={d}
-                      filter={props.filter.others}
-                      callbacks={props.callbacks} />;
+                                   style={{marginLeft: 22}}
+                                   other={d}
+                                   filter={props.filter.others()}
+                                   callbacks={props.callbacks} />;
           })}
         </div>
     );
