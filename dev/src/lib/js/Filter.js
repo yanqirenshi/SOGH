@@ -10,7 +10,8 @@ export default class Filter {
             others: {
                 Yesterday: false,
                 Waiting: false,
-                EmptyPlan: false
+                EmptyPlan: false,
+                DiffMinus: false,
             },
         };
     }

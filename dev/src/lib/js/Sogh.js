@@ -537,6 +537,15 @@ export default class Sogh {
 
         return false;
     }
+    checkDiffMinus (filter, issue) {
+        if (!filter.others().DiffMinus)
+            return true;
+
+        if ((issue.point.plan - issue.point.result) < 0)
+            return true;
+
+        return false;
+    }
     filteringIssue (filter, issues) {
         return issues.reduce((list, issue) => {
             if (this.checkProjects(filter, issue) &&
@@ -544,7 +553,8 @@ export default class Sogh {
                 this.checkStatus(filter, issue) &&
                 this.checkYesterday(filter, issue) &&
                 this.checkEmptyPlan(filter, issue) &&
-                this.checkWaiting(filter, issue))
+                this.checkWaiting(filter, issue) &&
+                this.checkDiffMinus(filter, issue))
                 list.push(issue);
 
             return list;

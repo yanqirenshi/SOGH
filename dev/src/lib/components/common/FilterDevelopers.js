@@ -5,7 +5,7 @@ export default function FilterDevelopers (props) {
         ...props.style,
         ...{
             padding: 8,
-            height: 33,
+            height: 30,
             marginBottom: 0,
             fontSize: 12,
         },
@@ -28,7 +28,7 @@ export default function FilterDevelopers (props) {
 
           <div className="contents"
                data_id={props.assignee.id}>
-            <p data_id={props.assignee.id}>
+            <p data_id={props.assignee.id} style={{marginTop: -2}}>
               {(props.assignee.name || props.assignee.login).trim()}
             </p>
           </div>

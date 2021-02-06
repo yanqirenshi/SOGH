@@ -19,9 +19,10 @@ export default function Filter (props) {
 
     const others = {
         list: [
-            { title: 'Yesterday',   key: 'Yesterday' },
-            { title: 'XX待ち',      key: 'Waiting' },
-            { title: 'Plan 未入力', key: 'EmptyPlan' },
+            { title: 'Yesterday',     key: 'Yesterday' },
+            { title: 'XX待ち',        key: 'Waiting' },
+            { title: 'Plan 未入力',   key: 'EmptyPlan' },
+            { title: 'Diff -', key: 'DiffMinus' },
         ],
     };
 
@@ -31,7 +32,7 @@ export default function Filter (props) {
 
           {filter.assignees.list.map((d,i)=>{
               return <FilterDevelopers key={d.id}
-                                       style={{marginLeft: i===0 ? 0 : 22}}
+                                       style={{marginLeft: i===0 ? 0 : 11}}
                                        assignee={d}
                                        filter={props.filter.assignees()}
                                        callbacks={props.callbacks} />;
@@ -39,15 +40,16 @@ export default function Filter (props) {
 
           {filter.statuses.list.map((d)=>{
               return <FilterStatus key={d.title}
-                                   style={{marginLeft: 22}}
+                                   style={{marginLeft: 11}}
                                    status={d}
                                    filter={props.filter.statuses()}
                                    callbacks={props.callbacks} />;
           })}
 
-          {others.list.map((d)=>{
+          {props.issues.length>0 &&
+           others.list.map((d)=>{
               return <FilterOthers key={d.key}
-                                   style={{marginLeft: 22}}
+                                   style={{marginLeft: 11}}
                                    other={d}
                                    filter={props.filter.others()}
                                    callbacks={props.callbacks} />;

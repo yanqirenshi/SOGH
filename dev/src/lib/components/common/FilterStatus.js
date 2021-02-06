@@ -5,7 +5,7 @@ export default function FilterStatus (props) {
         ...props.style,
         ...{
             padding: 8,
-            height: 33,
+            height: 30,
             marginBottom: 0,
             fontSize: 12,
         },
@@ -29,7 +29,7 @@ export default function FilterStatus (props) {
 
           <div className="contents"
                data_id={title}>
-            <p data_id={title}>
+            <p data_id={title} style={{marginTop: -2}}>
               {title}
             </p>
           </div>

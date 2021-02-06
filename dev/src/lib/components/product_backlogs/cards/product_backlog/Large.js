@@ -26,7 +26,12 @@ export default function Large (props) {
           </div>
 
           <div className="panel-block">
-            <BarProgress project={project}/>
+            {project.progress.enabled &&
+             <BarProgress project={project}/>}
+            {!project.progress.enabled &&
+             <p>
+               Disable track progress or Empty
+             </p>}
           </div>
         </>
     );
