@@ -122,7 +122,7 @@ export default function SprintPlanning (props) {
                           callbacks={callbacks} sogh={sogh}/>
             </div>
 
-            <div style={{flexGrow:1,overflow:'auto', paddingRight: 22, paddingBottom: 222}}>
+            <div style={{flexGrow:1,overflow:'auto', paddingBottom: 222}}>
               <ProductBacklogs projects={sorted_projects}
                                close_projects={closeProjects}
                                sogh={sogh}

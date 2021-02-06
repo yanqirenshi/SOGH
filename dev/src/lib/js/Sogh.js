@@ -369,10 +369,16 @@ export default class Sogh {
     /////
     ///// summary issue
     /////
-    summaryIssue (out, issue) {
+    summaryIssue (out, issue, project) {
+        /// gross
         out.gross.points.plan   += issue.point.plan || 0;
         out.gross.points.result += issue.point.result || 0;
 
+        // priority
+        out.gross.priority[project.priority].plan += issue.point.plan;
+        out.gross.priority[project.priority].result += issue.point.result;
+
+        // assignee
         const sumAssignee = (assignee, issue, count, out) => {
             if (!out[assignee.id])
                 out[assignee.id] = {
@@ -408,22 +414,29 @@ export default class Sogh {
 
         return out;
     }
-    summaryIssues (out, issues) {
-        return issues.reduce(this.summaryIssue, out);
+    summaryIssues (out, project) {
+        const issues = project.issues;
+
+        return issues.reduce((out, issue)=>{
+            this.summaryIssue(out, issue, project);
+            return out;
+        }, out);
     }
     summaryIssuesByProjects (projects) {
         const makeOut = () => {
+            const x = { plan: 0, result: 0 };
             return {
                 gross: {
-                    points: { plan: 0, result: 0 },
+                    points: {...x},
                     issues: { open: 0, close:  0 },
+                    priority: { c: {...x}, h: {...x}, n: {...x}, l: {...x} },
                 },
                 assignees: {},
             };
         };
 
         return projects.reduce(
-            (out, project)=> this.summaryIssues(out, project.issues),
+            (out, project)=> this.summaryIssues(out, project),
             makeOut());
     }
     /////
