@@ -5,7 +5,7 @@ import { faFilter } from "@fortawesome/free-solid-svg-icons";
 
 const style = {
     fontSize: 18,
-    paddingTop: 4,
+    paddingTop: 2,
     marginRight: 22,
     marginLeft: 7,
     color: '#888'

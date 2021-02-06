@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 
 import Sogh from '../js/Sogh.js';
+import Filter from '../js/Filter.js';
 
 import ProductBacklogs from './common/ProductBacklogs.js';
 
@@ -13,15 +14,15 @@ import style from  './sprint_planning/Styles.js';
 
 export default function SprintPlanning (props) {
     const [sogh] = useState(new Sogh(props.token));
+    const [filter] = useState(new Filter());
+    const [changed, setChanged] = useState(null);
+
     const [milestones, setMilestones] = useState([]);
     const [milestone, setMilestone] = useState(undefined);
     const [issues, setIssues] = useState([]);
+    const [issues_filterd, setIssuesFilterd] = useState([]);
     const [projects, setProjects] = useState({ht:{},list:[]});
     const [closeProjects, setCloseProjects] = useState({});
-    const [filter] = useState({
-        assignee: [],
-        status: { Open: true, Close: true },
-    });
 
     const changeMilestone = (m) => {
         setIssues([]);
@@ -55,13 +56,23 @@ export default function SprintPlanning (props) {
         if (trg)
             setMilestone(trg);
     }, [milestones]);
+
     useEffect(() => fetchIssues(milestone), [milestone]);
-    useEffect(() => setProjects(sogh.issues2projects(issues)), [issues]);
+
+    useEffect(() => {
+        const filterd_issue = sogh.filteringIssue(filter, issues);
+        setProjects(sogh.issues2projects(filterd_issue));
+    }, [issues, sogh, changed]);
+
+    const changeFilter = (type, id) => {
+        filter.change(type, id);
+        setChanged(new Date());
+    };
 
     const callbacks = {
         refresh: () => fetchIssues(milestone),
         filter: {
-            click: (type, id) => {}
+            click: (type, id) => changeFilter(type, id),
         },
         clickMilestone: (m) => changeMilestone(m),
         clearMilestone: () => changeMilestone(null),
@@ -111,7 +122,7 @@ export default function SprintPlanning (props) {
                           callbacks={callbacks} sogh={sogh}/>
             </div>
 
-            <div style={{flexGrow:1,overflow:'auto', paddingRight: 22, paddingBottom: 222}}>
+            <div style={{flexGrow:1,overflow:'auto', paddingBottom: 222}}>
               <ProductBacklogs projects={sorted_projects}
                                close_projects={closeProjects}
                                sogh={sogh}

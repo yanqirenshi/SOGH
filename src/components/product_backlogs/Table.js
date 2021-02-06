@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import moment from 'moment';
 
 function dt (v) { return !v ? '' : moment(v).format('YYYY-MM-DD'); }
@@ -43,8 +43,22 @@ function priority (d) {
 }
 
 export default function Table (props) {
+    const [selected, setSelected] = useState(null);
+
     const sogh = props.sogh;
     const projects = props.projects;
+
+    const clickRow = (e) => {
+        const getTr = (elem) => {
+            if (elem.tagName==='TR')
+                return elem;
+
+            return getTr(elem.parentNode);
+        };
+        const project_id = getTr(e.target).getAttribute('project_id');
+
+        setSelected(selected===project_id ? null : project_id);
+    };
 
     return (
         <div style={style.root}>
@@ -76,7 +90,10 @@ export default function Table (props) {
               {projects.map(d => {
                   const s = sogh.headerColor(d);
 
-                  return <tr key={d.id}>
+                  return <tr key={d.id}
+                             className={selected===d.id ? 'is-selected ' : null}
+                             project_id={d.id}
+                             onClick={clickRow}>
                            <td style={{...style.code, ...s}}>
                              {priority(d)}
                            </td>
@@ -102,25 +119,35 @@ export default function Table (props) {
                              {d.progress.todoCount}
                            </td>
 
-                           <td style={style.num}>
-                             {Math.floor(d.progress.todoPercentage)}%
-                           </td>
+                           {!d.progress.enabled &&
+                            <td colSpan="6" style={{fontSize:12}}>
+                              Disable track progress or Empty
+                            </td>}
 
-                           <td style={style.num}>
-                             {d.progress.inProgressCount}
-                           </td>
+                           {d.progress.enabled &&
+                            <td style={style.num}>
+                              {Math.floor(d.progress.todoPercentage)}%
+                            </td>}
 
-                           <td style={style.num}>
-                             {Math.floor(d.progress.inProgressPercentage)}%
-                           </td>
+                           {d.progress.enabled &&
+                            <td style={style.num}>
+                              {d.progress.inProgressCount}
+                            </td>}
 
-                           <td style={style.num}>
-                             {d.progress.doneCount}
-                           </td>
+                           {d.progress.enabled &&
+                            <td style={style.num}>
+                              {Math.floor(d.progress.inProgressPercentage)}%
+                            </td>}
 
-                           <td style={style.num}>
-                             {Math.floor(d.progress.donePercentage)}%
-                           </td>
+                           {d.progress.enabled &&
+                            <td style={style.num}>
+                              {d.progress.doneCount}
+                            </td>}
+
+                           {d.progress.enabled &&
+                            <td style={style.num}>
+                              {Math.floor(d.progress.donePercentage)}%
+                            </td>}
 
                            {/* <td style={style.dt}>{dt(d.createdAt)}</td> */}
                            {/* <td style={style.dt}>{dt(d.updatedAt)}</td> */}

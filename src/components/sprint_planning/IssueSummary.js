@@ -9,18 +9,18 @@ export default function IssueSummary (props) {
     return (
         <div style={{...{display:'flex'}, ...props.style}}>
           <p>
-            {props.label}:
+            <strong>{props.label}:</strong>
           </p>
 
           <p style={{marginLeft:8}}>
-            <strong>Points:</strong>
+            Points:
             <span> {source.points.plan}</span>,
             <span> {source.points.result}</span>,
             <span> {point_p}</span>%
           </p>
 
           <p style={{marginLeft:8}}>
-            <strong>Issues:</strong>
+            Issues:
             <span> {source.issues.open}</span>,
             <span> {source.issues.close}</span>,
             <span> {Math.floor(issue_p)}</span>%

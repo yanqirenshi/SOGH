@@ -17,7 +17,12 @@ export default function Medium (props) {
           </div>
 
           <div className="panel-block">
-            <BarProgress project={project} />
+            {project.progress.enabled &&
+             <BarProgress project={project} />}
+            {!project.progress.enabled &&
+             <p style={{fontSize:12}}>
+               Disable track progress or Empty
+             </p>}
           </div>
         </>
     );

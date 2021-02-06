@@ -1,62 +1,7 @@
 import moment from 'moment';
 import * as query from './GraphQL.js';
-
-class GithubApiV3 {
-    makeHeader (api) {
-        return {
-            'Authorization': `bearer ${api.__auth.token}`,
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-        };
-    }
-    postData (api, query) {
-        return {
-            method: 'POST',
-            headers: this.makeHeader(api),
-            body: JSON.stringify({query: query})
-        };
-    }
-    fetch (api, query, cb) {
-        const endpoint = 'https://api.github.com/graphql';
-
-        fetch(endpoint, this.postData(api, query))
-            .then(response => response.json())
-            .then(cb);
-    }
-}
-
-class GithubApiV4 {
-    constructor (token) {
-        this._token = token;
-    }
-    token (api_or_token) {
-        if ((typeof api_or_token)==="string")
-            return api_or_token;
-        else
-            return api_or_token.__auth.token;
-    }
-    makeHeader (api_or_token) {
-        return {
-            'Authorization': `bearer ${this.token(api_or_token)}`,
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-        };
-    }
-    postData (api_or_token, query) {
-        return {
-            method: 'POST',
-            headers: this.makeHeader(api_or_token),
-            body: JSON.stringify({query: query})
-        };
-    }
-    fetch (query, cb) {
-        const endpoint = 'https://api.github.com/graphql';
-
-        fetch(endpoint, this.postData(this._token, query))
-            .then(response => response.json())
-            .then(cb);
-    }
-}
+import GithubApiV3 from './GithubApiV3.js';
+import GithubApiV4 from './GithubApiV4.js';
 
 export default class Sogh {
     constructor (token) {
@@ -424,10 +369,16 @@ export default class Sogh {
     /////
     ///// summary issue
     /////
-    summaryIssue (out, issue) {
+    summaryIssue (out, issue, project) {
+        /// gross
         out.gross.points.plan   += issue.point.plan || 0;
         out.gross.points.result += issue.point.result || 0;
 
+        // priority
+        out.gross.priority[project.priority].plan += issue.point.plan;
+        out.gross.priority[project.priority].result += issue.point.result;
+
+        // assignee
         const sumAssignee = (assignee, issue, count, out) => {
             if (!out[assignee.id])
                 out[assignee.id] = {
@@ -463,22 +414,29 @@ export default class Sogh {
 
         return out;
     }
-    summaryIssues (out, issues) {
-        return issues.reduce(this.summaryIssue, out);
+    summaryIssues (out, project) {
+        const issues = project.issues;
+
+        return issues.reduce((out, issue)=>{
+            this.summaryIssue(out, issue, project);
+            return out;
+        }, out);
     }
     summaryIssuesByProjects (projects) {
         const makeOut = () => {
+            const x = { plan: 0, result: 0 };
             return {
                 gross: {
-                    points: { plan: 0, result: 0 },
+                    points: {...x},
                     issues: { open: 0, close:  0 },
+                    priority: { c: {...x}, h: {...x}, n: {...x}, l: {...x} },
                 },
                 assignees: {},
             };
         };
 
         return projects.reduce(
-            (out, project)=> this.summaryIssues(out, project.issues),
+            (out, project)=> this.summaryIssues(out, project),
             makeOut());
     }
     /////
@@ -523,7 +481,7 @@ export default class Sogh {
         }, []);
 
         const id_list_filterd = id_list.reduce((list, id)=> {
-            if (filter.project.includes(id))
+            if (filter.projects().includes(id))
                 list.push(id);
 
             return list;
@@ -535,7 +493,7 @@ export default class Sogh {
         const id_list = issue.assignees.nodes.map(d=>d.id);
 
         const id_list_filterd = id_list.reduce((list, id)=> {
-            if (filter.assignee.indexOf(id)===-1)
+            if (filter.assignees().indexOf(id)===-1)
                 list.push(id);
 
             return list;
@@ -544,10 +502,10 @@ export default class Sogh {
         return id_list_filterd.length > 0;
     }
     checkStatus (filter, issue) {
-        if (!filter.status.Close && issue.closedAt)
+        if (!filter.statuses().Close && issue.closedAt)
             return false;
 
-        if (!filter.status.Open && !issue.closedAt)
+        if (!filter.statuses().Open && !issue.closedAt)
             return false;
 
         return true;
@@ -555,14 +513,14 @@ export default class Sogh {
     checkYesterday (filter, issue) {
         const yesterday = moment().startOf('day').add('d',-1);
 
-        if (filter.others.Yesterday)
+        if (filter.others().Yesterday)
             if (moment(issue.updatedAt).isBefore(yesterday))
                 return false;
 
         return true;
     }
     checkWaiting (filter, issue) {
-        if (!filter.others.Waiting)
+        if (!filter.others().Waiting)
             return true;
 
         if (issue.labels.nodes.find(d=>d.name.includes('待ち')))
@@ -571,10 +529,19 @@ export default class Sogh {
         return false;
     }
     checkEmptyPlan (filter, issue) {
-        if (!filter.others.EmptyPlan)
+        if (!filter.others().EmptyPlan)
             return true;
 
         if (issue.point.plan===null)
+            return true;
+
+        return false;
+    }
+    checkDiffMinus (filter, issue) {
+        if (!filter.others().DiffMinus)
+            return true;
+
+        if ((issue.point.plan - issue.point.result) < 0)
             return true;
 
         return false;
@@ -586,7 +553,8 @@ export default class Sogh {
                 this.checkStatus(filter, issue) &&
                 this.checkYesterday(filter, issue) &&
                 this.checkEmptyPlan(filter, issue) &&
-                this.checkWaiting(filter, issue))
+                this.checkWaiting(filter, issue) &&
+                this.checkDiffMinus(filter, issue))
                 list.push(issue);
 
             return list;
