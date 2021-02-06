@@ -3,6 +3,7 @@ import React from 'react';
 import IconFilter from './IconFilter.js';
 import FilterDevelopers from './FilterDevelopers.js';
 import FilterStatus from './FilterStatus.js';
+import FilterOthers from './FilterOthers.js';
 
 const style = {
     display:'flex',
@@ -15,6 +16,14 @@ export default function Filter (props) {
     const sogh = props.sogh;
 
     const filter = sogh.issues2filter(props.issues);
+
+    const others = {
+        list: [
+            { title: 'Yesterday',   key: 'Yesterday' },
+            { title: 'XX待ち',      key: 'Waiting' },
+            { title: 'Plan 未入力', key: 'EmptyPlan' },
+        ],
+    };
 
     return (
         <div style={style}>
@@ -32,7 +41,15 @@ export default function Filter (props) {
               return <FilterStatus key={d.title}
                                    style={{marginLeft: 22}}
                                    status={d}
-                                   filter={props.filter.assignees()}
+                                   filter={props.filter.statuses()}
+                                   callbacks={props.callbacks} />;
+          })}
+
+          {others.list.map((d)=>{
+              return <FilterOthers key={d.key}
+                                   style={{marginLeft: 22}}
+                                   other={d}
+                                   filter={props.filter.others()}
                                    callbacks={props.callbacks} />;
           })}
         </div>

@@ -14,13 +14,15 @@ export default function ControllerProductBacklogs (props) {
 
           <div style={{marginLeft:11}}>
             <button className="button is-small"
-                    onClick={props.callbacks.clickOpenAllProductBacklogs}>
-              Open All Product Backlogs
+                    onClick={props.callbacks.clickOpenAllProductBacklogs}
+                    title="Open All Product Backlogs">
+              Open All
             </button>
 
             <button className="button is-small"
-                    onClick={props.callbacks.clickCloseAllProductBacklogs}>
-              Close All Product Backlogs
+                    onClick={props.callbacks.clickCloseAllProductBacklogs}
+                    title="Close All Product Backlogs">
+              Close All
             </button>
           </div>
         </div>

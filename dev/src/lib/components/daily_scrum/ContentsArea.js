@@ -5,7 +5,7 @@ import ProductBacklogs from '../common/ProductBacklogs.js';
 
 import ListProductBacklogs from './ListProductBacklogs.js';
 import ProductAndMilestone from './ProductAndMilestone.js';
-import Filter from './Filter.js';
+import Filter from '../common/Filter.js';
 
 import style from './Style.js';
 

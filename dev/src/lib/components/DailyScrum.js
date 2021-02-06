@@ -26,6 +26,7 @@ export default function DailyScrum (props) {
     const [sogh] = useState(new Sogh(props.token));
     const [filter] = useState(new Filter());
     const [changed, setChanged] = useState(null);
+
     const [milestones, setMilestones] = useState([]);
     const [milestone, setMilestone] = useState(null);
     const [issues, setIssues] = useState([]);
