@@ -36,7 +36,7 @@ function fetchProjects (repository, sogh, setProjects) {
 export default function ProductBacklogs (props) {
     const [sogh] = useState(new Sogh(props.token));
     const [projects, setProjects] = useState([]);
-    const [view, setView] = useState('cards');
+    const [view, setView] = useState('table');
     const [filter, setFilter] = useState({
         keyword: null,
         priorities: {},
