@@ -1,10 +1,11 @@
 import React from 'react';
-import moment from 'moment';
+// import moment from 'moment';
 
 export default function ChartBardown (props) {
     // if (props.milestone) {
-    //     console.log(moment(props.milestone.dueOn).format('YYYY-MM-DD HH:mm:ss'));
-    //     console.log(props.milestone.description);
+    //     const to = moment(props.milestone.dueOn);
+    //     const from = moment(props.milestone.dueOn).add('d', -6);
+    //     console.log([from.format('YYYY-MM-DD HH:mm:ss'), to.format('YYYY-MM-DD HH:mm:ss')]);
     // }
     return <div></div>;
 }
