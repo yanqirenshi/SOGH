@@ -1,5 +1,6 @@
 import React from 'react';
 import moment from 'moment';
+import ANewTab from '../common/ANewTab.js';
 
 function isSelected (milestone, selected_milestone) {
     if (!selected_milestone)
@@ -58,9 +59,9 @@ export default function Milestones (props) {
                              納期: {moment(d.dueOn).format('YYYY-MM-DD')}
                            </span>
                            (
-                           <a href={d.url}>
+                           <ANewTab to={d.url}>
                              {d.number}
-                           </a>
+                           </ANewTab>
                            )
                          </p>
                        </div>

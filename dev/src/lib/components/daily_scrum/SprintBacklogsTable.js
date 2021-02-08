@@ -1,5 +1,6 @@
 import React from 'react';
 import moment from 'moment';
+import ANewTab from './ANewTab.js';
 
 function dt (v) {
     if (!v) return '';
@@ -44,9 +45,9 @@ function makeTrs (issue) {
 
     return <tr key={issue.id}>
              <td style={style.right}>
-               <a href={issue.url}>
+               <ANewTab to={issue.url}>
                  {issue.number}
-               </a>
+               </ANewTab>
              </td>
              <td>{issue.title}</td>
              <td>{issue.labels.nodes.map(l => {
@@ -54,9 +55,9 @@ function makeTrs (issue) {
                  return <p key={l.id}
                            style={label_style}>
 
-                          <a href={l.url} style={aStyle(label_style.background)}>
+                          <ANewTab to={l.url} style={aStyle(label_style.background)}>
                             {l.name}
-                          </a>
+                          </ANewTab>
 
                         </p>;
              })}</td>

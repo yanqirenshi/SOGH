@@ -5,6 +5,8 @@ import { faQuestionCircle } from "@fortawesome/free-solid-svg-icons";
 import Sogh from '../js/Sogh.js';
 import Search from './product_backlogs/Search.js';
 
+import ANewTab from './common/ANewTab.js';
+
 import ButtonViewSwitch from './product_backlogs/ButtonViewSwitch.js';
 import ButtonRefresh from './product_backlogs/ButtonRefresh.js';
 import Cards from './product_backlogs/Cards.js';
@@ -106,9 +108,9 @@ export default function ProductBacklogs (props) {
 
             {props.help &&
              <div style={{marginLeft:22, fontSize: 22, display: 'flex', alignItems:'center'}}>
-               <a href={props.help.to} target="_blank" rel="noopener noreferrer">
+               <ANewTab to={props.help.to}>
                  <FontAwesomeIcon style={{}} icon={faQuestionCircle} />
-               </a>
+               </ANewTab>
              </div>}
           </div>
 

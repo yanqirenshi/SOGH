@@ -1,5 +1,7 @@
 import React from 'react';
 
+import ANewTab from '../../../common/ANewTab.js';
+
 export default function NameWithNum (props) {
     const project = props.project;
 
@@ -9,9 +11,9 @@ export default function NameWithNum (props) {
 
           <span style={{marginLeft:8}}>
             (
-            <a href={project.url} target="_blank" rel="noopener noreferrer">
+            <ANewTab to={project.url}>
               {project.number}
-            </a>
+            </ANewTab>
             )
           </span>
         </div>

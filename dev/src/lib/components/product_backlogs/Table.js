@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import moment from 'moment';
 
+import ANewTab from '../common/ANewTab.js';
+
 function dt (v) { return !v ? '' : moment(v).format('YYYY-MM-DD'); }
 
 const style = {
@@ -99,9 +101,9 @@ export default function Table (props) {
                            </td>
 
                            <td>
-                             <a href={d.url}>
+                             <ANewTab to={d.url}>
                                {d.number}
-                             </a>
+                             </ANewTab>
                            </td>
 
                            <td style={style.code}>

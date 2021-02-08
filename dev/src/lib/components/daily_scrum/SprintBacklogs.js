@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faExternalLinkAlt } from "@fortawesome/free-solid-svg-icons";
 
 import SprintBacklogsTable from './SprintBacklogsTable.js';
+import ANewTab from './ANewTab.js';
 
 export default function SprintBacklogs (props) {
     const project = props.project;
@@ -11,9 +12,9 @@ export default function SprintBacklogs (props) {
     return (
         <nav className="panel">
           <p className="panel-heading" style={{fontSize:14}}>
-            <a href={project.url}>
+            <ANewTab to={project.url}>
               <FontAwesomeIcon style={{}} icon={faExternalLinkAlt} />
-            </a>
+            </ANewTab>
             {project.name}
           </p>
 
