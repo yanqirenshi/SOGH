@@ -38,7 +38,7 @@ export default function ContentsArea (props) {
 
           <div style={style.contents_area.body}>
 
-            <div style={{width:333, marginRight:11}}>
+            <div style={{minWidth:333, maxWidth:333}}>
               <ListProductBacklogs projects={sorted_projects}
                                    filter={props.filter}
                                    callbacks={props.callbacks} />

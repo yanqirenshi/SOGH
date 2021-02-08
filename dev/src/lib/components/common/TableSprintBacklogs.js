@@ -61,7 +61,7 @@ function makeTrs (issue) {
                  {issue.number}
                </ANewTab>
              </td>
-             <td>
+             <td style={style.nowrap}>
                {prjColumn(issue)}
              </td>
              <td>{issue.title}</td>
