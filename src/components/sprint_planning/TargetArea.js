@@ -3,6 +3,8 @@ import React from 'react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faQuestionCircle } from "@fortawesome/free-solid-svg-icons";
 
+import ANewTab from '../common/ANewTab.js';
+
 import Milestone from './Milestone.js';
 
 export default function TargetArea (props) {
@@ -21,9 +23,9 @@ export default function TargetArea (props) {
 
           {props.help &&
            <div style={{marginLeft:22, fontSize: 33}}>
-             <a href={props.help.to} target="_blank" rel="noopener noreferrer">
+             <ANewTab to={props.help.to}>
                <FontAwesomeIcon style={{}} icon={faQuestionCircle} />
-             </a>
+             </ANewTab>
            </div>}
         </div>
     );

@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
     faExternalLinkAlt, faWindowMinimize, faWindowMaximize,
 } from "@fortawesome/free-solid-svg-icons";
+import ANewTab from './ANewTab.js';
 
 export default function ProductBacklogHeader (props) {
     const sogh = props.sogh;
@@ -18,9 +19,9 @@ export default function ProductBacklogHeader (props) {
     return (
         <div className="panel-heading" style={style_header}>
           <div style={{flexGrow:1}}>
-            <a href={project.url}>
+            <ANewTab to={project.url}>
               <FontAwesomeIcon style={{}} icon={faExternalLinkAlt} />
-            </a>
+            </ANewTab>
             {project.name || '@Project 未割り当て'}
           </div>
 

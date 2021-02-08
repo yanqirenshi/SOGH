@@ -2,6 +2,7 @@ import React from 'react';
 
 import IssueSummary from './IssueSummary.js';
 import MilestonePriorityTable from './MilestonePriorityTable.js';
+import ANewTab from '../common/ANewTab.js';
 
 export default function Milestone (props) {
     const sogh = props.sogh;
@@ -27,9 +28,9 @@ export default function Milestone (props) {
             {milestone.url &&
              <span style={{marginLeft: 11}}>
                (
-               <a href={milestone.url}>
+               <ANewTab to={milestone.url}>
                  {milestone.number}
-               </a>
+               </ANewTab>
                )
              </span>}
           </p>

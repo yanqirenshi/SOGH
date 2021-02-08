@@ -5,6 +5,8 @@ import { faQuestionCircle } from "@fortawesome/free-solid-svg-icons";
 import Sogh from '../js/Sogh.js';
 import Search from './product_backlogs/Search.js';
 
+import ANewTab from './common/ANewTab.js';
+
 import ButtonViewSwitch from './product_backlogs/ButtonViewSwitch.js';
 import ButtonRefresh from './product_backlogs/ButtonRefresh.js';
 import Cards from './product_backlogs/Cards.js';
@@ -36,7 +38,7 @@ function fetchProjects (repository, sogh, setProjects) {
 export default function ProductBacklogs (props) {
     const [sogh] = useState(new Sogh(props.token));
     const [projects, setProjects] = useState([]);
-    const [view, setView] = useState('cards');
+    const [view, setView] = useState('table');
     const [filter, setFilter] = useState({
         keyword: null,
         priorities: {},
@@ -90,7 +92,7 @@ export default function ProductBacklogs (props) {
 
     return (
         <div style={style.root}>
-          <div style={{display:'flex', justifyContent: 'center', paddingBottom: 22, borderBottom: '1px solid #cccccc'}}>
+          <div style={{display:'flex', justifyContent: 'center', paddingTop: 11, paddingBottom: 0 }}>
             <div style={{marginRight:33}}>
               <ButtonRefresh callbacks={callbacks} />
             </div>
@@ -106,9 +108,9 @@ export default function ProductBacklogs (props) {
 
             {props.help &&
              <div style={{marginLeft:22, fontSize: 22, display: 'flex', alignItems:'center'}}>
-               <a href={props.help.to} target="_blank" rel="noopener noreferrer">
+               <ANewTab to={props.help.to}>
                  <FontAwesomeIcon style={{}} icon={faQuestionCircle} />
-               </a>
+               </ANewTab>
              </div>}
           </div>
 
