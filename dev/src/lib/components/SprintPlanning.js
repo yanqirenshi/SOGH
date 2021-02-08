@@ -110,19 +110,19 @@ export default function SprintPlanning (props) {
 
           <div style={style.right}>
 
-            <div style={{marginBottom: 22, display: 'flex'}}>
+            <div style={{marginBottom: 11, display: 'flex'}}>
               <TargetArea milestone={milestone}
                           projects={projects}
                           sogh={sogh} />
             </div>
 
             <div style={{marginBottom: 22 }}>
-              <Controller issues={issues}
-                          filter={filter}
-                          callbacks={callbacks} sogh={sogh}/>
-            </div>
+              <div style={{marginBottom:11}}>
+                <Controller issues={issues}
+                            filter={filter}
+                            callbacks={callbacks} sogh={sogh}/>
+              </div>
 
-            <div style={{flexGrow:1,overflow:'auto', paddingBottom: 222}}>
               <ProductBacklogs projects={sorted_projects}
                                close_projects={closeProjects}
                                sogh={sogh}
