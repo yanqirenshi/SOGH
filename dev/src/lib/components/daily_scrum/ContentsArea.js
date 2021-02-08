@@ -6,6 +6,7 @@ import ProductBacklogs from '../common/ProductBacklogs.js';
 import ListProductBacklogs from './ListProductBacklogs.js';
 import ProductAndMilestone from './ProductAndMilestone.js';
 import Filter from '../common/Filter.js';
+import ChartBardown from '../common/ChartBardown.js';
 
 import style from './Style.js';
 
@@ -45,6 +46,11 @@ export default function ContentsArea (props) {
             </div>
 
             <div style={{flexGrow:1, marginLeft: 11}}>
+              <div>
+                <ChartBardown issues={props.issues}
+                              milestone={props.milestone} />
+              </div>
+
               <ProductBacklogs projects={sorted_projects_filterd}
                                close_projects={props.close_projects}
                                callbacks={props.callbacks}
