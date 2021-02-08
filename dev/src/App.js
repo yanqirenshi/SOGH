@@ -17,6 +17,7 @@ function App() {
         { code: 'ds', label: 'Daily scrum' },
         { code: 'sp', label: 'Sprint planning' },
         { code: 'pb', label: 'Product backlog' },
+        { code: 'rp', label: 'Reports' },
     ];
 
     const pathname = window.location.pathname;
@@ -45,6 +46,10 @@ function App() {
 
           <div style={isActive(tabs[2], selected)}>
             <SOGH.ProductBacklogs token={token} repository={repository} />
+          </div>
+
+          <div style={isActive(tabs[3], selected)}>
+            <SOGH.Reports token={token} repository={repository} />
           </div>
         </div>
     );

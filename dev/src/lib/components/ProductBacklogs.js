@@ -92,7 +92,7 @@ export default function ProductBacklogs (props) {
 
     return (
         <div style={style.root}>
-          <div style={{display:'flex', justifyContent: 'center', paddingBottom: 22, borderBottom: '1px solid #cccccc'}}>
+          <div style={{display:'flex', justifyContent: 'center', paddingTop: 11, paddingBottom: 0 }}>
             <div style={{marginRight:33}}>
               <ButtonRefresh callbacks={callbacks} />
             </div>
