@@ -20,7 +20,6 @@ export default function SprintPlanning (props) {
     const [milestones, setMilestones] = useState([]);
     const [milestone, setMilestone] = useState(undefined);
     const [issues, setIssues] = useState([]);
-    const [issues_filterd, setIssuesFilterd] = useState([]);
     const [projects, setProjects] = useState({ht:{},list:[]});
     const [closeProjects, setCloseProjects] = useState({});
 

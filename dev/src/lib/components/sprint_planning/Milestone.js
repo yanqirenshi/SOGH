@@ -8,12 +8,6 @@ export default function Milestone (props) {
     const sogh = props.sogh;
     const data = sogh.summaryIssuesByProjects(props.projects);
     const milestone = props.milestone || { title: 'All', url: null };
-    const priorities = [
-        { code: 'c', label: '緊急' },
-        { code: 'h', label: '高' },
-        { code: 'n', label: '普' },
-        { code: 'l', label: '低' },
-    ];
 
     return (
         <nav className="panel">

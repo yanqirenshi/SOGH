@@ -1,7 +1,5 @@
 import React from 'react';
 
-import IssueSummary from './IssueSummary.js';
-
 function makeRow (style, priority, priorities, point) {
     let total = 0;
 

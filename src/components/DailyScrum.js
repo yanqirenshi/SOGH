@@ -10,14 +10,11 @@ import style from './daily_scrum/Style.js';
 
 function targetMilestone (milestones) {
     const sorted = milestones.sort((a,b) => a.dueOn < b.dueOn ? -1 :1);
-    const now = moment().add('d', '7');
+    const now = moment();
 
-    let trg = null;
     for (const m of sorted)
         if (now.isSameOrBefore(moment(m.dueOn)))
-            return trg;
-        else
-            trg = m;
+            return m;
 
     return null;
 }
