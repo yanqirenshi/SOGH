@@ -2,6 +2,7 @@ import React from 'react';
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFilter } from "@fortawesome/free-solid-svg-icons";
+import ButtonToggle from './ButtonToggle.js';
 
 export default function Search (props) {
     const sogh = props.sogh;
@@ -9,7 +10,7 @@ export default function Search (props) {
 
     const changeKeyword = (e) => callbacks.keyword.change(e.target.value);
     const clearKeyword = (e) => callbacks.keyword.change('');
-    const switchPriority = (e) => callbacks.priority.switch(e.target.getAttribute('code'));
+    const switchPriority = (code) => callbacks.priority.switch(code);
 
     const priorities = sogh.getFilterPriorities(props.projects);
 
@@ -21,7 +22,7 @@ export default function Search (props) {
           </div>
 
 
-          <div style={{display:'flex', width:333}}>
+          <div style={{display:'flex', width:255}}>
 
             <input className="input"
                    type="text"
@@ -34,26 +35,14 @@ export default function Search (props) {
             </button>
           </div>
 
-          <div style={{display: 'flex', marginLeft: 33}}>
+          <div style={{display: 'flex', marginLeft: 22}}>
             {priorities.map(d => {
-                const style = {
-                    height: 40,
-                    padding: '11px 22px',
-                    marginRight: 22
-                };
-
-                if (props.filter.priorities[d.code]) {
-                    style.border = '1px solid #eeeeee';
-                    style.boxShadow = 'none';
-                }
-
-                return <div key={d.code}
-                            code={d.code}
-                            className="card"
-                            style={style}
-                            onClick={switchPriority}>
-                         {sogh.priorityLabel(d.code) + ` (${d.count})`}
-                       </div>;
+                const label = sogh.priorityLabel(d.code) + ` (${d.count})`;
+                return <ButtonToggle key={d.code}
+                                     code={d.code}
+                                     label={label}
+                                     on={props.filter.priorities[d.code]}
+                                     callback={switchPriority} />;
             })}
           </div>
 

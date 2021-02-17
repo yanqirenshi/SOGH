@@ -11,18 +11,26 @@ import ButtonViewSwitch from './product_backlogs/ButtonViewSwitch.js';
 import ButtonRefresh from './product_backlogs/ButtonRefresh.js';
 import Cards from './product_backlogs/Cards.js';
 import Table from './product_backlogs/Table.js';
+import ButtonToggle from './product_backlogs/ButtonToggle.js';
 
 import style from './daily_scrum/Style.js';
 
 function filtering (filter, projects) {
     const keyword = filter.keyword;
     const priorities = filter.priorities;
+    const closing = filter.closing;
 
     return projects.filter(d => {
         if (keyword && !d.name.includes(keyword))
             return false;
 
         if (priorities[d.priority])
+            return false;
+
+        if (closing
+            && !(d.progress.doneCount > 1 &&
+                 d.progress.inProgressCount === 0 &&
+                 d.progress.todoCount <= 1))
             return false;
 
         return true;
@@ -42,6 +50,7 @@ export default function ProductBacklogs (props) {
     const [filter, setFilter] = useState({
         keyword: null,
         priorities: {},
+        closing: false,
     });
 
     useEffect(() => fetchProjects(props.repository, sogh, setProjects), [sogh]);
@@ -53,6 +62,7 @@ export default function ProductBacklogs (props) {
     }, [projects]);
 
     const callbacks = {
+
         filter: {
             keyword: {
                 change: (v) => {
@@ -80,7 +90,13 @@ export default function ProductBacklogs (props) {
 
                     setFilter(new_filter);
                 }
-            }
+            },
+            closing: (code) => {
+                const new_filter = {...filter};
+
+                new_filter[code] = !new_filter[code];
+                setFilter(new_filter);
+            },
         },
         view: {
             change: (type) => setView(type),
@@ -97,7 +113,7 @@ export default function ProductBacklogs (props) {
               <ButtonRefresh callbacks={callbacks} />
             </div>
 
-            <div style={{marginRight:33}}>
+            <div style={{marginRight:22}}>
               <ButtonViewSwitch type={view} callbacks={callbacks} />
             </div>
 
@@ -105,6 +121,14 @@ export default function ProductBacklogs (props) {
                     projects={projects || []}
                     sogh={sogh}
                     callbacks={callbacks.filter} />
+
+            {filterd_projects.length>0 &&
+             <div style={{marginRight:22}}>
+               <ButtonToggle label="Closing"
+                             on={!filter.closing}
+                             code={'closing'}
+                             callback={callbacks.filter.closing}/>
+             </div>}
 
             {props.help &&
              <div style={{marginLeft:22, fontSize: 22, display: 'flex', alignItems:'center'}}>
