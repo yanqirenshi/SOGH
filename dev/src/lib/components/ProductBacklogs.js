@@ -11,7 +11,7 @@ import ButtonViewSwitch from './product_backlogs/ButtonViewSwitch.js';
 import ButtonRefresh from './product_backlogs/ButtonRefresh.js';
 import Cards from './product_backlogs/Cards.js';
 import Table from './product_backlogs/Table.js';
-import ButtonToggle from './product_backlogs/ButtonToggle.js';
+import ButtonToggle from './common/ButtonToggle.js';
 
 import style from './daily_scrum/Style.js';
 
