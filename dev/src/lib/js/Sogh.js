@@ -90,12 +90,21 @@ export default class Sogh {
 
             return { start: moment(ret[1]), end: moment(ret[2]) };
         };
+        const scheduleResult = (p) => {
+            const ret = /.*@Result:(\s+\d+-\d+-\d+),\s+(\d+-\d+-\d+).*/.exec(p.body);
+
+            if (!ret)
+                return { start: null, end: null };
+
+            return { start: moment(ret[1]), end: moment(ret[2]) };
+        };
 
         const tat = titleAndType(project);
         project.title = tat.title;
         project.type = tat.type;
 
         project.plan = schedulePlan(project);
+        project.result = scheduleResult(project);
 
         project.priority = priority(project);
 

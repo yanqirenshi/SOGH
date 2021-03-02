@@ -3,11 +3,15 @@ import moment from 'moment';
 
 import ANewTab from '../common/ANewTab.js';
 
-function dt (v) { return !v ? '' : moment(v).format('YYYY-MM-DD'); }
+function dt (v, type=0) {
+    const fmt = (type===0) ? 'MM-DD' : 'YYYY-MM-DD';
+
+    return !v ? '' : moment(v).format(fmt);
+}
 
 const style = {
     root: {
-        width:1111,
+        minWidth: 1111,
         marginLeft: 'auto',
         marginRight: 'auto'
     },
@@ -68,7 +72,8 @@ export default function Table (props) {
             <thead>
               <tr>
                 <th colSpan="4">Product backlog</th>
-                <th colSpan="2">Schedule</th>
+                <th colSpan="2">Plan</th>
+                <th colSpan="2">Result</th>
                 <th colSpan="6">Progress</th>
                 {/* <th colSpan="3">Timestamp</th> */}
               </tr>
@@ -77,6 +82,8 @@ export default function Table (props) {
                 <th>#</th>
                 <th>Type</th>
                 <th>Title</th>
+                <th>Start</th>
+                <th>End</th>
                 <th>Start</th>
                 <th>End</th>
                 <th colSpan="2">To Do</th>
@@ -114,8 +121,10 @@ export default function Table (props) {
                              {d.title}
                            </td>
 
-                           <td style={style.plan}>{dt(d.plan.start)}</td>
-                           <td style={style.plan}>{dt(d.plan.end)}</td>
+                           <td style={style.plan} title={dt(d.plan.start,1)}>{dt(d.plan.start)}</td>
+                           <td style={style.plan} title={dt(d.plan.end,1)}>{dt(d.plan.end)}</td>
+                           <td style={style.plan} title={dt(d.result.start,1)}>{dt(d.result.start)}</td>
+                           <td style={style.plan} title={dt(d.result.end,1)}>{dt(d.result.end)}</td>
 
                            <td style={style.num}>
                              {d.progress.todoCount}
