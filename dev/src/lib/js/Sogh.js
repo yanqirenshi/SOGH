@@ -180,6 +180,42 @@ export default class Sogh {
 
         getter();
     }
+    getIssuesByReportLabel (repository, cb) {
+        if (!this.api.v4._token)
+            cb([]);
+
+        if (!repository)
+            cb([]);
+
+        const api = this.api.v4;
+
+        const base_query = query.issues_by_report_label
+              .replace('@owner', repository.owner)
+              .replace('@name', repository.name);
+
+        let issues = [];
+        const getter = (endCursor) => {
+            let query = this.ensureEndCursor(base_query, endCursor);
+
+            api.fetch(query, (results) => {
+                const data = results.data.repository.label.issues;
+                const page_info = data.pageInfo;
+
+                issues = issues.concat(data.nodes);
+
+                if (page_info.hasNextPage) {
+                    getter(page_info.endCursor);
+                } else {
+                    cb(issues.map(d => {
+                        d.point = this.point(d.body);
+                        return d;
+                    }));
+                }
+            });
+        };
+
+        getter();
+    }
     getProjectsByRepository (repository, cb) {
         if (!this.api.v4._token || !repository)
             cb([]);
