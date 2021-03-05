@@ -1,8 +1,6 @@
 import React from 'react';
 import moment from 'moment';
 
-import {Table, Button, Heading} from 'react-bulma-components';
-
 function dt (v) {
     if (!v) return '';
 
@@ -19,16 +17,11 @@ function project (issue) {
 }
 
 export default function TableReportTrOpen (props) {
-    const sogh = props.sogh;
-
-    const clickSwitch = (e) => {
-        props.callbacks.switch(e.target.getAttribute('issue_id'));
-    };
-
     const issue = props.issue;
     return (
         <div style={{marginBottom:33}}>
-          <Table bordered={true} striped={false}>
+          <table className="table is-bordered is-narrow is-hoverable is-fullwidth"
+                 style={{fontSize:14}}>
             <tbody>
               <tr><th>Product Backlog</th></tr>
               <tr><td>{project(issue)}</td></tr>
@@ -37,7 +30,7 @@ export default function TableReportTrOpen (props) {
               <tr><th>内容</th></tr>
               <tr><td><div dangerouslySetInnerHTML={{ __html: issue.bodyHTML }} /></td></tr>
             </tbody>
-          </Table>
+          </table>
         </div>
     );
 }

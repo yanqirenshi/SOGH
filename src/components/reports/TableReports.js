@@ -1,20 +1,15 @@
 import React from 'react';
 
-import {Table} from 'react-bulma-components';
-
 import TableReportTr from './TableReportTr.js';
 
 export default function TableReports (props) {
     const sogh = props.sogh;
 
-    const clickSwitch = (e) => {
-        props.callbacks.switch(e.target.getAttribute('issue_id'));
-    };
-
     const issues = props.issues;
     const opens = props.opens;
     return (
-         <Table>
+        <table className="table is-bordered is-striped is-narrow is-hoverable is-fullwidth"
+               style={{fontSize:14}}>
            <thead>
              <tr>
                <th>更新</th>
@@ -30,8 +25,8 @@ export default function TableReports (props) {
                                         issue={d}
                                         open={opens[d.id]}
                                         callbacks={props.callbacks}
-                                        sogh={props.sogh} />)}
+                                        sogh={sogh} />)}
            </tbody>
-         </Table>
+        </table>
     );
 }

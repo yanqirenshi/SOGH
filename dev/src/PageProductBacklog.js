@@ -3,8 +3,6 @@ import React from 'react';
 import * as SOGH from './lib/index.js';
 
 export default function PageProductBacklog (props) {
-    const backlog_id = props.match.params.id;
-
     const token = process.env.REACT_APP_GITHUB_PARSONAL_TOKEN;
     const repository = {
         owner: process.env.REACT_APP_GITHUB_REPOSITORY_OWNER,

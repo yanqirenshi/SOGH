@@ -1,7 +1,6 @@
 import React from 'react';
 import moment from 'moment';
 
-import {Button} from 'react-bulma-components';
 import TableReportTrOpen from './TableReportTrOpen.js';
 
 function dt (v) {
@@ -20,8 +19,6 @@ function project (issue) {
 }
 
 export default function TableReportTr (props) {
-    const sogh = props.sogh;
-
     const clickSwitch = (e) => {
         props.callbacks.switch(e.target.getAttribute('issue_id'));
     };
@@ -38,10 +35,11 @@ export default function TableReportTr (props) {
                </a>
              </td>
              <td>
-               <Button issue_id={issue.id}
+               <button className="button"
+                       issue_id={issue.id}
                        onClick={clickSwitch}>
                  {issue.title}
-               </Button>
+               </button>
              </td>
              <td>
                <TableReportTrOpen issue={issue}
@@ -58,10 +56,11 @@ export default function TableReportTr (props) {
                </a>
              </td>
              <td>
-               <Button issue_id={issue.id}
+               <button className="button"
+                       issue_id={issue.id}
                        onClick={clickSwitch}>
                  {issue.title}
-               </Button>
+               </button>
              </td>
              <td>{project(issue)}</td>
            </tr>}
