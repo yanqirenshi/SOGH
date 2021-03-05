@@ -33,10 +33,10 @@ const query = `{
                   id
                   name
                   body
+                  url
                   createdAt
                   updatedAt
                   closedAt
-                  url
                 }
               }
             }

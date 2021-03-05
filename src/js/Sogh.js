@@ -90,12 +90,21 @@ export default class Sogh {
 
             return { start: moment(ret[1]), end: moment(ret[2]) };
         };
+        const scheduleResult = (p) => {
+            const ret = /.*@Result:(\s+\d+-\d+-\d+),\s+(\d+-\d+-\d+).*/.exec(p.body);
+
+            if (!ret)
+                return { start: null, end: null };
+
+            return { start: moment(ret[1]), end: moment(ret[2]) };
+        };
 
         const tat = titleAndType(project);
         project.title = tat.title;
         project.type = tat.type;
 
         project.plan = schedulePlan(project);
+        project.result = scheduleResult(project);
 
         project.priority = priority(project);
 
@@ -154,6 +163,42 @@ export default class Sogh {
 
             api.fetch(query, (results) => {
                 const data = results.data.repository.issues;
+                const page_info = data.pageInfo;
+
+                issues = issues.concat(data.nodes);
+
+                if (page_info.hasNextPage) {
+                    getter(page_info.endCursor);
+                } else {
+                    cb(issues.map(d => {
+                        d.point = this.point(d.body);
+                        return d;
+                    }));
+                }
+            });
+        };
+
+        getter();
+    }
+    getIssuesByReportLabel (repository, cb) {
+        if (!this.api.v4._token)
+            cb([]);
+
+        if (!repository)
+            cb([]);
+
+        const api = this.api.v4;
+
+        const base_query = query.issues_by_report_label
+              .replace('@owner', repository.owner)
+              .replace('@name', repository.name);
+
+        let issues = [];
+        const getter = (endCursor) => {
+            let query = this.ensureEndCursor(base_query, endCursor);
+
+            api.fetch(query, (results) => {
+                const data = results.data.repository.label.issues;
                 const page_info = data.pageInfo;
 
                 issues = issues.concat(data.nodes);
