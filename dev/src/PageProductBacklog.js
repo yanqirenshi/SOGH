@@ -10,6 +10,9 @@ export default function PageProductBacklog (props) {
     };
 
     return (
-        <SOGH.ProductBacklog token={token} repository={repository} />
+        <SOGH.ProductBacklog token={token}
+                             repository={repository}
+                             project_id={props.match.params.id}
+                             root_url={{to: '/?tab=pb', label: 'Product Backlogs'}} />
     );
 }

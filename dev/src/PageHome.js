@@ -45,7 +45,9 @@ export default function PageHome () {
           </div>
 
           <div style={isActive(tabs[2], selected)}>
-            <SOGH.ProductBacklogs token={token} repository={repository} />
+            <SOGH.ProductBacklogs token={token}
+                                  repository={repository}
+                                  productbacklog_url_prefix="/product-backlogs/" />
           </div>
 
           <div style={isActive(tabs[3], selected)}>

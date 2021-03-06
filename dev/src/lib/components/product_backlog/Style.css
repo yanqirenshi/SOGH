@@ -1,0 +1,7 @@
+.hero.is-info.sogh-product-backlog-hero li.is-active a:not(.button):not(.dropdown-item):not(.tag):not(.pagination-link.is-current) {
+    color: #333;
+}
+
+.hero.is-info.sogh-product-backlog-hero .tabs.is-boxed a {
+    color: #fff;
+}

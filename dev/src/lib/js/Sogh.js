@@ -145,10 +145,7 @@ export default class Sogh {
         getter();
     }
     getIssuesByRepository (repository, cb) {
-        if (!this.api.v4._token)
-            cb([]);
-
-        if (!repository)
+        if (!this.api.v4._token || !repository)
             cb([]);
 
         const api = this.api.v4;
@@ -216,6 +213,53 @@ export default class Sogh {
 
         getter();
     }
+    getIssuesByRepositoryProject (repository, project, cb) {
+        if (!this.api.v4._token || !repository)
+            cb([]);
+
+        const api = this.api.v4;
+
+        const base_query = query.issues_by_repository
+              .replace('issues(after: "", first: 100)', 'issues(after: "", first: 100, states: OPEN)')
+              .replace('@owner', repository.owner)
+              .replace('@name', repository.name);
+
+        let issues = [];
+        const getter = (endCursor) => {
+            let query = this.ensureEndCursor(base_query, endCursor);
+
+            api.fetch(query, (results) => {
+                const data = results.data.repository.issues;
+                const page_info = data.pageInfo;
+
+                const isTarget = (cards) => {
+                    for (const card of cards) {
+                        if (card.column.project.id===project.id)
+                            return true;
+                    }
+
+                    return false;
+                };
+
+                data.nodes.reduce((list, d) => {
+                    if (isTarget(d.projectCards.nodes)) {
+                        d.point = this.point(d.body);
+                        list.push(d);
+                    }
+
+                    return list;
+                }, issues);
+
+                if (page_info.hasNextPage) {
+                    getter(page_info.endCursor);
+                } else {
+                    cb(issues);
+                }
+            });
+        };
+
+        getter();
+    }
     getProjectsByRepository (repository, cb) {
         if (!this.api.v4._token || !repository)
             cb([]);
@@ -246,6 +290,26 @@ export default class Sogh {
 
         getter();
     }
+    getProjectByID (id, cb) {
+        if (!this.api.v4._token || !id)
+            cb(null);
+
+        const api = this.api.v4;
+
+        const base_query = query.project_by_id
+              .replace('@id', id);
+
+        const getter = (endCursor) => {
+            let query = this.ensureEndCursor(base_query, endCursor);
+
+            api.fetch(query, (results) => {
+                cb(this.addAnotetionValue4Project(results.data.node));
+            });
+        };
+
+        getter();
+    }
+
     // from core
     addPool (data, pool) {
         if (pool.ht[data.id])

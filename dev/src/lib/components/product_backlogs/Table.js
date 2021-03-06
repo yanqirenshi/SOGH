@@ -76,6 +76,7 @@ export default function Table (props) {
                 <th colSpan="2">Result</th>
                 <th colSpan="6">Progress</th>
                 {/* <th colSpan="3">Timestamp</th> */}
+                <th rowSpan="2"></th>
               </tr>
               <tr>
                 <th>Priority</th>
@@ -89,9 +90,6 @@ export default function Table (props) {
                 <th colSpan="2">To Do</th>
                 <th colSpan="2" style={{whiteSpace: 'nowrap'}}>In Progress</th>
                 <th colSpan="2">Done</th>
-                {/* <th>create</th> */}
-                {/* <th>update</th> */}
-                {/* <th>close</th> */}
               </tr>
             </thead>
 
@@ -131,7 +129,7 @@ export default function Table (props) {
                            </td>
 
                            {!d.progress.enabled &&
-                            <td colSpan="6" style={{fontSize:12}}>
+                            <td colSpan="5" style={{fontSize:12}}>
                               Disable track progress or Empty
                             </td>}
 
@@ -160,9 +158,13 @@ export default function Table (props) {
                               {Math.floor(d.progress.donePercentage)}%
                             </td>}
 
-                           {/* <td style={style.dt}>{dt(d.createdAt)}</td> */}
-                           {/* <td style={style.dt}>{dt(d.updatedAt)}</td> */}
-                           {/* <td style={style.dt}>{dt(d.closedAt)}</td> */}
+                           <td style={{whiteSpace: 'nowrap'}}>
+                             <a href={props.productbacklog_url_prefix + d.id}
+                                target="_blank"
+                                rel="noreferrer">
+                               詳細
+                             </a>
+                           </td>
                          </tr>;
               })}
             </tbody>
