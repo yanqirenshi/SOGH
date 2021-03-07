@@ -139,8 +139,13 @@ export default function ProductBacklogs (props) {
           </div>
 
           <div style={{flexGrow: 1, overflow: 'auto', padding: 22}}>
-            {'table'===view && <Table projects={filterd_projects} sogh={sogh} />}
-            {'cards'===view && <Cards projects={filterd_projects} sogh={sogh} />}
+            {'table'===view &&
+             <Table projects={filterd_projects}
+                    sogh={sogh}
+                    productbacklog_url_prefix={props.productbacklog_url_prefix} />}
+
+            {'cards'===view &&
+             <Cards projects={filterd_projects} sogh={sogh} />}
           </div>
         </div>
     );
