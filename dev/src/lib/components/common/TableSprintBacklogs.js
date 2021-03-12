@@ -53,8 +53,19 @@ function prjColumn (issue) {
     });
 }
 
-function makeTrs (issue) {
+function due (v) {
+    if (!v)
+        return '';
 
+    const m = moment(v);
+
+    if (!m.isValid())
+        return '';
+
+    return m.format('MM-DD');
+}
+
+function makeTrs (issue) {
     return <tr key={issue.id}>
              <td style={style.right}>
                <ANewTab to={issue.url}>
@@ -81,6 +92,9 @@ function makeTrs (issue) {
                           </span>;
                })}
              </td>
+             <td style={style.nowrap}>
+               {due(issue.due_date)}
+             </td>
              <td style={style.right}>{issue.point.plan}</td>
              <td style={style.right}>{issue.point.result}</td>
              <td style={style.right}>
@@ -105,6 +119,7 @@ export default function TableSprintBacklogs (props) {
               <th rowSpan="2">Title</th>
               <th rowSpan="2">Labels</th>
               <th rowSpan="2">Assignees</th>
+              <th rowSpan="2">Due Date</th>
               <th colSpan="3">Point</th>
               <th>Create</th>
               <th>Update</th>
