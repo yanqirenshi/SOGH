@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 
-import Sogh from '../js/Sogh.js';
 import Filter from '../js/Filter.js';
 import ContentsArea  from './daily_scrum/ContentsArea.js';
 import SprintListArea from './daily_scrum/SprintListArea.js';
@@ -20,7 +19,6 @@ function targetMilestone (milestones) {
 }
 
 export default function DailyScrum (props) {
-    const [sogh] = useState(new Sogh(props.token));
     const [filter] = useState(new Filter());
     const [changed, setChanged] = useState(null);
 
@@ -31,6 +29,8 @@ export default function DailyScrum (props) {
     const [projects, setProjects] = useState({ht:[],list:[]});
     const [projects_filterd, setProjectsFilterd] = useState({ht:[],list:[]});
     const [closeProjects, setCloseProjects] = useState({});
+
+    const sogh = props.sogh;
 
     const refresh = () => {
         if (issues.length>0)

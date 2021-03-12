@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
 
-import Sogh from '../js/Sogh.js';
-
 import Hero from './product_backlog/Hero.js';
 import Milestones from './product_backlog/Milestones.js';
 
@@ -42,14 +40,15 @@ function makeMilestones (issues) {
 }
 
 export default function ProductBacklog (props) {
-    const [sogh] = useState(new Sogh(props.token));
-    const [tabs, setTabs] = useState([
+    const [tabs] = useState([
         { code: 'milestones', label: 'Milestones', selected: true },
         // { code: 'columns',    label: 'Columns',    selected: false },
     ]);
     const [project, setProject] = useState(null);
     const [issues, setIssues] = useState([]);
     const [milestones, setMilestones] = useState([]);
+
+    const sogh = props.sogh;
 
     useEffect(() => getProjectByID(props.project_id, sogh, setProject), [sogh]);
     useEffect(() => getIssuesByProject(props.repository, project, sogh, setIssues), [project]);

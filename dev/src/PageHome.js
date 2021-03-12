@@ -1,7 +1,7 @@
 import React from 'react';
 
 import 'react-bulma-components/dist/react-bulma-components.min.css';
-import * as SOGH from './lib/index.js';
+import Sogh, * as SOGH from './lib/index.js';
 
 import Tabs from './Tabs.js';
 
@@ -19,16 +19,16 @@ export default function PageHome () {
         { code: 'pb', label: 'Product backlog' },
         { code: 'rp', label: 'Reports' },
     ];
-
     const pathname = window.location.pathname;
     const params = new URLSearchParams(window.location.search);
     const selected = params.get('tab') || tabs[0].code;
 
-    const token = process.env.REACT_APP_GITHUB_PARSONAL_TOKEN;
     const repository = {
         owner: process.env.REACT_APP_GITHUB_REPOSITORY_OWNER,
         name:  process.env.REACT_APP_GITHUB_REPOSITORY_NAME,
     };
+
+    const sogh = new Sogh(process.env.REACT_APP_GITHUB_PARSONAL_TOKEN);
 
     return (
         <div>
@@ -37,21 +37,24 @@ export default function PageHome () {
           </div>
 
           <div style={isActive(tabs[0], selected)}>
-            <SOGH.DailyScrum token={token} repository={repository} />
+            <SOGH.DailyScrum sogh={sogh}
+                             repository={repository} />
           </div>
 
           <div style={isActive(tabs[1], selected)}>
-            <SOGH.SprintPlanning token={token} repository={repository} />
+            <SOGH.SprintPlanning sogh={sogh}
+                                 repository={repository} />
           </div>
 
           <div style={isActive(tabs[2], selected)}>
-            <SOGH.ProductBacklogs token={token}
+            <SOGH.ProductBacklogs sogh={sogh}
                                   repository={repository}
                                   productbacklog_url_prefix="/product-backlogs/" />
           </div>
 
           <div style={isActive(tabs[3], selected)}>
-            <SOGH.Reports token={token} repository={repository} />
+            <SOGH.Reports sogh={sogh}
+                          repository={repository} />
           </div>
         </div>
     );

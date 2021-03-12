@@ -24,7 +24,7 @@ function makeLabels (d,i) {
         display: 'inline-block',
     };
 
-    return <p style={style}>
+    return <p key={d.id} style={style}>
              {d.name}
            </p>;
 }

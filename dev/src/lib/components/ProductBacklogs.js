@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faQuestionCircle } from "@fortawesome/free-solid-svg-icons";
 
-import Sogh from '../js/Sogh.js';
 import Search from './product_backlogs/Search.js';
 
 import ANewTab from './common/ANewTab.js';
@@ -44,7 +43,6 @@ function fetchProjects (repository, sogh, setProjects) {
 }
 
 export default function ProductBacklogs (props) {
-    const [sogh] = useState(new Sogh(props.token));
     const [projects, setProjects] = useState([]);
     const [view, setView] = useState('table');
     const [filter, setFilter] = useState({
@@ -52,6 +50,8 @@ export default function ProductBacklogs (props) {
         priorities: {},
         closing: false,
     });
+
+    const sogh = props.sogh;
 
     useEffect(() => fetchProjects(props.repository, sogh, setProjects), [sogh]);
     useEffect(() => {

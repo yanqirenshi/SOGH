@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 
-import Sogh from '../js/Sogh.js';
 import TableReports from './reports/TableReports.js';
 
 function fetchReportIssues (repository, sogh, setIssues) {
@@ -12,9 +11,10 @@ function fetchReportIssues (repository, sogh, setIssues) {
 }
 
 export default function Reports (props) {
-    const [sogh] = useState(new Sogh(props.token));
     const [issues, setIssues] = useState([]);
     const [opens, setOpens] = useState({});
+
+    const sogh = props.sogh;
 
     useEffect(() => fetchReportIssues(props.repository, sogh, setIssues), [sogh]);
 

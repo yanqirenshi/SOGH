@@ -57,6 +57,15 @@ export default class Sogh {
             result: result ? result[1] * 1 : null,
         };
     }
+    addAnotetionValue4Issue (issue) {
+        issue.point = this.point(issue.body);
+
+        const duedate = /.*@Due\.Date:\s+(\d+-\d+-\d+).*/.exec(issue.body);
+
+        issue.due_date = duedate ? duedate[1] : null;
+
+        return issue;
+    }
     addAnotetionValue4Project (project) {
         const priority = (p) => {
             const ret = /.*@Priority:\s+([c|h|n|l]).*/.exec(p.body);
@@ -129,16 +138,13 @@ export default class Sogh {
                 const data = results.data.node.issues;
                 const page_info = data.pageInfo;
 
-                issues = issues.concat(data.nodes);
+                for(const d of data.nodes)
+                    issues.push(this.addAnotetionValue4Issue(d));
 
-                if (page_info.hasNextPage) {
+                if (page_info.hasNextPage)
                     getter(page_info.endCursor);
-                } else {
-                    cb(issues.map(d => {
-                        d.point = this.point(d.body);
-                        return d;
-                    }));
-                }
+                else
+                    cb(issues);
             });
         };
 
@@ -162,16 +168,13 @@ export default class Sogh {
                 const data = results.data.repository.issues;
                 const page_info = data.pageInfo;
 
-                issues = issues.concat(data.nodes);
+                for(const d of data.nodes)
+                    issues.push(this.addAnotetionValue4Issue(d));
 
-                if (page_info.hasNextPage) {
+                if (page_info.hasNextPage)
                     getter(page_info.endCursor);
-                } else {
-                    cb(issues.map(d => {
-                        d.point = this.point(d.body);
-                        return d;
-                    }));
-                }
+                else
+                    cb(issues);
             });
         };
 
@@ -198,16 +201,13 @@ export default class Sogh {
                 const data = results.data.repository.label.issues;
                 const page_info = data.pageInfo;
 
-                issues = issues.concat(data.nodes);
+                for(const d of data.nodes)
+                    issues.push(this.addAnotetionValue4Issue(d));
 
-                if (page_info.hasNextPage) {
+                if (page_info.hasNextPage)
                     getter(page_info.endCursor);
-                } else {
-                    cb(issues.map(d => {
-                        d.point = this.point(d.body);
-                        return d;
-                    }));
-                }
+                else
+                    cb(issues);
             });
         };
 
@@ -242,19 +242,16 @@ export default class Sogh {
                 };
 
                 data.nodes.reduce((list, d) => {
-                    if (isTarget(d.projectCards.nodes)) {
-                        d.point = this.point(d.body);
-                        list.push(d);
-                    }
+                    if (isTarget(d.projectCards.nodes))
+                        list.push(this.addAnotetionValue4Issue(d));
 
                     return list;
                 }, issues);
 
-                if (page_info.hasNextPage) {
+                if (page_info.hasNextPage)
                     getter(page_info.endCursor);
-                } else {
+                else
                     cb(issues);
-                }
             });
         };
 
