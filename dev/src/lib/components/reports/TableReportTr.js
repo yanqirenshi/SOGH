@@ -56,6 +56,9 @@ export default function TableReportTr (props) {
                </a>
              </td>
              <td>
+               {issue.closedAt ? 'Close' : 'Open'}
+             </td>
+             <td>
                <button className="button"
                        issue_id={issue.id}
                        onClick={clickSwitch}>

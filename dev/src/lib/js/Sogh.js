@@ -5,12 +5,36 @@ import GithubApiV4 from './GithubApiV4.js';
 
 export default class Sogh {
     constructor (token) {
-        this._token = token || null;
+        this._token = null;
+
+        this._viewer = null;
 
         this.api = {
-            v3: new GithubApiV3(this._token),
-            v4: new GithubApiV4(this._token),
+            v3: null,
+            v4: null,
         };
+    }
+    connect (token, success, error) {
+        const api = new GithubApiV4(token);
+
+        api.fetch(query.viwer, (results) => {
+            const data = results.data;
+
+            this._token = token;
+
+            this._viewer = data.viewer;
+            this.api.v3 = new GithubApiV3(this._token);
+            this.api.v4 = api;
+
+            success(this);
+        }, (r) => {
+            this._token = token;
+            this._viewer = null;
+            this.api.v3 = null;
+            this.api.v4 = null;
+
+            error(r);
+        });
     }
     ensureEndCursor(query, endCursor) {
         if (endCursor)
@@ -300,7 +324,7 @@ export default class Sogh {
             let query = this.ensureEndCursor(base_query, endCursor);
 
             api.fetch(query, (results) => {
-                cb(this.addAnotetionValue4Project(results.data.node));
+                cb(this.addAnotetionValue4Project({...results.data.node}));
             });
         };
 

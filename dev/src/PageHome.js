@@ -1,9 +1,11 @@
 import React from 'react';
+import { connect } from 'react-redux';
 
 import 'react-bulma-components/dist/react-bulma-components.min.css';
-import Sogh, * as SOGH from './lib/index.js';
 
-import Tabs from './Tabs.js';
+import * as SOGH from './lib/index.js';
+
+import Tabs from './components/Tabs.js';
 
 function isActive (a,b) {
     if (a.code===b)
@@ -12,7 +14,7 @@ function isActive (a,b) {
     return {display:'none'};
 };
 
-export default function PageHome () {
+function PageHome (props) {
     const tabs = [
         { code: 'ds', label: 'Daily scrum' },
         { code: 'sp', label: 'Sprint planning' },
@@ -28,8 +30,7 @@ export default function PageHome () {
         name:  process.env.REACT_APP_GITHUB_REPOSITORY_NAME,
     };
 
-    const sogh = new Sogh(process.env.REACT_APP_GITHUB_PARSONAL_TOKEN);
-
+    const sogh = props.sogh;
     return (
         <div>
           <div style={{paddingTop:11}}>
@@ -59,3 +60,12 @@ export default function PageHome () {
         </div>
     );
 }
+
+export default connect(
+    (state) => {
+        return {
+            sogh: state.sogh,
+        };
+    },
+    (dispatch) => ({}),
+)(PageHome);

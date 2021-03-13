@@ -3,8 +3,14 @@ const query = `{
     ... on Project {
       id
       name
-      number
       url
+      updatedAt
+      state
+      number
+      createdAt
+      closedAt
+      body
+      closed
       progress {
         todoPercentage
         todoCount

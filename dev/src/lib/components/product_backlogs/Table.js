@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import moment from 'moment';
+import {Link} from "react-router-dom";
 
 import ANewTab from '../common/ANewTab.js';
 
@@ -159,11 +160,9 @@ export default function Table (props) {
                             </td>}
 
                            <td style={{whiteSpace: 'nowrap'}}>
-                             <a href={props.productbacklog_url_prefix + d.id}
-                                target="_blank"
-                                rel="noreferrer">
+                             <Link to={props.productbacklog_url_prefix + d.id}>
                                詳細
-                             </a>
+                             </Link>
                            </td>
                          </tr>;
               })}

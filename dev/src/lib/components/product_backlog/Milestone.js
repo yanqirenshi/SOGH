@@ -1,4 +1,5 @@
 import React from 'react';
+import moment from 'moment';
 
 function makeLabels (d,i) {
     const aStyle = (hexcolor) => {
@@ -43,16 +44,29 @@ function makeProjectColumn (d, project) {
     return <p>{target.column.name}</p>;
 }
 
+function due (v) {
+    if (!v)
+        return '';
+
+    const m = moment(v);
+
+    if (!m.isValid())
+        return '';
+
+    return m.format('MM-DD ddd');
+}
+
 function makeTr (d, project) {
     return <tr key={d.id}>
              <td>
-               <a href={d.url}>
+               <a href={d.url} target="_blank" rel="noreferrer">
                  {d.number}
                </a>
              </td>
              <td>{d.title}</td>
              <td>{d.labels.nodes.map((d,i) => makeLabels(d,i))}</td>
-             <td>{makeProjectColumn(d, project)}</td>
+             <td style={{whiteSpace: 'nowrap'}}>{makeProjectColumn(d, project)}</td>
+             <td style={{whiteSpace: 'nowrap'}}>{due(d.due_date)}</td>
              <td>{d.point.plan}</td>
              <td>{d.point.result}</td>
            </tr>;
@@ -73,6 +87,7 @@ export default function Milestone (props) {
                 <tr>
                   <th colSpan="3">Issue</th>
                   <th>Project</th>
+                  <th>Due</th>
                   <th colSpan="2">Point</th>
                 </tr>
                 <tr>
@@ -80,6 +95,7 @@ export default function Milestone (props) {
                   <th>Title</th>
                   <th>Labels</th>
                   <th>Column</th>
+                  <th>Date</th>
                   <th>Plan</th>
                   <th>Result</th>
                 </tr>

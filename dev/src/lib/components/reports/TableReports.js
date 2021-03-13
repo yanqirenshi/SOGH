@@ -14,6 +14,7 @@ export default function TableReports (props) {
              <tr>
                <th>更新</th>
                <th>#</th>
+               <th>Status</th>
                <th>Title</th>
                <th>Project / Contents</th>
              </tr>

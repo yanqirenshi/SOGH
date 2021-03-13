@@ -9,8 +9,9 @@ export default function Milestones (props) {
     return (
         <section className="section">
           <div className="container">
-            {milestones.map(d => <Milestone source={d}
-                                                 project={project} />)}
+            {milestones.map(d => <Milestone key={d.id}
+                                            source={d}
+                                            project={project} />)}
           </div>
         </section>
     );
