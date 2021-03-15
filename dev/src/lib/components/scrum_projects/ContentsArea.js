@@ -4,7 +4,7 @@ import ButtonRefresh from '../common/ButtonRefresh.js';
 import ProductBacklogs from '../common/ProductBacklogs.js';
 
 import ListProductBacklogs from './ListProductBacklogs.js';
-import ProductAndMilestone from './ProductAndMilestone.js';
+import ProductAndMilestone from '../common/ProductAndMilestone.js';
 import Filter from '../common/Filter.js';
 import ChartBardown from '../common/ChartBardown.js';
 
