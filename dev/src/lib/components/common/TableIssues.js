@@ -71,7 +71,7 @@ function prjNum (issue) {
     if (!project.id)
         return '';
 
-    return <a href={project.url} target="_blank">
+    return <a href={project.url} target="_blank" rel="noreferrer">
              {project.number}
            </a>;
 }
