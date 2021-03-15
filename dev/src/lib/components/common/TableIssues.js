@@ -140,11 +140,7 @@ export default function TableIssues (props) {
           <thead>
             <tr>
               <th colSpan="4">Product Backlog</th>
-              <th rowSpan="2">#</th>
-              <th rowSpan="2">Title</th>
-              <th rowSpan="2">Labels</th>
-              <th rowSpan="2">Assignees</th>
-              <th rowSpan="2">Due Date</th>
+              <th colSpan="5">Sprint Backlog</th>
               <th colSpan="3">Point</th>
               {/* <th>Create</th> */}
               <th>Update</th>
@@ -155,6 +151,11 @@ export default function TableIssues (props) {
               <th>Num</th>
               <th>Name</th>
               <th>Col</th>
+              <th rowSpan="2">#</th>
+              <th rowSpan="2">Title</th>
+              <th rowSpan="2">Labels</th>
+              <th rowSpan="2">Assignees</th>
+              <th rowSpan="2">Due Date</th>
               <th>Plan</th>
               <th>Result</th>
               <th>Diff</th>
