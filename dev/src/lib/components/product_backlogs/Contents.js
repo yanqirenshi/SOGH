@@ -12,7 +12,7 @@ import ButtonRefresh from './ButtonRefresh.js';
 import Cards from './Cards.js';
 import Table from './Table.js';
 
-import style from '../daily_scrum/Style.js';
+import style from '../scrum_projects/Style.js';
 
 function filtering (filter, projects) {
     const keyword = filter.keyword;

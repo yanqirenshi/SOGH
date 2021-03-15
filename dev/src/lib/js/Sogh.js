@@ -375,6 +375,33 @@ export default class Sogh {
 
         return pool;
     }
+    issues2dueDates (issues) {
+        const ht = {};
+        const list = [];
+
+        const dd = (v) => {
+            if (!v)
+                return null;
+
+            const m = moment(v);
+
+            if (!m.isValid())
+                return null;
+
+            return m.format('YYYY-MM-DD');
+        };
+
+        for (const issue of issues) {
+            const key = dd(issue.due_date);
+            if (!ht[key])
+                ht[key] = [];
+
+            ht[key].push(issue);
+            list.push(issue);
+        }
+
+        return { list: list, ht: ht };
+    }
     pointFromIssueBody (v) {
         const ret = /.*@Point:\s+(\d+).*/.exec(v);
 

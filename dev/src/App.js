@@ -13,7 +13,7 @@ import PageProductBacklog from './PageProductBacklog.js';
 import { connectGithub } from './actions/sogh.js';
 
 function App(props) {
-    const [token, setToken] = useState(process.env.REACT_APP_GITHUB_PARSONAL_TOKEN || null);
+    const [token] = useState(process.env.REACT_APP_GITHUB_PARSONAL_TOKEN || null);
 
     useEffect(() => props.connectGithub(token), [token]);
 

@@ -16,10 +16,11 @@ function isActive (a,b) {
 
 function PageHome (props) {
     const tabs = [
-        { code: 'ds', label: 'Daily scrum' },
-        { code: 'sp', label: 'Sprint planning' },
-        { code: 'pb', label: 'Product backlog' },
-        { code: 'rp', label: 'Reports' },
+        { code: 'sct', label: 'Scrum (Timeline)' },
+        { code: 'ds',  label: 'Scrum (Projects)' },
+        { code: 'sp',  label: 'Sprint planning' },
+        { code: 'pb',  label: 'Product backlog' },
+        { code: 'rp',  label: 'Reports' },
     ];
     const pathname = window.location.pathname;
     const params = new URLSearchParams(window.location.search);
@@ -38,16 +39,21 @@ function PageHome (props) {
           </div>
 
           <div style={isActive(tabs[0], selected)}>
-            <SOGH.DailyScrum sogh={sogh}
-                             repository={repository} />
+            <SOGH.ScrumTimeline sogh={sogh}
+                                repository={repository} />
           </div>
 
           <div style={isActive(tabs[1], selected)}>
+            <SOGH.ScrumProjects sogh={sogh}
+                                repository={repository} />
+          </div>
+
+          <div style={isActive(tabs[2], selected)}>
             <SOGH.SprintPlanning sogh={sogh}
                                  repository={repository} />
           </div>
 
-          <div style={isActive(tabs[2], selected)}>
+          <div style={isActive(tabs[3], selected)}>
             <SOGH.ProductBacklogs sogh={sogh}
                                   repository={repository}
                                   productbacklog_url_prefix="/product-backlogs/" />

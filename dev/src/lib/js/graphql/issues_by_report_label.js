@@ -30,6 +30,7 @@ const query = `{
                 url
                 project {
                   id
+                  number
                   name
                   body
                   url

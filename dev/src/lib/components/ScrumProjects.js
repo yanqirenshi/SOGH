@@ -2,9 +2,9 @@ import React from 'react';
 
 import NotSignIn from './common/NotSignIn.js';
 
-import Contents from './daily_scrum/Contents.js';
+import Contents from './scrum_projects/Contents.js';
 
-export default function DailyScrum (props) {
+export default function ScrumProjects (props) {
     const sogh = props.sogh;
 
     return (
