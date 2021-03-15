@@ -515,13 +515,40 @@ export default class Sogh {
         const x = { c: [], h: [], n: [], l: [], '?': [] };
 
         for (const project of sorted_projects) {
-            const p = project.priority;
+            const p = project.priority || '?';
 
             x[p].push(project);
         }
 
-        return [...x.c, ...x.h, ...x.n, ...x.l ];
+        return [...x.c, ...x.h, ...x.n, ...x.l, ...x['?']];
+    }
+    sortIssuesByProjectAndPriority (issues) {
+        const projects = {};
 
+        for (const issue of issues) {
+            const card = issue.projectCards.nodes;
+            const project_id = card.length===0 ? null : card[0].column.project.id;
+
+            if (!projects[project_id]) {
+                if (project_id) {
+                    const tmp = {...card[0].column.project, ...{issues: []}};
+                    projects[project_id] = tmp || { id: null, issues: [] };
+                } else {
+                    projects[project_id] =  {id: null, issues: [] };
+                }
+                projects[project_id] = this.addAnotetionValue4Project(projects[project_id]);
+            }
+
+            const project = projects[project_id];
+
+            issue.project = project;
+
+            project.issues.push(issue);
+        }
+
+        const x = this.sortProjectsByPriority(Object.values(projects));
+
+        return x.reduce((list,d) => list.concat(d.issues), []);
     }
     /////
     ///// summary issue

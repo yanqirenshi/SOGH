@@ -9,6 +9,8 @@ export default function DueDate (props) {
     const title = props.title;
     const issues = props.issues;
 
+    const issues_sorted =  sogh.sortIssuesByProjectAndPriority(issues);
+
     return (
         <nav className="panel">
           <DueDateHeader sogh={sogh}
@@ -17,7 +19,7 @@ export default function DueDate (props) {
                          callbacks={props.callbacks} />
 
           <div className="panel-block">
-            <TableIssues issues={issues} />
+            <TableIssues issues={issues_sorted} sogh={sogh} />
           </div>
 
           <div className="panel-block">

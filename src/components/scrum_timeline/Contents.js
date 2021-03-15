@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 
+import ProductAndMilestone from '../common/ProductAndMilestone.js';
 import DueDates from '../common/DueDates.js';
 import Filter from '../../js/Filter.js';
 
@@ -76,7 +77,17 @@ export default function Contents (props) {
 
     return (
         <div style={style.root}>
-          <DueDates duedates={duedates_filterd} />
+          <div>
+            <ProductAndMilestone repository={props.repository}
+                                 milestone={milestone} />
+          </div>
+
+          <div>
+          </div>
+
+          <div>
+            <DueDates duedates={duedates_filterd} sogh={sogh} />
+          </div>
         </div>
     );
 }

@@ -7,7 +7,7 @@ export default function Hero (props) {
     const project = props.project;
 
     const style = sogh.headerColor(project);
-
+    console.log(project)
     return (
         <section className="hero is-large sogh-product-backlog-hero"
                  style={{background: style.background}}>
@@ -51,7 +51,16 @@ export default function Hero (props) {
                 {project && project.title}
               </p>
               <p className="subtitle" style={{color: style.color}}>
-                {project && project.type}
+                <span>
+                  {project && project.type}
+                </span>
+                <span style={{marginLeft:22}}>
+                  (
+                  <a href={project && project.url} target="_blank" rel="noreferrer">
+                    {project && project.number}
+                  </a>
+                  )
+                </span>
               </p>
             </div>
           </div>
