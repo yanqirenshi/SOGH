@@ -13,12 +13,7 @@ export default function DueDates (props) {
 
     const duedates = props.duedates;
 
-    const keys = Object.keys(duedates.ht).sort((a,b) => a < b ? 1 : -1);
-
-    if (keys[0]==='null') {
-        keys.shift();
-        keys.push('null');
-    }
+    const keys = Object.keys(duedates.ht).sort((a,b) => a < b ? -1 : 1);
 
     return (
         <div style={style}>

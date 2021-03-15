@@ -76,7 +76,7 @@ export default function Contents (props) {
 
     return (
         <div style={style.root}>
-          <DueDates duedates={duedates_filterd} />
+          <DueDates duedates={duedates_filterd} sogh={sogh} />
         </div>
     );
 }
