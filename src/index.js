@@ -1,4 +1,5 @@
-import DailyScrum from './components/DailyScrum.js';
+import ScrumTimeline from './components/ScrumTimeline.js';
+import ScrumProjects from './components/ScrumProjects.js';
 import SprintPlanning from './components/SprintPlanning.js';
 import ProductBacklogs from './components/ProductBacklogs.js';
 import ProductBacklog from './components/ProductBacklog.js';
@@ -11,7 +12,8 @@ export default Sogh;
 export {
     ProductBacklogs,
     ProductBacklog,
-    DailyScrum,
+    ScrumTimeline,
+    ScrumProjects,
     SprintPlanning,
     Reports,
     // class

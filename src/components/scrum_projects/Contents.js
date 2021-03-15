@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 
-import Sogh from '../js/Sogh.js';
-import Filter from '../js/Filter.js';
-import ContentsArea  from './daily_scrum/ContentsArea.js';
-import SprintListArea from './daily_scrum/SprintListArea.js';
+import Filter from '../../js/Filter.js';
+import ContentsArea  from './ContentsArea.js';
+import SprintListArea from './SprintListArea.js';
 
-import style from './daily_scrum/Style.js';
+import style from './Style.js';
 
 function targetMilestone (milestones) {
     const sorted = milestones.sort((a,b) => a.dueOn < b.dueOn ? -1 :1);
@@ -19,8 +18,7 @@ function targetMilestone (milestones) {
     return null;
 }
 
-export default function DailyScrum (props) {
-    const [sogh] = useState(new Sogh(props.token));
+export default function Contents (props) {
     const [filter] = useState(new Filter());
     const [changed, setChanged] = useState(null);
 
@@ -31,6 +29,8 @@ export default function DailyScrum (props) {
     const [projects, setProjects] = useState({ht:[],list:[]});
     const [projects_filterd, setProjectsFilterd] = useState({ht:[],list:[]});
     const [closeProjects, setCloseProjects] = useState({});
+
+    const sogh = props.sogh;
 
     const refresh = () => {
         if (issues.length>0)

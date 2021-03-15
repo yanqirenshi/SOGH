@@ -22,11 +22,17 @@ export default class GithubApiV4 {
             body: JSON.stringify({query: query})
         };
     }
-    fetch (query, cb) {
+    fetch (query, success, error) {
         const endpoint = 'https://api.github.com/graphql';
 
         fetch(endpoint, this.postData(this._token, query))
-            .then(response => response.json())
-            .then(cb);
+            .then(response => {
+                if (response.ok)
+                    return response.json();
+                else
+                    return Promise.reject(response);
+            })
+            .then(data => success(data))
+            .catch(err => error(err));
     }
 }

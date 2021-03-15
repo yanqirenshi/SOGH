@@ -5,12 +5,36 @@ import GithubApiV4 from './GithubApiV4.js';
 
 export default class Sogh {
     constructor (token) {
-        this._token = token || null;
+        this._token = null;
+
+        this._viewer = null;
 
         this.api = {
-            v3: new GithubApiV3(this._token),
-            v4: new GithubApiV4(this._token),
+            v3: null,
+            v4: null,
         };
+    }
+    connect (token, success, error) {
+        const api = new GithubApiV4(token);
+
+        api.fetch(query.viwer, (results) => {
+            const data = results.data;
+
+            this._token = token;
+
+            this._viewer = data.viewer;
+            this.api.v3 = new GithubApiV3(this._token);
+            this.api.v4 = api;
+
+            success(this);
+        }, (r) => {
+            this._token = token;
+            this._viewer = null;
+            this.api.v3 = null;
+            this.api.v4 = null;
+
+            error(r);
+        });
     }
     ensureEndCursor(query, endCursor) {
         if (endCursor)
@@ -56,6 +80,15 @@ export default class Sogh {
             plan:   plan ? plan[1] * 1 : null,
             result: result ? result[1] * 1 : null,
         };
+    }
+    addAnotetionValue4Issue (issue) {
+        issue.point = this.point(issue.body);
+
+        const duedate = /.*@Due\.Date:\s+(\d+-\d+-\d+).*/.exec(issue.body);
+
+        issue.due_date = duedate ? duedate[1] : null;
+
+        return issue;
     }
     addAnotetionValue4Project (project) {
         const priority = (p) => {
@@ -129,16 +162,13 @@ export default class Sogh {
                 const data = results.data.node.issues;
                 const page_info = data.pageInfo;
 
-                issues = issues.concat(data.nodes);
+                for(const d of data.nodes)
+                    issues.push(this.addAnotetionValue4Issue(d));
 
-                if (page_info.hasNextPage) {
+                if (page_info.hasNextPage)
                     getter(page_info.endCursor);
-                } else {
-                    cb(issues.map(d => {
-                        d.point = this.point(d.body);
-                        return d;
-                    }));
-                }
+                else
+                    cb(issues);
             });
         };
 
@@ -162,16 +192,13 @@ export default class Sogh {
                 const data = results.data.repository.issues;
                 const page_info = data.pageInfo;
 
-                issues = issues.concat(data.nodes);
+                for(const d of data.nodes)
+                    issues.push(this.addAnotetionValue4Issue(d));
 
-                if (page_info.hasNextPage) {
+                if (page_info.hasNextPage)
                     getter(page_info.endCursor);
-                } else {
-                    cb(issues.map(d => {
-                        d.point = this.point(d.body);
-                        return d;
-                    }));
-                }
+                else
+                    cb(issues);
             });
         };
 
@@ -198,16 +225,13 @@ export default class Sogh {
                 const data = results.data.repository.label.issues;
                 const page_info = data.pageInfo;
 
-                issues = issues.concat(data.nodes);
+                for(const d of data.nodes)
+                    issues.push(this.addAnotetionValue4Issue(d));
 
-                if (page_info.hasNextPage) {
+                if (page_info.hasNextPage)
                     getter(page_info.endCursor);
-                } else {
-                    cb(issues.map(d => {
-                        d.point = this.point(d.body);
-                        return d;
-                    }));
-                }
+                else
+                    cb(issues);
             });
         };
 
@@ -242,19 +266,16 @@ export default class Sogh {
                 };
 
                 data.nodes.reduce((list, d) => {
-                    if (isTarget(d.projectCards.nodes)) {
-                        d.point = this.point(d.body);
-                        list.push(d);
-                    }
+                    if (isTarget(d.projectCards.nodes))
+                        list.push(this.addAnotetionValue4Issue(d));
 
                     return list;
                 }, issues);
 
-                if (page_info.hasNextPage) {
+                if (page_info.hasNextPage)
                     getter(page_info.endCursor);
-                } else {
+                else
                     cb(issues);
-                }
             });
         };
 
@@ -303,7 +324,7 @@ export default class Sogh {
             let query = this.ensureEndCursor(base_query, endCursor);
 
             api.fetch(query, (results) => {
-                cb(this.addAnotetionValue4Project(results.data.node));
+                cb(this.addAnotetionValue4Project({...results.data.node}));
             });
         };
 
@@ -353,6 +374,33 @@ export default class Sogh {
         }
 
         return pool;
+    }
+    issues2dueDates (issues) {
+        const ht = {};
+        const list = [];
+
+        const dd = (v) => {
+            if (!v)
+                return null;
+
+            const m = moment(v);
+
+            if (!m.isValid())
+                return null;
+
+            return m.format('YYYY-MM-DD');
+        };
+
+        for (const issue of issues) {
+            const key = dd(issue.due_date);
+            if (!ht[key])
+                ht[key] = [];
+
+            ht[key].push(issue);
+            list.push(issue);
+        }
+
+        return { list: list, ht: ht };
     }
     pointFromIssueBody (v) {
         const ret = /.*@Point:\s+(\d+).*/.exec(v);

@@ -2,9 +2,9 @@ import React from 'react';
 
 import NotSignIn from './common/NotSignIn.js';
 
-import Contents from './sprint_planning/Contents.js';
+import Contents from './scrum_timeline/Contents.js';
 
-export default function SprintPlanning (props) {
+export default function ScrumTimeline (props) {
     const sogh = props.sogh;
 
     return (

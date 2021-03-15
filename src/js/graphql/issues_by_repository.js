@@ -25,6 +25,7 @@ const query = `{
               name
               project {
                 id
+                number
                 name
                 body
                 createdAt
