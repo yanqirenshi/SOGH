@@ -62,16 +62,14 @@ function due (v) {
     if (!m.isValid())
         return '';
 
-    return m.format('MM-DD');
+    return m.format('MM-DD ddd');
 }
 
 function prjNum (issue) {
-    const cards = issue.projectCards.nodes;
+    const project = issue.project;
 
-    if (cards.length===0)
+    if (!project.id)
         return '';
-
-    const project = cards[0].column.project;
 
     return <a href={project.url} target="_blank">
              {project.number}
@@ -79,15 +77,18 @@ function prjNum (issue) {
 }
 
 function prjName (issue) {
-    const cards = issue.projectCards.nodes;
-    if (cards.length===0)
-        return '';
-
-    return cards[0].column.project.name;
+    return issue.project.name || '';
 }
 
-function makeTrs (issue) {
+function prjPri (sogh, issue) {
+    return sogh.priorityLabel(issue.project.priority);
+}
+
+function makeTrs (sogh, issue) {
     return <tr key={issue.id}>
+             <td style={sogh.headerColor(issue.project)}>
+               {prjPri(sogh, issue)}
+             </td>
              <td>{prjNum(issue)}</td>
              <td>{prjName(issue)}</td>
              <td style={style.nowrap}>
@@ -110,9 +111,9 @@ function makeTrs (issue) {
              })}</td>
              <td style={style.nowrap}>
                {issue.assignees.nodes.map(a => {
-                   return <span key={issue.id+'.'+a.id}>
+                   return <p key={issue.id+'.'+a.id}>
                             {a.name || a.login}
-                          </span>;
+                          </p>;
                })}
              </td>
              <td style={style.nowrap}>
@@ -130,14 +131,15 @@ function makeTrs (issue) {
 }
 
 export default function TableIssues (props) {
+    const sogh = props.sogh;
     const issues = props.issues;
 
     return (
-        <table className="table is-bordered is-striped is-narrow is-hoverable is-fullwidth"
+        <table className="table is-striped is-narrow is-hoverable is-fullwidth"
                style={{fontSize:14}}>
           <thead>
             <tr>
-              <th colSpan="3">Product Backlog</th>
+              <th colSpan="4">Product Backlog</th>
               <th rowSpan="2">#</th>
               <th rowSpan="2">Title</th>
               <th rowSpan="2">Labels</th>
@@ -149,6 +151,7 @@ export default function TableIssues (props) {
               <th>Close</th>
             </tr>
             <tr>
+              <th>優</th>
               <th>Num</th>
               <th>Name</th>
               <th>Col</th>
@@ -162,7 +165,7 @@ export default function TableIssues (props) {
           </thead>
 
           <tbody>
-            {issues.map(d => makeTrs(d))}
+            {issues.map(d => makeTrs(sogh, d))}
           </tbody>
         </table>
     );

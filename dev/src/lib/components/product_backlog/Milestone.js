@@ -57,19 +57,28 @@ function due (v) {
 }
 
 function makeTr (d, project) {
-    return <tr key={d.id}>
-             <td>
-               <a href={d.url} target="_blank" rel="noreferrer">
-                 {d.number}
-               </a>
-             </td>
-             <td>{d.title}</td>
-             <td>{d.labels.nodes.map((d,i) => makeLabels(d,i))}</td>
-             <td style={{whiteSpace: 'nowrap'}}>{makeProjectColumn(d, project)}</td>
-             <td style={{whiteSpace: 'nowrap'}}>{due(d.due_date)}</td>
-             <td>{d.point.plan}</td>
-             <td>{d.point.result}</td>
-           </tr>;
+    return (
+        <tr key={d.id}>
+          <td style={{whiteSpace: 'nowrap'}}>{makeProjectColumn(d, project)}</td>
+          <td>
+            <a href={d.url} target="_blank" rel="noreferrer">
+              {d.number}
+            </a>
+          </td>
+          <td>{d.title}</td>
+          <td>{d.labels.nodes.map((d,i) => makeLabels(d,i))}</td>
+          <td>
+            {d.assignees.nodes.map(a => {
+                return <p key={d.id+'.'+a.id}>
+                         {a.name || a.login}
+                       </p>;
+            })}
+          </td>
+          <td style={{whiteSpace: 'nowrap'}}>{due(d.due_date)}</td>
+          <td>{d.point.plan}</td>
+          <td>{d.point.result}</td>
+        </tr>
+    );
 }
 
 export default function Milestone (props) {
@@ -85,16 +94,17 @@ export default function Milestone (props) {
             <table className="table is-striped is-narrow is-hoverable is-fullwidth">
               <thead>
                 <tr>
-                  <th colSpan="3">Issue</th>
                   <th>Project</th>
+                  <th colSpan="4">Issue</th>
                   <th>Due</th>
                   <th colSpan="2">Point</th>
                 </tr>
                 <tr>
+                  <th>Column</th>
                   <th>#</th>
                   <th>Title</th>
                   <th>Labels</th>
-                  <th>Column</th>
+                  <th>Assignees</th>
                   <th>Date</th>
                   <th>Plan</th>
                   <th>Result</th>
