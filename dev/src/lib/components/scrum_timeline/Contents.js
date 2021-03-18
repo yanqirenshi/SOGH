@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 
+import ButtonRefresh from '../common/ButtonRefresh.js';
 import ProductAndMilestone from '../common/ProductAndMilestone.js';
 import DueDates from '../common/DueDates.js';
 import Filter from '../common/Filter.js';
@@ -82,10 +83,10 @@ export default function Contents (props) {
                                  milestone={milestone} />
           </div>
 
-          <div style={{marginBottom: 22}}>
-            {/* <div> */}
-            {/*   <ButtonRefresh callbacks={props.callbacks} /> */}
-            {/* </div> */}
+          <div style={{marginBottom: 22, display: 'flex'}}>
+            <div>
+              <ButtonRefresh callbacks={callbacks} />
+            </div>
 
             <Filter issues={issues}
                     filter={filter}
