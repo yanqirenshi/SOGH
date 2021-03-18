@@ -26,10 +26,11 @@ function filtering (filter, projects) {
         if (priorities[d.priority])
             return false;
 
-        if (closing
-            && !(d.progress.doneCount > 1 &&
-                 d.progress.inProgressCount === 0 &&
-                 d.progress.todoCount <= 1))
+        if (closing)
+            if (!(d.progress.doneCount > 1 &&
+                  d.progress.inProgressCount === 0 &&
+                  d.progress.todoCount <= 1)
+               && !d.result.end)
             return false;
 
         return true;
