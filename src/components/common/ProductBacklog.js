@@ -27,7 +27,7 @@ export default function ProductBacklog (props) {
            </div>}
 
           <div className="panel-block">
-            <TablePointProductBacklog project={project} />
+            <TablePointProductBacklog issues={project.issues || []} />
           </div>
         </nav>
     );

@@ -392,7 +392,8 @@ export default class Sogh {
         };
 
         for (const issue of issues) {
-            const key = dd(issue.due_date);
+            const key = dd(issue.closedAt || issue.due_date);
+
             if (!ht[key])
                 ht[key] = [];
 

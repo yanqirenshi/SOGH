@@ -2,6 +2,7 @@ import React from 'react';
 
 import DueDateHeader from './DueDateHeader.js';
 import TableIssues from './TableIssues.js';
+import TablePointProductBacklog from './TablePointProductBacklog.js';
 
 export default function DueDate (props) {
     const sogh = props.sogh;
@@ -23,6 +24,7 @@ export default function DueDate (props) {
           </div>
 
           <div className="panel-block">
+            <TablePointProductBacklog issues={issues || []} />
           </div>
         </nav>
     );

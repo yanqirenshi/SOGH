@@ -1,7 +1,7 @@
 import React from 'react';
 
 export default function TablePointProductBacklog (props) {
-    const data = props.project.issues.reduce((out, issue)=>{
+    const data = props.issues.reduce((out, issue)=>{
         out.points.plan += issue.point.plan || 0;
         out.points.result += issue.point.result || 0;
 
