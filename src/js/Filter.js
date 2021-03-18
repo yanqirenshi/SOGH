@@ -1,8 +1,10 @@
+import merge from 'deepmerge';
+
 export default class Filter {
-    constructor () {
-        this._filter = this.makeFilter();
+    constructor (filter) {
+        this._filter = this.makeFilter(filter || {});
     }
-    makeFilter () {
+    defaultFilter () {
         return {
             assignee: [],
             project: [],
@@ -14,6 +16,9 @@ export default class Filter {
                 DiffMinus: false,
             },
         };
+    }
+    makeFilter (filter) {
+        return merge(this.defaultFilter(), filter);
     }
     // change
     changeFilterList (id, filter) {
