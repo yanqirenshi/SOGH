@@ -3,7 +3,7 @@ import moment from 'moment';
 
 import ProductAndMilestone from '../common/ProductAndMilestone.js';
 import DueDates from '../common/DueDates.js';
-import Filter from '../../js/Filter.js';
+import Filter from '../common/Filter.js';
 
 import style from './Style.js';
 
@@ -19,7 +19,6 @@ function targetMilestone (milestones) {
 }
 
 export default function Contents (props) {
-    const [filter] = useState(new Filter());
     const [changed, setChanged] = useState(null);
 
     const [milestones, setMilestones] = useState([]);
@@ -31,6 +30,7 @@ export default function Contents (props) {
     const [duedates_filterd, setDueDatesFilterd] = useState({ht:[],list:[]});
 
     const sogh = props.sogh;
+    const filter = props.filter;
 
     const refresh = () => {
         if (issues.length>0)
@@ -82,7 +82,15 @@ export default function Contents (props) {
                                  milestone={milestone} />
           </div>
 
-          <div>
+          <div style={{marginBottom: 22}}>
+            {/* <div> */}
+            {/*   <ButtonRefresh callbacks={props.callbacks} /> */}
+            {/* </div> */}
+
+            <Filter issues={issues}
+                    filter={filter}
+                    callbacks={callbacks}
+                    sogh={sogh} />
           </div>
 
           <div>
