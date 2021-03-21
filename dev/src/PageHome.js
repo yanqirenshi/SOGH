@@ -16,6 +16,7 @@ function isActive (a,b) {
 
 function PageHome (props) {
     const tabs = [
+        { code: 'vis', label: 'Issues' },
         { code: 'sct', label: 'Scrum (Timeline)' },
         { code: 'ds',  label: 'Scrum (Projects)' },
         { code: 'sp',  label: 'Sprint planning' },
@@ -39,21 +40,25 @@ function PageHome (props) {
           </div>
 
           <div style={isActive(tabs[0], selected)}>
+            <SOGH.ViwerIssues sogh={sogh} repository={repository} />
+          </div>
+
+          <div style={isActive(tabs[1], selected)}>
             <SOGH.ScrumTimeline sogh={sogh}
                                 repository={repository} />
           </div>
 
-          <div style={isActive(tabs[1], selected)}>
+          <div style={isActive(tabs[2], selected)}>
             <SOGH.ScrumProjects sogh={sogh}
                                 repository={repository} />
           </div>
 
-          <div style={isActive(tabs[2], selected)}>
+          <div style={isActive(tabs[3], selected)}>
             <SOGH.SprintPlanning sogh={sogh}
                                  repository={repository} />
           </div>
 
-          <div style={isActive(tabs[3], selected)}>
+          <div style={isActive(tabs[4], selected)}>
             <SOGH.ProductBacklogs sogh={sogh}
                                   repository={repository}
                                   productbacklog_url_prefix="/product-backlogs/" />

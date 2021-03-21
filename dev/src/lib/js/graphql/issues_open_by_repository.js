@@ -1,5 +1,5 @@
 const query = `{
-  viewer {
+  repository(name: "@name", owner: "@owner") {
     issues(after: "", first: 100, states: OPEN) {
       pageInfo {
         hasNextPage
@@ -19,7 +19,7 @@ const query = `{
           name
           url
         }
-        projectCards(first: 10) {
+        projectCards(first: 1) {
           nodes {
             id
             url
@@ -69,6 +69,7 @@ const query = `{
       }
     }
   }
-}`;
+}
+`;
 
 export default query;
