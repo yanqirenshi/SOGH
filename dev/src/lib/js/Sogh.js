@@ -851,15 +851,20 @@ export default class Sogh {
         return color;
     };
     /////
-    issues2filterContents (issues) {
+    issues2filterContents (old_filter, issues) {
         const projects = {};
         const milestones = {};
+
+        const active = (type, milestone) => {
+            const old = old_filter[type].ht[milestone.id];
+            return old ? old.active : true;
+        };
 
         for (const issue of issues) {
             const milestone = issue.milestone;
             if (milestone && !milestones[milestone.id]) {
                 milestones[milestone.id] = milestone;
-                milestones[milestone.id].active = true;
+                milestones[milestone.id].active = active('milestones', milestone);
             }
 
             const cards = issue.projectCards.nodes;
@@ -868,7 +873,7 @@ export default class Sogh {
                     const project = card.column.project;
                     if (!projects[project.id]) {
                         projects[project.id] = project;
-                        projects[project.id].active = true;
+                        projects[project.id].active = active('projects', project);
                     }
                 }
         }

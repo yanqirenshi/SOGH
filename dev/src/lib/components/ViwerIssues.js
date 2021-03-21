@@ -41,7 +41,7 @@ export default function ViwerIssues (props) {
             return;
 
         sogh.getIssuesOpenByRepository(repository, sogh._viewer, (issues) => {
-            setFilter(sogh.issues2filterContents(issues));
+            setFilter(sogh.issues2filterContents(filter, issues));
         });
     }, [updated_at]);
 
