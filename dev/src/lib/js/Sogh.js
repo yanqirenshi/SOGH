@@ -849,7 +849,7 @@ export default class Sogh {
         const color = ( ( ( (r * 299) + (g * 587) + (b * 114) ) / 1000 ) < 128 ) ? "white" : "black" ;
 
         return color;
-    };
+    }
     /////
     issues2filterContents (old_filter, issues) {
         const projects = {};
@@ -881,6 +881,7 @@ export default class Sogh {
         return {
             projects:   { ht: projects,   list: Object.values(projects) },
             milestones: { ht: milestones, list: Object.values(milestones) },
+            contents: old_filter.contents,
         };
     }
     filteringIssues2filter (filter, issues) {
@@ -893,9 +894,11 @@ export default class Sogh {
         const milestones = filter.milestones.list.reduce(ope, {});
 
         return issues.filter(d => {
+            // milestone
             if (d.milestone && milestones[d.milestone.id]===false)
                 return false;
 
+            // project
             const cards = d.projectCards.nodes;
             let exist = false;
             if (cards.length > 0)
@@ -905,6 +908,24 @@ export default class Sogh {
 
             if (!exist)
                 return false;
+
+
+            if (filter.contents.word.trim()!=='') {
+                const word = filter.contents.word.toUpperCase();
+
+                if (filter.contents.targets.labels && d.projectCards.nodes.length>0) {
+                    const x = d.projectCards.nodes.find(d => {
+                        return d.column.name.toUpperCase().indexOf(word) > 0;
+                    });
+
+                    if (!x) return false;
+                }
+
+                if (filter.contents.targets.title) {
+                    if (d.title.toUpperCase().indexOf(word)===-1)
+                        return false;
+                }
+            }
 
             return true;
         });

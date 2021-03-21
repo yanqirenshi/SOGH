@@ -24,6 +24,10 @@ export default function ViwerIssues (props) {
     const [filter, setFilter] = useState({
         projects:   { ht: {}, list: [] },
         milestones: { ht: {}, list: [] },
+        contents: {
+            word: '',
+            targets: { labels: true, title: false } ,
+        },
     });
     const sogh = props.sogh;
     const repository = props.repository;
@@ -63,6 +67,28 @@ export default function ViwerIssues (props) {
 
                 setFilter({...filter});
             },
+            changeContents: (type, value) => {
+                if ('word'===type) {
+                    if (filter.contents.word===value)
+                        return;
+                    filter.contents.word = value;
+                }
+
+                if ('labels'===type) {
+                    console.log(value)
+                    if (filter.contents.targets.labels===value)
+                        return;
+                    filter.contents.targets.labels = value;
+                }
+
+                if ('title'===type) {
+                    if (filter.contents.targets.title===value)
+                        return;
+                    filter.contents.targets.title = value;
+                }
+
+                setFilter({...filter});
+            },
             clearAll: (type) => setFilter(allOpenClose(filter, type, false)),
             checkAll: (type) => setFilter(allOpenClose(filter, type, true)),
         },
@@ -71,6 +97,7 @@ export default function ViwerIssues (props) {
     return (
         <div style={{paddingTop:22}}>
           {sogh  && <Controller updated_at={updated_at}
+                                filter={filter}
                                 callbaks={callbaks}
                                 sogh={props.sogh} />}
           {sogh  && <Contents sogh={props.sogh}
