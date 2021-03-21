@@ -73,7 +73,7 @@ export default function ViwerIssues (props) {
 
     return (
         <>
-          <span style={{display:'none'}}>{updated_at}</span>
+          <span style={{display:'none'}}>{typeof updated_at}</span>
           {sogh  && <Contents sogh={props.sogh}
                               issues={issues(sogh)}
                               filter={filter}
