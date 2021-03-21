@@ -217,8 +217,6 @@ export default class Sogh {
         if (!this.api.v4._token || !repository)
             cb([]);
 
-        const fetch = this._data.viwer.issues.fetch;
-
         this._data.viwer.issues.fetch.start = new Date();
         this._data.viwer.issues.fetch.end = null;
 
@@ -343,8 +341,6 @@ export default class Sogh {
     getIssuesByViwer (cb) {
         if (!this.api.v4._token)
             return cb([]);
-
-        const fetch = this._data.viwer.issues.fetch;
 
         this._data.viwer.issues.fetch.start = new Date();
         this._data.viwer.issues.fetch.end = null;

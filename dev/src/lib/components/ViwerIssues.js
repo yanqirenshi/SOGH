@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 import NotSignIn from './common/NotSignIn.js';
 
@@ -49,12 +49,31 @@ export default function ViwerIssues (props) {
                     filter.milestones.ht[id].active = value;
 
                 setFilter({...filter});
-            }
+            },
+            clearAll: (type) => {
+                if (!filter[type])
+                    return;
+
+                for (const d of filter[type].list)
+                    d.active = false;
+
+                setFilter({...filter});
+            },
+            checkAll: (type) => {
+                if (!filter[type])
+                    return;
+
+                for (const d of filter[type].list)
+                    d.active = true;
+
+                setFilter({...filter});
+            },
         },
     };
 
     return (
         <>
+          <span style={{display:'none'}}>{updated_at}</span>
           {sogh  && <Contents sogh={props.sogh}
                               issues={issues(sogh)}
                               filter={filter}

@@ -64,11 +64,6 @@ export default function Contents (props) {
         setChanged(new Date());
     };
 
-    const setFilter = (type, v) => {
-        filter.set(type, v);
-        setChanged(new Date());
-    };
-
     const callbacks = {
         refresh: () => refresh(),
         filter: {
@@ -78,6 +73,7 @@ export default function Contents (props) {
 
     return (
         <div style={style.root}>
+          <span style={{dipslay:'none'}}>{duedates.length}</span>
           <div>
             <ProductAndMilestone repository={props.repository}
                                  milestone={milestone} />

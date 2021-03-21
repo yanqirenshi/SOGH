@@ -1,7 +1,5 @@
 import React from 'react';
 
-import CardIssueClose from '../CardIssueClose.js';
-
 const style = {
     marginBottom: 3,
     marginTop: 6,
