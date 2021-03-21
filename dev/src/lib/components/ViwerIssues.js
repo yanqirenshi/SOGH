@@ -1,14 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import NotSignIn from './common/NotSignIn.js';
 
+import Controller from './viwer_issues/Controller.js';
 import Contents from './viwer_issues/Contents.js';
 
 function issues (sogh) {
-   if (!sogh)
-       return [];
+    return !sogh ? [] : sogh._data.viwer.issues.pool.list;
+}
 
-    return sogh._data.viwer.issues.pool.list;
+function allOpenClose (filter, type, v) {
+    if (!filter[type])
+        return filter;
+
+    for (const d of filter[type].list)
+        d.active = v;
+
+    return {...filter};
 }
 
 export default function ViwerIssues (props) {
@@ -20,20 +28,25 @@ export default function ViwerIssues (props) {
     const sogh = props.sogh;
     const repository = props.repository;
 
-    if (sogh) {
-        const fetch = sogh._data.viwer.issues.fetch;
+    useEffect(() => {
+        if (!props.sogh)
+            return;
 
-        if (!fetch.start && !fetch.end) {
-            const viewer = sogh._viewer;
+        if (!fetch.start && !fetch.end)
+            setUpdatedAt(new Date());
+    }, [props.sogh]);
 
-            sogh.getIssuesOpenByRepository(repository, viewer, (issues) => {
-                setUpdatedAt(new Date());
-                setFilter(sogh.issues2filterContents(issues));
-            });
-        }
-    }
+    useEffect(() => {
+        if (!updated_at)
+            return;
+
+        sogh.getIssuesOpenByRepository(repository, sogh._viewer, (issues) => {
+            setFilter(sogh.issues2filterContents(issues));
+        });
+    }, [updated_at]);
 
     const callbaks = {
+        refresh: () => setUpdatedAt(new Date()),
         filter: {
             change: (id, value) => {
                 const project = filter.projects.ht[id];
@@ -50,35 +63,21 @@ export default function ViwerIssues (props) {
 
                 setFilter({...filter});
             },
-            clearAll: (type) => {
-                if (!filter[type])
-                    return;
-
-                for (const d of filter[type].list)
-                    d.active = false;
-
-                setFilter({...filter});
-            },
-            checkAll: (type) => {
-                if (!filter[type])
-                    return;
-
-                for (const d of filter[type].list)
-                    d.active = true;
-
-                setFilter({...filter});
-            },
+            clearAll: (type) => setFilter(allOpenClose(filter, type, false)),
+            checkAll: (type) => setFilter(allOpenClose(filter, type, true)),
         },
     };
 
     return (
-        <>
-          <span style={{display:'none'}}>{typeof updated_at}</span>
+        <div style={{paddingTop:22}}>
+          {sogh  && <Controller updated_at={updated_at}
+                                callbaks={callbaks}
+                                sogh={props.sogh} />}
           {sogh  && <Contents sogh={props.sogh}
                               issues={issues(sogh)}
                               filter={filter}
                               callbaks={callbaks} />}
           {!sogh && <NotSignIn />}
-        </>
+        </div>
     );
 }
