@@ -1,7 +1,10 @@
 import React from 'react';
 
 export default function Asignees (props) {
-    const assignees = props.issue.assignees.nodes;
+    const sogh = props.sogh;
+    const viewer = sogh._viewer;
+
+    const assignees = props.issue.assignees.nodes.filter(d => d.id!==viewer.id);
 
     if (assignees.length===0)
         return null;
@@ -17,6 +20,9 @@ export default function Asignees (props) {
             color: '#333',
         },
     };
+
+    if (!assignees)
+        return null;
 
     return assignees.map(d => {
         return (

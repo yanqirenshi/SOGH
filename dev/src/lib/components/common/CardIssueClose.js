@@ -34,7 +34,7 @@ export default function CardIssueClose (props) {
 
           <div style={s}>
             <Labels issue={issue} sogh={sogh} />
-            <Asignees issue={issue} />
+            <Asignees issue={issue} sogh={sogh} />
           </div>
 
           <Milestone issue={issue} />
