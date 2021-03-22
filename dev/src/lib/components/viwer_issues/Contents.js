@@ -18,7 +18,7 @@ function calW (dimensions) {
 export default function Contents (props) {
     const [dimensions, setDimensions] = useState({width:0});
 
-    const sogh = props.sogh;
+    const gtd = props.gtd;
 
     const style = {
         root: {
@@ -40,7 +40,7 @@ export default function Contents (props) {
         return a.updatedAt < b.updatedAt ? -1 : 1;
     };
 
-    const issues_filterd = sogh.filteringIssues2filter(filter, issues).sort(sorter);
+    const issues_filterd = gtd.filteringIssues2filter(filter, issues).sort(sorter);
 
     return (
         <div style={style.root}>
@@ -58,7 +58,7 @@ export default function Contents (props) {
                           return (
                               <CardIssue key={d.id}
                                          issue={d}
-                                         sogh={sogh}/>
+                                         sogh={gtd._sogh}/>
                           );
                       })}
 

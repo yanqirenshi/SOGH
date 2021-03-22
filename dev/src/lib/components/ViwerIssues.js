@@ -5,10 +5,6 @@ import NotSignIn from './common/NotSignIn.js';
 import Controller from './viwer_issues/Controller.js';
 import Contents from './viwer_issues/Contents.js';
 
-function issues (sogh) {
-    return !sogh ? [] : sogh._data.viwer.issues.pool.list;
-}
-
 function allOpenClose (filter, type, v) {
     if (!filter[type])
         return filter;
@@ -20,6 +16,7 @@ function allOpenClose (filter, type, v) {
 }
 
 export default function ViwerIssues (props) {
+    const [gtd, setGtd] = useState(null);
     const [updated_at, setUpdatedAt] = useState(null);
     const [filter, setFilter] = useState({
         projects:   { ht: {}, list: [] },
@@ -29,25 +26,24 @@ export default function ViwerIssues (props) {
             targets: { labels: true, title: false } ,
         },
     });
+
     const sogh = props.sogh;
+
     const repository = props.repository;
 
     useEffect(() => {
-        if (!props.sogh)
-            return;
-
-        if (!fetch.start && !fetch.end)
-            setUpdatedAt(new Date());
+        if (props.sogh)
+            setGtd(sogh.gtd());
     }, [props.sogh]);
 
     useEffect(() => {
-        if (!updated_at)
+        if (!gtd || !gtd.isNeedFetchData())
             return;
 
-        sogh.getIssuesOpenByRepository(repository, sogh._viewer, (issues) => {
-            setFilter(sogh.issues2filterContents(filter, issues));
+        gtd.getIssuesOpenByRepository(repository, gtd.viewer(), (issues) => {
+            setFilter(gtd.issues2filterContents(filter, issues));
         });
-    }, [updated_at]);
+    }, [gtd]);
 
     const callbaks = {
         refresh: () => setUpdatedAt(new Date()),
@@ -75,7 +71,6 @@ export default function ViwerIssues (props) {
                 }
 
                 if ('labels'===type) {
-                    console.log(value)
                     if (filter.contents.targets.labels===value)
                         return;
                     filter.contents.targets.labels = value;
@@ -96,15 +91,15 @@ export default function ViwerIssues (props) {
 
     return (
         <div style={{paddingTop:22}}>
-          {sogh  && <Controller updated_at={updated_at}
-                                filter={filter}
-                                callbaks={callbaks}
-                                sogh={props.sogh} />}
-          {sogh  && <Contents sogh={props.sogh}
-                              issues={issues(sogh)}
+          {gtd && <Controller updated_at={updated_at}
+                        filter={filter}
+                        callbaks={callbaks}
+                        sogh={props.sogh} />}
+          {gtd && <Contents gtd={gtd}
+                              issues={gtd._pool.list}
                               filter={filter}
                               callbaks={callbaks} />}
-          {!sogh && <NotSignIn />}
+          {!gtd && <NotSignIn />}
         </div>
     );
 }
