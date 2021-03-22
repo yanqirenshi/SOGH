@@ -1,3 +1,4 @@
+import ViwerIssues from './components/ViwerIssues.js';
 import ScrumTimeline from './components/ScrumTimeline.js';
 import ScrumProjects from './components/ScrumProjects.js';
 import SprintPlanning from './components/SprintPlanning.js';
@@ -10,6 +11,7 @@ import Sogh from './js/Sogh.js';
 export default Sogh;
 
 export {
+    ViwerIssues,
     ProductBacklogs,
     ProductBacklog,
     ScrumTimeline,
