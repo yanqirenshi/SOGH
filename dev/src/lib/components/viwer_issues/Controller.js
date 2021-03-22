@@ -68,7 +68,7 @@ export default function Controller (props) {
                        checked={filter.targets.labels}
                        onChange={changeLabels} />
                 <span style={{marginLeft:3}}>
-                  Label
+                  Project Column
                 </span>
               </div>
             </div>
