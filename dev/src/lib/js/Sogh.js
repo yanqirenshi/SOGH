@@ -201,10 +201,14 @@ class Gtd {
         if (!this._filter[type])
             return false;
 
+        let diff = false;
         for (const d of this._filter[type].list)
-            d.active = v;
+            if (d.active !== v) {
+                d.active = v;
+                diff = true;
+            }
 
-        return true;
+        return diff;
     }
 }
 
