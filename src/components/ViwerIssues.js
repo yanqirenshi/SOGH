@@ -5,106 +5,65 @@ import NotSignIn from './common/NotSignIn.js';
 import Controller from './viwer_issues/Controller.js';
 import Contents from './viwer_issues/Contents.js';
 
-function issues (sogh) {
-    return !sogh ? [] : sogh._data.viwer.issues.pool.list;
-}
-
-function allOpenClose (filter, type, v) {
-    if (!filter[type])
-        return filter;
-
-    for (const d of filter[type].list)
-        d.active = v;
-
-    return {...filter};
-}
-
 export default function ViwerIssues (props) {
+    const [gtd, setGtd] = useState(null);
     const [updated_at, setUpdatedAt] = useState(null);
-    const [filter, setFilter] = useState({
-        projects:   { ht: {}, list: [] },
-        milestones: { ht: {}, list: [] },
-        contents: {
-            word: '',
-            targets: { labels: true, title: false } ,
-        },
-    });
+
     const sogh = props.sogh;
+
     const repository = props.repository;
 
     useEffect(() => {
-        if (!props.sogh)
-            return;
-
-        if (!fetch.start && !fetch.end)
-            setUpdatedAt(new Date());
+        if (props.sogh)
+            setGtd(sogh.gtd());
     }, [props.sogh]);
 
     useEffect(() => {
-        if (!updated_at)
+        if (!gtd || !gtd.isNeedFetchData())
             return;
 
-        sogh.getIssuesOpenByRepository(repository, sogh._viewer, (issues) => {
-            setFilter(sogh.issues2filterContents(filter, issues));
+        gtd.getIssuesOpenByRepository(repository, gtd.viewer(), (issues) => {
+            gtd._filter = gtd.issues2filterContents(gtd._filter, issues);
+            setUpdatedAt(new Date());
         });
-    }, [updated_at]);
+    }, [gtd]);
 
     const callbaks = {
         refresh: () => setUpdatedAt(new Date()),
         filter: {
             change: (id, value) => {
-                const project = filter.projects.ht[id];
-                const milestones = filter.milestones.ht[id];
-
-                if (!project && !milestones)
-                    return;
-
-                if (filter.projects.ht[id])
-                    filter.projects.ht[id].active = value;
-
-                if (filter.milestones.ht[id])
-                    filter.milestones.ht[id].active = value;
-
-                setFilter({...filter});
+                if (gtd.changeFilter(id, value))
+                    setUpdatedAt(new Date());
             },
             changeContents: (type, value) => {
-                if ('word'===type) {
-                    if (filter.contents.word===value)
-                        return;
-                    filter.contents.word = value;
-                }
-
-                if ('labels'===type) {
-                    console.log(value)
-                    if (filter.contents.targets.labels===value)
-                        return;
-                    filter.contents.targets.labels = value;
-                }
-
-                if ('title'===type) {
-                    if (filter.contents.targets.title===value)
-                        return;
-                    filter.contents.targets.title = value;
-                }
-
-                setFilter({...filter});
+                if (gtd.changeFilterContents(type, value))
+                    setUpdatedAt(new Date());
             },
-            clearAll: (type) => setFilter(allOpenClose(filter, type, false)),
-            checkAll: (type) => setFilter(allOpenClose(filter, type, true)),
+            clearAll: (type) => {
+                if (gtd.changeFilterAll(type, false))
+                    setUpdatedAt(new Date());
+            },
+            checkAll: (type) => {
+                if (gtd.changeFilterAll(type, true))
+                    setUpdatedAt(new Date());
+            },
         },
     };
 
     return (
         <div style={{paddingTop:22}}>
-          {sogh  && <Controller updated_at={updated_at}
-                                filter={filter}
-                                callbaks={callbaks}
-                                sogh={props.sogh} />}
-          {sogh  && <Contents sogh={props.sogh}
-                              issues={issues(sogh)}
-                              filter={filter}
-                              callbaks={callbaks} />}
-          {!sogh && <NotSignIn />}
+
+          {gtd && <Controller updated_at={updated_at}
+                              filter={gtd._filter}
+                              callbaks={callbaks}
+                              sogh={props.sogh} />}
+
+          {gtd && <Contents gtd={gtd}
+                            issues={gtd._pool.list}
+                            filter={gtd._filter}
+                            callbaks={callbaks} />}
+
+          {!gtd && <NotSignIn />}
         </div>
     );
 }
