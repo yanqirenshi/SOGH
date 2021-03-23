@@ -32,8 +32,11 @@ class Gtd {
     viewer () {
         return this._sogh._viewer;
     }
-    isNeedFetchData () {
+    isCanFetchData () {
         if (!this._fetch.start && !this._fetch.end)
+            return true;
+
+        if (this._fetch.start && this._fetch.end)
             return true;
 
         return false;
