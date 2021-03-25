@@ -1,36 +1,45 @@
 import moment from 'moment';
+
+import Gtd from './Gtd.js';
+import Filter from './Filter.js';
+
 import * as query from './GraphQL.js';
 import GithubApiV3 from './GithubApiV3.js';
 import GithubApiV4 from './GithubApiV4.js';
 
-class Gtd {
+class Scrum {
     constructor (token) {
-        this._sogh = null;
-
-        this._pool = {
-            ht:{},
-            list:[]
-        };
-
         this._fetch = {
             start: null,
             end: null
         };
 
-        this._filter = {
-            projects:   { ht: {}, list: [] },
-            milestones: { ht: {}, list: [] },
-            contents: {
-                word: '',
-                targets: { labels: true, title: false } ,
-            },
+        this._data = {
+            milestones: [],
+            milestone: null,
+            issues: [],
+        };
+
+        this._timeline = {
+            filter: new Filter(),
+            issues_filterd: null,
+            duedates: {ht:[],list:[]},
+            duedates_filterd: {ht:[],list:[]},
+        };
+
+        this._projects = {
+            filter: new Filter(),
+            issues_filterd: null,
+            projects: {ht:[],list:[]},
+            projects_filterd: {ht:[],list:[]},
+            close_projects: {},
         };
     }
     apiV4 () {
         return this._sogh.api.v4;
     }
-    viewer () {
-        return this._sogh._viewer;
+    isNeverFetched () {
+        return this._fetch.start ? false : true;
     }
     isCanFetchData () {
         if (!this._fetch.start && !this._fetch.end)
@@ -41,177 +50,272 @@ class Gtd {
 
         return false;
     }
-    getIssuesOpenByRepository (repository, viewer, cb) {
-        if (!this.apiV4()._token || !repository)
-            cb([]);
+    addPool (data, pool) {
+        if (pool.ht[data.id])
+            return;
 
-        this._fetch.start = new Date();
-        this._fetch.end = null;
+        data.issues = [];
+
+        pool.ht[data.id] = data;
+        pool.list.push(data);
+    }
+    addAnotetionValue4Issue (issue) {
+        issue.point = this.point(issue.body);
+
+        const duedate = /.*@Due\.Date:\s+(\d+-\d+-\d+).*/.exec(issue.body);
+
+        issue.due_date = duedate ? duedate[1] : null;
+
+        return issue;
+    }
+    addAnotetionValue4Project (project) {
+        const priority = (p) => {
+            const ret = /.*@Priority:\s+([c|h|n|l]).*/.exec(p.body);
+
+            // Critical :  最高の優先度のユーザー・ジョブ。
+            // High : 高い優先度のユーザー・ジョブ。
+            // Normal : 通常の優先度のユーザー・ジョブ。
+            // Low : 低い優先度のユーザー・ジョブ。
+
+            if (!ret)
+                return 'l';
+
+            return ret[1];
+        };
+
+        const titleAndType = (p) => {
+            const name = p.name;
+            const ret = /^【(.*)】(.*)$/.exec(name);
+
+            if (!ret)
+                return { title: name, type: null };
+
+            return { title: ret[2], type: ret[1] };
+        };
+
+        const schedulePlan = (p) => {
+            const ret = /.*@Plan:(\s+\d+-\d+-\d+),\s+(\d+-\d+-\d+).*/.exec(p.body);
+
+            if (!ret)
+                return { start: null, end: null };
+
+            return { start: moment(ret[1]), end: moment(ret[2]) };
+        };
+        const scheduleResult = (p) => {
+            const ret = /.*@Result:(\s+\d+-\d+-\d+),\s+(\d+-\d+-\d+).*/.exec(p.body);
+
+            if (!ret)
+                return { start: null, end: null };
+
+            return { start: moment(ret[1]), end: moment(ret[2]) };
+        };
+
+        const tat = titleAndType(project);
+        project.title = tat.title;
+        project.type = tat.type;
+
+        project.plan = schedulePlan(project);
+        project.result = scheduleResult(project);
+
+        project.priority = priority(project);
+
+        return project;
+    }
+    getMilestonesByRepository (repository, cb) {
+        if (!this.apiV4()._token)
+            cb([]);
 
         const api = this.apiV4();
 
-        const base_query = query.issues_open_by_repository
+        const base_query = query.milestone_by_reposigory
               .replace('@owner', repository.owner)
-              .replace('@name', repository.name);
+              .replace('@name',  repository.name);
 
-        const isViewer = (issue) => {
-            return issue.assignees.nodes.find(d=>d.id===viewer.id);
-        };
-
-        let issues = [];
+        let milestones = [];
         const getter = (endCursor) => {
             let query = this._sogh.ensureEndCursor(base_query, endCursor);
 
             api.fetch(query, (results) => {
-                const data = results.data.repository.issues;
+                const data = results.data.repository.milestones;
                 const page_info = data.pageInfo;
 
-                for(const issue of data.nodes)
-                    if (isViewer(issue))
-                        issues.push(this._sogh.addAnotetionValue4Issue(issue));
+                milestones = milestones.concat(data.nodes);
 
-                if (page_info.hasNextPage)
+                if (page_info.hasNextPage) {
                     getter(page_info.endCursor);
-                else {
-                    this._fetch.end = new Date();
-
-                    this._pool.list = issues;
-
-                    cb(issues);
+                } else {
+                    cb(milestones);
                 }
             });
         };
 
         getter();
     }
-    issues2filterContents (old_filter, issues) {
-        const projects = {};
-        const milestones = {};
+    targetMilestone (milestones) {
+        const sorted = milestones.sort((a,b) => a.dueOn < b.dueOn ? -1 :1);
+        const now = moment();
 
-        const active = (type, milestone) => {
-            const old = old_filter[type].ht[milestone.id];
-            return old ? old.active : true;
+        for (const m of sorted)
+            if (now.isSameOrBefore(moment(m.dueOn)))
+                return m;
+
+        return null;
+    }
+    getIssuesByMilestone (milestone, cb) {
+        if (!this.apiV4()._token)
+            cb([]);
+
+        if (!milestone) return;
+
+        const api = this.apiV4();
+
+        const base_query = query.issues_by_milestone
+              .replace('@milestone-id', milestone.id);
+
+        let issues = [];
+        const getter = (endCursor) => {
+            let query = this._sogh.ensureEndCursor(base_query, endCursor);
+
+            api.fetch(query, (results) => {
+                const data = results.data.node.issues;
+                const page_info = data.pageInfo;
+
+                for(const d of data.nodes)
+                    issues.push(this._sogh.addAnotetionValue4Issue(d));
+
+                if (page_info.hasNextPage)
+                    getter(page_info.endCursor);
+                else
+                    cb(issues);
+            });
+        };
+
+        getter();
+    }
+    issues2dueDates (issues) {
+        const ht = {};
+        const list = [];
+
+        const dd = (v) => {
+            if (!v)
+                return null;
+
+            const m = moment(v);
+
+            if (!m.isValid())
+                return null;
+
+            return m.format('YYYY-MM-DD');
         };
 
         for (const issue of issues) {
-            const milestone = issue.milestone;
-            if (milestone && !milestones[milestone.id]) {
-                milestones[milestone.id] = milestone;
-                milestones[milestone.id].active = active('milestones', milestone);
-            }
+            const key = dd(issue.closedAt || issue.due_date);
 
-            const cards = issue.projectCards.nodes;
-            if (cards.length>0)
-                for (const card of cards) {
-                    const project = card.column.project;
-                    if (!projects[project.id]) {
-                        projects[project.id] = project;
-                        projects[project.id].active = active('projects', project);
-                    }
-                }
+            if (!ht[key])
+                ht[key] = [];
+
+            ht[key].push(issue);
+            list.push(issue);
         }
 
-        return {
-            projects:   { ht: projects,   list: Object.values(projects) },
-            milestones: { ht: milestones, list: Object.values(milestones) },
-            contents: old_filter.contents,
-        };
+        return { list: list, ht: ht };
     }
-    filteringIssues2filter (filter, issues) {
-        const ope = (ht,d) => {
-            ht[d.id] = d.active;
-            return ht;
+    issues2projects (issues) {
+        const pool = { ht:{}, list: [] };
+        const empyProject = () => {
+            return {
+                id: null,
+                body: null,
+                closedAt: null,
+                createdAt: null,
+                name: null,
+                updatedAt: null,
+                url: null,
+                issues: [],
+                priority: 'l',
+            };
         };
 
-        const projects = filter.projects.list.reduce(ope, {});
-        const milestones = filter.milestones.list.reduce(ope, {});
+        for (const issue of issues) {
+            if (issue.projectCards.nodes.length===0) {
+                const project = empyProject();
 
-        return issues.filter(d => {
-            // milestone
-            if (d.milestone && milestones[d.milestone.id]===false)
-                return false;
+                this.addPool(project, pool);
 
-            // project
-            const cards = d.projectCards.nodes;
-            let exist = false;
-            if (cards.length > 0)
-                for (const card of cards)
-                    if (projects[card.column.project.id])
-                        exist = true;
+                pool.ht[project.id].issues.push(issue);
+            } else {
+                const project = this.addAnotetionValue4Project(issue.projectCards.nodes[0].column.project);
 
-            if (!exist)
-                return false;
+                this.addPool(project, pool);
 
-
-            if (filter.contents.word.trim()!=='') {
-                const word = filter.contents.word.toUpperCase();
-
-                if (filter.contents.targets.labels && d.projectCards.nodes.length>0) {
-                    const x = d.projectCards.nodes.find(d => {
-                        return d.column.name.toUpperCase().indexOf(word) > 0;
-                    });
-
-                    if (!x) return false;
-                }
-
-                if (filter.contents.targets.title) {
-                    if (d.title.toUpperCase().indexOf(word)===-1)
-                        return false;
-                }
+                pool.ht[project.id].issues.push(issue);
             }
+        }
 
-            return true;
+        return pool;
+    }
+    filteringIssue (filter, issues) {
+
+        const x = issues.reduce((list, issue) => {
+            if (this._sogh.checkProjects(filter, issue) &&
+                this._sogh.checkAssignees(filter, issue) &&
+                this._sogh.checkStatus(filter, issue) &&
+                this._sogh.checkYesterday(filter, issue) &&
+                this._sogh.checkEmptyPlan(filter, issue) &&
+                this._sogh.checkWaiting(filter, issue) &&
+                this._sogh.checkDiffMinus(filter, issue))
+                list.push(issue);
+
+            return list;
+        }, []);
+        return x;
+    }
+    makeFilterdTimeline (issues) {
+        this._timeline.duedates = this.issues2dueDates(issues);
+        this._timeline.issues_filterd
+            = this.filteringIssue(this._timeline.filter, issues);
+        this._timeline.duedates_filterd
+            = this.issues2dueDates(this._timeline.issues_filterd);
+    }
+    makeFilterdProjects (issues) {
+        this._projects.projects = this.issues2projects(issues);
+        this._projects.issues_filterd
+            = this.filteringIssue(this._projects.filter, issues);
+        this._projects.projects_filterd
+            = this.issues2projects(this._timeline.issues_filterd);
+    }
+    fetch (repository, cb) {
+        this._fetch.start = new Date();
+        this._fetch.end = null;
+
+        this.getMilestonesByRepository(repository, (milestones) => {
+            this._data.milestones = milestones;
+
+            this._data.milestone = this.targetMilestone(milestones);
+
+            this.getIssuesByMilestone(this._data.milestone, (issues) => {
+
+                this._data.issues = issues;
+
+                this.makeFilterdTimeline(issues);
+                this.makeFilterdProjects(issues);
+
+                this._fetch.end = new Date();
+
+                if (cb)
+                    cb();
+            });
         });
     }
-    changeFilter (id, value) {
-        const project = this._filter.projects.ht[id];
-        const milestones = this._filter.milestones.ht[id];
+    changeFilter (target, type, id, cb) {
+        this._timeline.filter.change(type, id);
 
-        if (!project && !milestones)
-            return false;
+        const issues = this._data.issues;
 
-        if (this._filter.projects.ht[id])
-            this._filter.projects.ht[id].active = value;
+        if ('timeline'===target)
+            this.makeFilterdTimeline(issues);
 
-        if (this._filter.milestones.ht[id])
-            this._filter.milestones.ht[id].active = value;
-
-        return true;
-    }
-    changeFilterContents (type, value) {
-        if ('word'===type) {
-            if (this._filter.contents.word===value)
-                return false;
-
-            this._filter.contents.word = value;
-        }
-
-        if ('labels'===type) {
-            if (this._filter.contents.targets.labels===value)
-                return false;
-            this._filter.contents.targets.labels = value;
-        }
-
-        if ('title'===type) {
-            if (this._filter.contents.targets.title===value)
-                return false;
-            this._filter.contents.targets.title = value;
-        }
-
-        return true;
-    }
-    changeFilterAll (type, v) {
-        if (!this._filter[type])
-            return false;
-
-        let diff = false;
-        for (const d of this._filter[type].list)
-            if (d.active !== v) {
-                d.active = v;
-                diff = true;
-            }
-
-        return diff;
+        if (cb) cb();
     }
 }
 
@@ -637,7 +741,6 @@ export default class Sogh {
 
         getter();
     }
-
     // from core
     addPool (data, pool) {
         if (pool.ht[data.id])
@@ -1063,6 +1166,14 @@ export default class Sogh {
         return color;
     }
     /////
+    scrum() {
+        if (!this._scrum) {
+            this._scrum = new Scrum();
+            this._scrum._sogh = this;
+        }
+
+        return this._scrum;
+    }
     gtd() {
         if (!this._gtd) {
             this._gtd = new Gtd();
