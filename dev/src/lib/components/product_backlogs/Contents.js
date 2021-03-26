@@ -14,98 +14,42 @@ import Table from './Table.js';
 
 import style from '../scrum_projects/Style.js';
 
-function filtering (filter, projects) {
-    const keyword = filter.keyword;
-    const priorities = filter.priorities;
-    const closing = filter.closing;
-
-    return projects.filter(d => {
-        if (keyword && !d.name.includes(keyword))
-            return false;
-
-        if (priorities[d.priority])
-            return false;
-
-        if (closing)
-            if (!(d.progress.doneCount > 1 &&
-                  d.progress.inProgressCount === 0 &&
-                  d.progress.todoCount <= 1)
-               && !d.result.end)
-            return false;
-
-        return true;
-    });
-}
-
-function fetchProjects (repository, sogh, setProjects) {
-    sogh.getProjectsByRepository(repository, (ret_projects) => {
-        setProjects(ret_projects);
-    });
-}
-
 export default function Contents (props) {
-    const [projects, setProjects] = useState([]);
-    const [view, setView] = useState('table');
-    const [filter, setFilter] = useState({
-        keyword: null,
-        priorities: {},
-        closing: false,
-    });
+    const [updated_at, setUpdatedAt] = useState(null);
 
     const sogh = props.sogh;
-
-    useEffect(() => fetchProjects(props.repository, sogh, setProjects), [sogh]);
-    useEffect(() => {
-        if (projects===null) {
-            fetchProjects(props.repository, sogh, setProjects);
-            setProjects([]);
-        }
-    }, [projects]);
+    const core = props.productbacklogs;
 
     const callbacks = {
 
         filter: {
             keyword: {
                 change: (v) => {
-                    const new_filter = {...filter};
-
-                    if (v.length===0)
-                        new_filter.keyword = null;
-                    else
-                        new_filter.keyword = v;
-
-                    setFilter(new_filter);
+                    core.changeFilterKeyword(v);
+                    setUpdatedAt(new Date());
                 },
             },
             priority: {
                 switch: (code) => {
-                    const new_filter = {...filter};
-                    const new_priorities = {...new_filter.priorities};
-
-                    if (new_priorities[code])
-                        delete new_priorities[code];
-                    else
-                        new_priorities[code] = true;
-
-                    new_filter.priorities = new_priorities;
-
-                    setFilter(new_filter);
+                    core.switchFilterPriority(code);
+                    setUpdatedAt(new Date());
                 }
             },
             closing: (code) => {
-                const new_filter = {...filter};
-
-                new_filter[code] = !new_filter[code];
-                setFilter(new_filter);
+                core.switchFilterClosing (code);
+                setUpdatedAt(new Date());
             },
         },
         view: {
-            change: (type) => setView(type),
+            change: (type) => {
+                core.changeViewMode(type);
+                setUpdatedAt(new Date());
+            },
         },
-        refresh: () => setProjects(null),
+        refresh: () => props.callbacks.refresh(),
     };
 
-    const filterd_projects = sogh.sortProjectsByPriority(filtering(filter, projects || []));
+    const filterd_projects = core.filtering(props.projects);
 
     return (
         <div style={style.root}>
@@ -115,18 +59,19 @@ export default function Contents (props) {
             </div>
 
             <div style={{marginRight:22}}>
-              <ButtonViewSwitch type={view} callbacks={callbacks} />
+              <ButtonViewSwitch type={core._view_mode}
+                                callbacks={callbacks} />
             </div>
 
-            <Search filter={filter}
-                    projects={projects || []}
+            <Search filter={core._filter}
+                    projects={props.projects || []}
                     sogh={sogh}
                     callbacks={callbacks.filter} />
 
             {filterd_projects.length>0 &&
              <div style={{marginRight:22}}>
                <ButtonToggle label="Closing"
-                             on={!filter.closing}
+                             on={!core._filter.closing}
                              code={'closing'}
                              callback={callbacks.filter.closing}/>
              </div>}
@@ -140,12 +85,12 @@ export default function Contents (props) {
           </div>
 
           <div style={{flexGrow: 1, overflow: 'auto', padding: 22}}>
-            {'table'===view &&
+            {'table'===core._view_mode &&
              <Table projects={filterd_projects}
                     sogh={sogh}
                     productbacklog_url_prefix={props.productbacklog_url_prefix} />}
 
-            {'cards'===view &&
+            {'cards'===core._view_mode &&
              <Cards projects={filterd_projects} sogh={sogh} />}
           </div>
         </div>

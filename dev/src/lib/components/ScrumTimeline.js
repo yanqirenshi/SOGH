@@ -38,7 +38,7 @@ export default function ScrumTimeline (props) {
 
     return (
         <>
-          <span style={{display:'none'}}>{updated_at}</span>
+          <span style={{display:'none'}}>{!!updated_at}</span>
           {scrum  && <Contents scrum={scrum}
                                callbacks={callbacks}
                                repository={repository} />}

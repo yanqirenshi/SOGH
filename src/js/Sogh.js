@@ -215,6 +215,62 @@ class Gtd {
     }
 }
 
+class ProductBacklogs {
+    constructor (token) {
+        this._sogh = null;
+
+        this._projects = [];
+
+        this._view_mode = 'table';
+
+        this._filter = {
+            keyword: null,
+            priorities: {},
+            closing: false,
+        };
+    }
+    apiV4 () {
+        return this._sogh.api.v4;
+    }
+    viewer () {
+        return this._sogh._viewer;
+    }
+    getProjectsByRepository (repository, cb) {
+        if (!this.apiV4()._token || !repository)
+            cb([]);
+
+        const api = this.apiV4();
+
+        const base_query = query.projects_by_repository
+              .replace('@owner', repository.owner)
+              .replace('@name', repository.name);
+        console.log('1-')
+        let projects = [];
+        const getter = (endCursor) => {
+            let query = this._sogh.ensureEndCursor(base_query, endCursor);
+            console.log('2-')
+
+            api.fetch(query, (results) => {
+                console.log('3-')
+
+                const data = results.data.repository.projects;
+                const page_info = data.pageInfo;
+
+                console.log('4-')
+                projects = projects.concat(data.nodes);
+
+                if (page_info.hasNextPage) {
+                    getter(page_info.endCursor);
+                } else {
+                    cb(projects.map(this._sogh.addAnotetionValue4Project));
+                }
+            });
+        };
+
+        getter();
+    }
+}
+
 export default class Sogh {
     constructor (token) {
         this._token = null;
@@ -1070,5 +1126,13 @@ export default class Sogh {
         }
 
         return this._gtd;
+    }
+    productBacklogs() {
+        if (!this._product_backlogs) {
+            this._product_backlogs = new ProductBacklogs();
+            this._product_backlogs._sogh = this;
+        }
+
+        return this._product_backlogs;
     }
 }
