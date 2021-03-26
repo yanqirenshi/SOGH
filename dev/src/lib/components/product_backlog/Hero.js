@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from "react-router-dom";
 
 import './Style.css';
 
@@ -7,7 +8,7 @@ export default function Hero (props) {
     const project = props.project;
 
     const style = sogh.headerColor(project);
-    console.log(project)
+
     return (
         <section className="hero is-large sogh-product-backlog-hero"
                  style={{background: style.background}}>
@@ -66,16 +67,18 @@ export default function Hero (props) {
           </div>
 
           <div className="hero-foot">
-            <nav className="tabs is-boxed is-fullwidth">
+            <nav className="tabs is-boxed is-centered">
               <div className="container">
-                {/* <ul> */}
-                {/*   {tabs.map(d => { */}
-                {/*       return <li key={d.code} */}
-                {/*                  className="is-active"> */}
-                {/*                <a>{d.label}</a> */}
-                {/*              </li>; */}
-                {/*   })} */}
-                {/* </ul> */}
+                <ul>
+                  {props.tabs.map(d => {
+                      return <li key={d.code}
+                                 className={d.code===props.selected_tab.code ? 'is-active' : ''}>
+                               <Link to={{search: "?tab="+d.code}}>
+                                 {d.label}
+                               </Link>
+                            </li>;
+                  })}
+                </ul>
               </div>
             </nav>
           </div>

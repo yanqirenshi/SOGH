@@ -692,6 +692,45 @@ export default class Sogh {
 
         return this;
     }
+    getIssuesByProjectColumn (column, cb) {
+        if (!this.api.v4._token)
+            cb([]);
+
+        if (!column)
+            cb([]);
+
+        const api = this.api.v4;
+
+        const base_query = query.issues_open_by_project_column
+              .replace('@column-id', column.id);
+
+        let issues = [];
+        const getter = (endCursor) => {
+            let query = this.ensureEndCursor(base_query, endCursor);
+
+            api.fetch(query, (results) => {
+                const cards = results.data.node.cards;
+
+                if (!cards)
+                    return cb([]);
+
+                cards.edges.reduce((list, d) => {
+                    if (d.node.content)
+                        list.push(this.addAnotetionValue4Issue(d.node.content));
+                    return list;
+                }, issues);
+
+                const page_info = cards.pageInfo;
+
+                if (page_info.hasNextPage)
+                    return getter(page_info.endCursor);
+                else
+                    return cb(issues);
+            });
+        };
+
+        getter();
+    }
     getProjectsByRepository (repository, cb) {
         if (!this.api.v4._token || !repository)
             cb([]);
