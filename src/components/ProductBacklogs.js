@@ -5,39 +5,46 @@ import NotSignIn from './common/NotSignIn.js';
 import Contents from './product_backlogs/Contents.js';
 
 export default function ProductBacklogs (props) {
-    const [product_backlogs, setProductBacklogs] = useState(null);
+    const [productbacklogs, setProductBacklogs] = useState(null);
+    const [projects, setProjects] = useState([]);
     const sogh = props.sogh;
 
     useEffect(() => {
-        if (props.sogh) return;
+        if (!sogh) return;
 
-        setProductBacklogs(props.sogh.productBacklogs());
-    }, [props.sogh]);
-
-    console.log('-----------------------------')
+        setProductBacklogs(sogh.productBacklogs());
+    }, [sogh]);
 
     useEffect(() => {
-        console.log('a-')
-        if (!product_backlogs) return;
+        if (!productbacklogs) return;
 
-        console.log('b-')
-        product_backlogs.getProjectsByRepository(props.repository, (projects) => {
-        console.log('c-')
-            console.log(projects);
+        productbacklogs.getProjectsByRepository(props.repository, (projects) => {
+            setProjects(projects);
         });
 
+    }, [productbacklogs]);
 
-    }, [product_backlogs]);
+    const callbacks = {
+        refresh: () => {
+            setProjects([]);
+
+            productbacklogs.getProjectsByRepository(props.repository, (projects) => {
+                setProjects(projects);
+            });
+        },
+    };
 
     const url_prefix = props.productbacklog_url_prefix || "/product-backlogs/";
 
     return (
         <>
-          {product_backlogs  && <Contents sogh={props.sogh}
-                                          product_backlogs={product_backlogs}
-                                          repository={props.repository}
-                                          productbacklog_url_prefix={url_prefix} />}
-          {!product_backlogs && <NotSignIn />}
+          {productbacklogs  && <Contents sogh={sogh}
+                                         productbacklogs={productbacklogs}
+                                         projects={projects}
+                                         repository={props.repository}
+                                         callbacks={callbacks}
+                                         productbacklog_url_prefix={url_prefix} />}
+          {!productbacklogs && <NotSignIn />}
         </>
     );
 }
