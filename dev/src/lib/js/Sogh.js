@@ -25,6 +25,7 @@ class Scrum {
             issues_filterd: null,
             duedates: {ht:[],list:[]},
             duedates_filterd: {ht:[],list:[]},
+            close_projects: {},
         };
 
         this._projects = {
@@ -271,18 +272,26 @@ class Scrum {
         return x;
     }
     makeFilterdTimeline (issues) {
-        this._timeline.duedates = this.issues2dueDates(issues);
-        this._timeline.issues_filterd
-            = this.filteringIssue(this._timeline.filter, issues);
-        this._timeline.duedates_filterd
-            = this.issues2dueDates(this._timeline.issues_filterd);
+        const data = this._timeline;
+
+        data.duedates = this.issues2dueDates(issues);
+
+        data.issues_filterd
+            = this.filteringIssue(data.filter, issues);
+
+        data.duedates_filterd
+            = this.issues2dueDates(data.issues_filterd);
     }
     makeFilterdProjects (issues) {
-        this._projects.projects = this.issues2projects(issues);
-        this._projects.issues_filterd
-            = this.filteringIssue(this._projects.filter, issues);
-        this._projects.projects_filterd
-            = this.issues2projects(this._timeline.issues_filterd);
+        const data = this._projects;
+
+        data.projects = this.issues2projects(issues);
+
+        data.issues_filterd
+            = this.filteringIssue(data.filter, issues);
+
+        data.projects_filterd
+            = this.issues2projects(data.issues_filterd);
     }
     fetch (repository, cb) {
         this._fetch.start = new Date();
@@ -307,12 +316,57 @@ class Scrum {
         });
     }
     changeFilter (target, type, id, cb) {
-        this._timeline.filter.change(type, id);
 
         const issues = this._data.issues;
 
-        if ('timeline'===target)
+        if ('timeline'===target) {
+            this._timeline.filter.change(type, id);
             this.makeFilterdTimeline(issues);
+        }
+
+        if ('projects'===target) {
+            this._projects.filter.change(type, id);
+            this.makeFilterdProjects(issues);
+        }
+
+        if (cb) cb();
+    }
+    setFilterProjects (v, cb) {
+        if ('all-hide'===v)
+            this._projects.filter.set('projects',
+                                      this._projects.hide_projects
+                                      = this._projects.projects.list.map(d => d.id));
+
+        if ('all-view'===v)
+            this._projects.filter.set('projects', []);
+
+        this.makeFilterdProjects(this._data.issues);
+
+        if (cb) cb();
+    }
+    changeCloseProjects (type, v, cb) {
+        if (v==='all') {
+            const all = () => this._projects.projects.list.reduce((ht,d)=> {
+                ht[d.id] = true;
+                return ht;
+            }, {});
+
+            this._projects.close_projects = (type==='open') ? {} : all();
+        } else {
+            if ('open'===type) {
+                const ht = {...this._projects.close_projects};
+
+                if (ht[v])
+                    delete ht[v];
+                this._projects.close_projects = ht;
+            } else if ('close'===type) {
+                const ht = {...this._projects.close_projects};
+
+                ht[v] = true;
+
+                this._projects.close_projects = ht;
+            }
+        }
 
         if (cb) cb();
     }

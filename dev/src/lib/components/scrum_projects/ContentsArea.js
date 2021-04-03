@@ -52,7 +52,7 @@ export default function ContentsArea (props) {
               </div>
 
               <ProductBacklogs projects={sorted_projects_filterd}
-                               close_projects={props.close_projects}
+                               close_projects={props.scrum._projects.close_projects}
                                callbacks={props.callbacks}
                                sogh={sogh} />
             </div>

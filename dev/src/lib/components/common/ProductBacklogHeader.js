@@ -11,8 +11,8 @@ export default function ProductBacklogHeader (props) {
 
     const project = props.project;
 
-    const clickClose = () => props.callbacks.clickCloseProductBacklog(project.id);
-    const clickOpen = () => props.callbacks.clickOpenProductBacklog(project.id);
+    const clickClose = () => props.callbacks.projects.close(project.id);
+    const clickOpen = () => props.callbacks.projects.open(project.id);
 
     const style_header = {...sogh.headerColor(project), ...{fontSize:14, display: 'flex'}};
 

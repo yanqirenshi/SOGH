@@ -1,5 +1,9 @@
 import React from 'react';
 
+function dataID (e) {
+    return e.target.getAttribute('data_id');
+}
+
 export default function FilterDevelopers (props) {
     const style = {
         ...props.style,
@@ -11,9 +15,7 @@ export default function FilterDevelopers (props) {
         },
     };
 
-    const clickItem = (e) => {
-        props.callbacks.filter.click('assignee', e.target.getAttribute('data_id'));
-    };
+    const clickItem = (e) => props.callbacks.filter.click('assignee', dataID(e));
 
     if (props.filter.indexOf(props.assignee.id)!==-1) {
         style.boxShadow = 'none';
