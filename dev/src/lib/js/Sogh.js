@@ -9,6 +9,8 @@ import GithubApiV4 from './GithubApiV4.js';
 
 class Scrum {
     constructor (token) {
+        this._listeners = [];
+
         this._fetch = {
             start: null,
             end: null
@@ -50,6 +52,9 @@ class Scrum {
             return true;
 
         return false;
+    }
+    addListeners (listener) {
+        this._listeners.push(listener);
     }
     addPool (data, pool) {
         if (pool.ht[data.id])
@@ -296,6 +301,7 @@ class Scrum {
     fetch (repository, cb) {
         this._fetch.start = new Date();
         this._fetch.end = null;
+
         this.getMilestonesByRepository(repository, (milestones) => {
             this._data.milestones = milestones;
 
@@ -309,6 +315,9 @@ class Scrum {
                 this.makeFilterdProjects(issues);
 
                 this._fetch.end = new Date();
+
+                for (const f of this._listeners)
+                    f();
 
                 if (cb)
                     cb();

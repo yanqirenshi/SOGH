@@ -13,14 +13,18 @@ export default function ScrumProjects (props) {
     const refresh = () => scrum.fetch(repository, () => setUpdatedAt(new Date()));
 
     useEffect(() => {
-        if (props.sogh) setScrum(props.sogh.scrum());
+        if (props.sogh)
+            setScrum(props.sogh.scrum());
     }, [props.sogh]);
 
     useEffect(() => {
-        if (!scrum || !scrum.isNeverFetched())
+        if (!scrum)
             return;
 
-        refresh();
+        scrum.addListeners(() => setUpdatedAt(new Date()));
+
+        if (scrum.isNeverFetched())
+            refresh();
     }, [scrum]);
 
     const invokeUpdate = () => setUpdatedAt(new Date());
@@ -44,7 +48,7 @@ export default function ScrumProjects (props) {
           <span style={{display:'none'}}>{!!updated_at}</span>
           {scrum  && <Contents scrum={scrum}
                                callbacks={callbacks}
-                               repository={props.repository} />}
+                               repository={repository} />}
           {!scrum && <NotSignIn />}
         </>
     );

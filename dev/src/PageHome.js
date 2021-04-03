@@ -15,6 +15,8 @@ function isActive (a,b) {
 };
 
 function PageHome (props) {
+    const sogh = props.sogh;
+
     const tabs = [
         { code: 'vis', label: 'Issues' },
         { code: 'sct', label: 'Scrum (Timeline)' },
@@ -32,7 +34,6 @@ function PageHome (props) {
         name:  process.env.REACT_APP_GITHUB_REPOSITORY_NAME,
     };
 
-    const sogh = props.sogh;
     return (
         <div>
           <div style={{paddingTop:11}}>

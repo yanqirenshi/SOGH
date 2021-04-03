@@ -10,17 +10,22 @@ export default function ScrumTimeline (props) {
 
     const repository = props.repository;
 
-    const refresh = () => scrum.fetch(repository, () => setUpdatedAt(new Date()));
+    const refresh = () => {
+        scrum.fetch(repository, () => setUpdatedAt(new Date()))
+    };
 
     useEffect(() => {
-        if (props.sogh) setScrum(props.sogh.scrum());
+        if (props.sogh)
+            setScrum(props.sogh.scrum());
     }, [props.sogh]);
 
     useEffect(() => {
-        if (!scrum || !scrum.isNeverFetched())
-            return;
+        if (!scrum) return;
 
-        refresh();
+        scrum.addListeners(() => setUpdatedAt(new Date()));
+
+        if (scrum.isNeverFetched())
+            refresh();
     }, [scrum]);
 
     const changeFilter = (type, id) => {
