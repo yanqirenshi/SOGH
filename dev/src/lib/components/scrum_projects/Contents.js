@@ -29,6 +29,9 @@ export default function Contents (props) {
     const sorted_projects = sogh.sortProjectsByPriority(projects.list);
     const sorted_projects_filterd = sogh.sortProjectsByPriority(projects_filterd.list);
 
+    const clickOpenAll = () => callbacks.projects.open('all');
+    const clickCloseAll = () => callbacks.projects.close('all');
+
     return (
         <div style={style.contents_area.root}>
           <div style={style.contents_area.head}>
@@ -61,10 +64,24 @@ export default function Contents (props) {
                               milestone={milestone} />
               </div>
 
-              <ProductBacklogs projects={sorted_projects_filterd}
-                               close_projects={data.close_projects}
-                               callbacks={callbacks}
-                               sogh={sogh} />
+              <div>
+                <div style={{padding: 22, paddingTop: 0}}>
+                  <button className="button is-small"
+                          style={{marginRight:11}}
+                          onClick={clickCloseAll}>
+                    Close All
+                  </button>
+                  <button className="button is-small"
+                          onClick={clickOpenAll}>
+                    Open All
+                  </button>
+                </div>
+
+                <ProductBacklogs projects={sorted_projects_filterd}
+                                 close_projects={data.close_projects}
+                                 callbacks={callbacks}
+                                 sogh={sogh} />
+              </div>
             </div>
           </div>
         </div>
