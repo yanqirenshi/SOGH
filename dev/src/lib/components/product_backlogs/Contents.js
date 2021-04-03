@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faQuestionCircle } from "@fortawesome/free-solid-svg-icons";
 
@@ -53,6 +53,8 @@ export default function Contents (props) {
 
     return (
         <div style={style.root}>
+          <span style={{display:'none'}}>{!!updated_at}</span>
+
           <div style={{display:'flex', justifyContent: 'center', paddingTop: 11, paddingBottom: 0 }}>
             <div style={{marginRight:33}}>
               <ButtonRefresh callbacks={callbacks} />

@@ -10,10 +10,10 @@ export default function ProductBacklogs (props) {
     const sogh = props.sogh;
 
     useEffect(() => {
-        if (!props.sogh) return;
+        if (!sogh) return;
 
-        setProductBacklogs(props.sogh.productBacklogs());
-    }, [props.sogh]);
+        setProductBacklogs(sogh.productBacklogs());
+    }, [sogh]);
 
     useEffect(() => {
         if (!productbacklogs) return;
@@ -38,12 +38,12 @@ export default function ProductBacklogs (props) {
 
     return (
         <>
-          {productbacklogs  && <Contents sogh={props.sogh}
-                                          productbacklogs={productbacklogs}
-                                          projects={projects}
-                                          repository={props.repository}
-                                          callbacks={callbacks}
-                                          productbacklog_url_prefix={url_prefix} />}
+          {productbacklogs  && <Contents sogh={sogh}
+                                         productbacklogs={productbacklogs}
+                                         projects={projects}
+                                         repository={props.repository}
+                                         callbacks={callbacks}
+                                         productbacklog_url_prefix={url_prefix} />}
           {!productbacklogs && <NotSignIn />}
         </>
     );

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 
 import ButtonRefresh from '../common/ButtonRefresh.js';
 import ProductBacklogs from '../common/ProductBacklogs.js';
@@ -7,9 +7,6 @@ import ListProductBacklogs from './ListProductBacklogs.js';
 import ProductAndMilestone from '../common/ProductAndMilestone.js';
 import Filter from '../common/Filter.js';
 import ChartBardown from '../common/ChartBardown.js';
-
-import ContentsArea  from './ContentsArea.js';
-import SprintListArea from './SprintListArea.js';
 
 import style from './Style.js';
 
@@ -23,14 +20,14 @@ export default function Contents (props) {
     const projects = data.projects;
     const projects_filterd = data.projects_filterd;
 
-    const sorted_projects = sogh.sortProjectsByPriority(projects.list);
-    const sorted_projects_filterd = sogh.sortProjectsByPriority(projects_filterd.list);
-
     const repository = props.repository;
     const issues = base.issues;
     const milestone = base.milestone;
     const filter = data.filter;
     const callbacks = props.callbacks;
+
+    const sorted_projects = sogh.sortProjectsByPriority(projects.list);
+    const sorted_projects_filterd = sogh.sortProjectsByPriority(projects_filterd.list);
 
     return (
         <div style={style.contents_area.root}>
