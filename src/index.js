@@ -8,6 +8,8 @@ import Reports from './components/Reports.js';
 import Filter from './js/Filter.js';
 import Sogh from './js/Sogh.js';
 
+import CardIssue from './components/common/CardIssue.js';
+
 export default Sogh;
 
 export {
@@ -19,5 +21,7 @@ export {
     SprintPlanning,
     Reports,
     // class
-    Filter
+    Filter,
+    // gtd
+    CardIssue,
 }

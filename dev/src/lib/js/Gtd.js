@@ -2,6 +2,8 @@ import * as query from './GraphQL.js';
 
 export default class Gtd {
     constructor (token) {
+        this._listeners = [];
+
         this._sogh = null;
 
         this._pool = {
@@ -38,6 +40,13 @@ export default class Gtd {
 
         return false;
     }
+    addListeners (listener) {
+        this._listeners.push(listener);
+    }
+    responseListeners () {
+        for (const f of this._listeners)
+            f();
+    }
     getIssuesOpenByRepository (repository, viewer, cb) {
         if (!this.apiV4()._token || !repository)
             cb([]);
@@ -73,6 +82,8 @@ export default class Gtd {
                     this._fetch.end = new Date();
 
                     this._pool.list = issues;
+
+                    this.responseListeners();
 
                     cb(issues);
                 }

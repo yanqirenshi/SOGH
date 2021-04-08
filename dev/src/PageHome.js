@@ -34,6 +34,10 @@ function PageHome (props) {
         name:  process.env.REACT_APP_GITHUB_REPOSITORY_NAME,
     };
 
+    const listener = () => {
+        console.log('finish get issues by gtd');
+    };
+
     return (
         <div>
           <div style={{paddingTop:11}}>
@@ -41,7 +45,9 @@ function PageHome (props) {
           </div>
 
           <div style={isActive(tabs[0], selected)}>
-            <SOGH.ViwerIssues sogh={sogh} repository={repository} />
+            <SOGH.ViwerIssues sogh={sogh}
+                              repository={repository}
+                              listener={listener}/>
           </div>
 
           <div style={isActive(tabs[1], selected)}>
