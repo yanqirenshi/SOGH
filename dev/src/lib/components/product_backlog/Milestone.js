@@ -1,6 +1,8 @@
 import React from 'react';
 import moment from 'moment';
 
+import TablePointProductBacklog from '../common/TablePointProductBacklog.js';
+
 import MilestoneIssuesTable from './MilestoneIssuesTable.js';
 import MilestoneIssuesEmpty from './MilestoneIssuesEmpty.js';
 
@@ -23,6 +25,10 @@ export default function Milestone (props) {
             {!is_empty &&
              <MilestoneIssuesTable project={props.project}
                                    issues={issues_filterd} />}
+          </div>
+
+          <div className="panel-block">
+            <TablePointProductBacklog issues={issues || []} />
           </div>
         </nav>
     );
