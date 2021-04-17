@@ -20,6 +20,7 @@ const style = {
 };
 
 export default function Contents (props) {
+    const [core] = useState(props.core);
     const [tabs] = useState([
         { code: 'milestones', label: 'Milestones', selected: true },
         { code: 'columns',    label: 'Columns',    selected: false },
@@ -27,12 +28,22 @@ export default function Contents (props) {
     const [project, setProject] = useState(null);
     const [updated_at, setUpdatedAt] = useState(null);
 
-    const core = props.core;
+    const updated = () => setUpdatedAt(new Date());
+    const refresh = () => core.fetch(project, ()=>updated());
 
-    useEffect(() => core.getProjectByID(props.project_id, setProject), []);
-    useEffect(() => core.fetch(project, ()=>setUpdatedAt(new Date())), [project]);
+    useEffect(() => core.getProjectByID(props.project_id, setProject), [core]);
+    useEffect(() => refresh(), [project]);
 
     const selected_tab = core.selectedTab(useLocation(), tabs);
+
+    const callbacks = {
+        milestones: {
+            refresh: () => refresh(),
+            filter: {
+                click: (type, id) => core.changeFilter('milestones', type, id, ()=>updated())
+            },
+        }
+    };
 
     const data = core._data;
     const filters = core._filters;
@@ -46,14 +57,13 @@ export default function Contents (props) {
                    selected_tab={selected_tab}
                    root_url={props.root_url}/>
 
-
              {selected_tab.code==='milestones'
               &&
               <div>
                 <div style={style.controller}>
                   <ControllerIssues issues={data.issues}
                                     filter={filters.columns}
-                                    callbacks={{}}
+                                    callbacks={callbacks.milestones}
                                     sogh={core._sogh}/>
                 </div>
 

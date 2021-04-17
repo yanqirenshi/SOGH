@@ -10,9 +10,7 @@ export default function ScrumTimeline (props) {
 
     const repository = props.repository;
 
-    const refresh = () => {
-        scrum.fetch(repository, () => setUpdatedAt(new Date()))
-    };
+    const refresh = () => scrum.fetch(repository, () => setUpdatedAt(new Date()));
 
     useEffect(() => {
         if (props.sogh)
