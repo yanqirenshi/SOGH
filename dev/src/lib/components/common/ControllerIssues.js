@@ -6,6 +6,8 @@ import Filter from './Filter.js';
 const style = {
     root: {
         display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center'
     },
 };
 

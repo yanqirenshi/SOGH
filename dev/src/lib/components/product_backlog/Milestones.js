@@ -7,7 +7,7 @@ export default function Milestones (props) {
     const project = props.project;
 
     return (
-        <section className="section">
+        <section className="section" style={props.style}>
           <div className="container">
             {milestones.map(d => <Milestone key={d.id}
                                             source={d}
