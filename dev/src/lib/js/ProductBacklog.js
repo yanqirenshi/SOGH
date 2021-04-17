@@ -31,9 +31,7 @@ export default class ProductBacklog {
         };
     }
     changeFilter (target, type, id, cb) {
-        if ('milestones'===target) {
-            this._filters.milestones.change(type, id);
-        }
+        this._filters[target].change(type, id);
 
         if (cb) cb();
     }

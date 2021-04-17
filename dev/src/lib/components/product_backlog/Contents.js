@@ -22,8 +22,8 @@ const style = {
 export default function Contents (props) {
     const [core] = useState(props.core);
     const [tabs] = useState([
-        { code: 'milestones', label: 'Milestones', selected: true },
-        { code: 'columns',    label: 'Columns',    selected: false },
+        { code: 'milestones', label: 'Milestones' },
+        { code: 'columns',    label: 'Columns' },
     ]);
     const [project, setProject] = useState(null);
     const [updated_at, setUpdatedAt] = useState(null);
@@ -42,7 +42,13 @@ export default function Contents (props) {
             filter: {
                 click: (type, id) => core.changeFilter('milestones', type, id, ()=>updated())
             },
-        }
+        },
+        columns: {
+            refresh: () => refresh(),
+            filter: {
+                click: (type, id) => core.changeFilter('columns', type, id, ()=>updated())
+            },
+        },
     };
 
     if (!project) return null;
@@ -59,8 +65,7 @@ export default function Contents (props) {
                 selected_tab={selected_tab}
                 root_url={props.root_url} />
 
-          {selected_tab.code==='milestones'
-           &&
+          {selected_tab.code==='milestones' &&
            <div>
              <div style={style.controller}>
                <ControllerIssues issues={data.issues}
@@ -75,9 +80,20 @@ export default function Contents (props) {
                          filter={filters.milestones} />
            </div>}
 
-          {selected_tab.code==='columns'
-           && <Columns columns={data.columns.list}
-                       project={project} />}
+          {selected_tab.code==='columns' &&
+           <div>
+             <div style={style.controller}>
+               <ControllerIssues issues={data.issues}
+                                 filter={filters.columns}
+                                 callbacks={callbacks.columns}
+                                 sogh={core._sogh}/>
+             </div>
+
+             <Columns style={style.milestones}
+                      columns={data.columns.list}
+                      project={project}
+                      filter={filters.columns} />
+           </div>}
         </div>
     );
 }
