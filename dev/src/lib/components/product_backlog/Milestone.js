@@ -84,6 +84,10 @@ function makeTr (d, project) {
 export default function Milestone (props) {
     const data = props.source;
     const project = props.project;
+    const filter = props.filter;
+
+    const issues = props.source.issues;
+    const issues_filterd =  filter.apply(issues);
 
     return (
         <nav className="panel">
@@ -112,7 +116,7 @@ export default function Milestone (props) {
               </thead>
 
               <tbody>
-                {props.source.issues.map(d => makeTr(d, project))}
+                {issues_filterd.map(d => makeTr(d, project))}
               </tbody>
             </table>
           </div>

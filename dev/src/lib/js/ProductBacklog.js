@@ -1,9 +1,4 @@
-import moment from 'moment';
-
 import Filter from './Filter.js';
-
-import * as query from './GraphQL.js';
-import GithubApiV4 from './GithubApiV4.js';
 
 export default class ProductBacklog {
     constructor (token) {
@@ -34,6 +29,13 @@ export default class ProductBacklog {
             milestones: { ht: {}, list: [] },
             columns:    { ht: {}, list: [] },
         };
+    }
+    changeFilter (target, type, id, cb) {
+        if ('milestones'===target) {
+            this._filters.milestones.change(type, id);
+        }
+
+        if (cb) cb();
     }
     getProjectByID (id, setProject) {
         this._sogh.getProjectByID(id, (project) => setProject(project));

@@ -9,8 +9,6 @@ import Scrum from './Scrum.js';
 import ProductBacklogs from './ProductBacklogs.js';
 import ProductBacklog from './ProductBacklog.js';
 
-import Filter from './Filter.js';
-
 export default class Sogh {
     constructor (token) {
         this._token = null;

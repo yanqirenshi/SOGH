@@ -28,8 +28,8 @@ export default function Contents (props) {
     const [project, setProject] = useState(null);
     const [updated_at, setUpdatedAt] = useState(null);
 
-    const updated = () => setUpdatedAt(new Date());
-    const refresh = () => core.fetch(project, ()=>updated());
+    const updated = ()=>setUpdatedAt(new Date());
+    const refresh = ()=>core.fetch(project, ()=>updated());
 
     useEffect(() => core.getProjectByID(props.project_id, setProject), [core]);
     useEffect(() => refresh(), [project]);
@@ -45,37 +45,39 @@ export default function Contents (props) {
         }
     };
 
+    if (!project) return null;
+
     const data = core._data;
     const filters = core._filters;
     return (
-        <>
-          {project &&
+        <div>
+          <span style={{display:'none'}}>{!!updated_at}</span>
+
+          <Hero sogh={core._sogh}
+                project={project}
+                tabs={tabs}
+                selected_tab={selected_tab}
+                root_url={props.root_url} />
+
+          {selected_tab.code==='milestones'
+           &&
            <div>
-             <Hero sogh={core._sogh}
-                   project={project}
-                   tabs={tabs}
-                   selected_tab={selected_tab}
-                   root_url={props.root_url}/>
+             <div style={style.controller}>
+               <ControllerIssues issues={data.issues}
+                                 filter={filters.milestones}
+                                 callbacks={callbacks.milestones}
+                                 sogh={core._sogh}/>
+             </div>
 
-             {selected_tab.code==='milestones'
-              &&
-              <div>
-                <div style={style.controller}>
-                  <ControllerIssues issues={data.issues}
-                                    filter={filters.columns}
-                                    callbacks={callbacks.milestones}
-                                    sogh={core._sogh}/>
-                </div>
-
-                <Milestones style={style.milestones}
-                            milestones={data.milestones.list}
-                            project={project} />
-              </div>}
-
-             {selected_tab.code==='columns'
-              && <Columns columns={data.columns.list}
-                          project={project} />}
+             <Milestones style={style.milestones}
+                         project={project}
+                         milestones={data.milestones.list}
+                         filter={filters.milestones} />
            </div>}
-        </>
+
+          {selected_tab.code==='columns'
+           && <Columns columns={data.columns.list}
+                       project={project} />}
+        </div>
     );
 }

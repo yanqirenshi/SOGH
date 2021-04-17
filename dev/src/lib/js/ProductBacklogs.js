@@ -1,7 +1,4 @@
-import moment from 'moment';
-
 import * as query from './GraphQL.js';
-import GithubApiV4 from './GithubApiV4.js';
 
 export default class ProductBacklogs {
     constructor (token) {
