@@ -68,8 +68,8 @@ function makeContents (project, issues) {
 
 export default function Contents (props) {
     const [tabs] = useState([
-        { code: 'milestones', label: 'Milestones', selected: true },
-        { code: 'columns',    label: 'Columns',    selected: false },
+        { code: 'milestones', label: 'Milestones', selected: false },
+        { code: 'columns',    label: 'Columns',    selected: true },
     ]);
     const [project, setProject] = useState(null);
     const [issues, setIssues] = useState([]);
