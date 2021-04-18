@@ -3,7 +3,7 @@ import React from 'react';
 import Column from './Column.js';
 
 export default function Columns (props) {
-    const columns = props.columns;
+    const columns = props.columns.filter(d => d.issues.length!==0);
     const project = props.project;
     const filter  = props.filter;
 
