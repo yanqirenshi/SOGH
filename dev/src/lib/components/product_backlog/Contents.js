@@ -4,6 +4,7 @@ import { useLocation } from "react-router-dom";
 import ControllerIssues from '../common/ControllerIssues.js';
 
 import Hero from './Hero.js';
+import Overivew from './Overivew.js';
 import Milestones from './Milestones.js';
 import Columns from './Columns.js';
 
@@ -20,11 +21,12 @@ const style = {
 };
 
 export default function Contents (props) {
-    const [core] = useState(props.core);
     const [tabs] = useState([
+        { code: 'overview',   label: 'Overview' },
         { code: 'milestones', label: 'Milestones' },
         { code: 'columns',    label: 'Columns' },
     ]);
+    const [core] = useState(props.core);
     const [project, setProject] = useState(null);
     const [updated_at, setUpdatedAt] = useState(null);
 
@@ -65,6 +67,11 @@ export default function Contents (props) {
                 selected_tab={selected_tab}
                 root_url={props.root_url} />
 
+          {selected_tab.code==='overview' &&
+           <div>
+             <Overivew core={core} data={data}/>
+           </div>}
+
           {selected_tab.code==='milestones' &&
            <div>
              <div style={style.controller}>
@@ -90,6 +97,7 @@ export default function Contents (props) {
              </div>
 
              <Columns style={style.milestones}
+                      core={core}
                       columns={data.columns.list}
                       project={project}
                       filter={filters.columns} />

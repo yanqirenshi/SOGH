@@ -28,6 +28,7 @@ export default class ProductBacklog {
             issues: [],
             milestones: { ht: {}, list: [] },
             columns:    { ht: {}, list: [] },
+            assignees:  { ht: {}, list: [] },
         };
     }
     changeFilter (target, type, id, cb) {
@@ -71,26 +72,58 @@ export default class ProductBacklog {
 
         return column;
     }
-    makeContents (project, issues) {
+    getCard (project, issue) {
+        const cards = issue.projectCards.nodes;
+
+        return cards.find(d=>d.column.project.id===project.id);
+    }
+    makeColumns (project) {
+        return project.columns.nodes.reduce((ht,c) => {
+            const new_c = {...c};
+
+            new_c.issues = [];
+            ht[new_c.id] = new_c;
+
+            return ht;
+        }, {});
+    };
+    makeData (project, issues) {
         const milestones = {};
-        const columns = {};
+        const columns = this.makeColumns(project);
+        const assignees = {};
 
         for (const issue of issues) {
             const milestone = this.ensureMilestone (issue, milestones);
             milestone.issues.push(issue);
 
-            const card = issue.projectCards.nodes.find(d=>d.column.project.id===project.id);
+            const card = this.getCard(project, issue);
+
             const column = this.ensureColumn(card, columns);
             column.issues.push(issue);
+
+            issue.assignees.nodes.reduce((ht, a) => {
+                if (!ht[a.id]) {
+                    ht[a.id] = {...a};
+                    ht[a.id].columns = {};
+                }
+
+                if (!ht[a.id].columns[column.id])
+                    ht[a.id].columns[column.id] = [];
+
+                ht[a.id].columns[column.id].push(issue);
+
+                return ht;
+            }, assignees);
         }
 
         const sorter_m = (a,b) => a.dueOn < b.dueOn ? 1 : -1;
         const sorter_c = (a,b) => a.name  < b.name ? -1 : 1;
 
-        return {
-            milestones: { ht: milestones, list: Object.values(milestones).sort(sorter_m) },
-            columns:    { ht: columns,    list: Object.values(columns).sort(sorter_c) },
-        };
+        const ht2list = (list, sorter) => Object.values(list).sort(sorter);
+
+        this._data.milestones = { ht: milestones, list:  ht2list(milestones, sorter_m)};
+        this._data.columns    = { ht: columns,    list: ht2list(columns, sorter_c) };
+        this._data.assignees  = { ht: assignees,  list: ht2list(assignees, sorter_c) };
     }
     fetch (project, cb) {
         if (!project)
@@ -109,10 +142,7 @@ export default class ProductBacklog {
 
                 this._fetching[column.id] = new Date();
 
-                const c = this.makeContents(project, this._data.issues);
-
-                this._data.milestones = c.milestones;
-                this._data.columns = c.columns;
+                this.makeData(project, this._data.issues);
 
                 cb(this._data.issues);
 
@@ -126,5 +156,23 @@ export default class ProductBacklog {
         const selected_tab_code = new URLSearchParams(location.search).get('tab');
 
         return tabs.find(d=>d.code===selected_tab_code) || tabs[0];
+    }
+    sortColumns (columns) {
+        const purposes = columns.reduce((ht, d) => {
+            const purpose = d.purpose;
+
+            if (!ht[purpose])
+                ht[purpose] = [];
+
+            ht[purpose].push(d);
+
+            return ht;
+        }, {});
+
+        return [ 'TODO', 'IN_PROGRESS', null, 'DONE' ].reduce((out, p) => {
+            if (!purposes[p]) return out;
+
+            return out.concat(purposes[p].sort((a,b) => a.id<b.id ? -1 : 1));
+        }, []);
     }
 }
