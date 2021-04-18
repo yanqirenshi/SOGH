@@ -1,138 +1,107 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from "react-router-dom";
 
+import ControllerIssues from '../common/ControllerIssues.js';
+
 import Hero from './Hero.js';
+import Overivew from './Overivew.js';
 import Milestones from './Milestones.js';
 import Columns from './Columns.js';
 
-function getProjectByID (id, sogh, setProject) {
-    sogh.getProjectByID(id, (project) => setProject(project));
-}
-
-function ensureMilestone (issue, milestones) {
-    const milestone_id = issue.milestone ? issue.milestone.id : null;
-
-    if (milestones[milestone_id])
-        return milestones[milestone_id];
-
-    const milestone = milestone_id ? {...issue.milestone} : {
-            id: null,
-            title: "未割り当て",
-            labels: {nodes: []},
-            dueOn: null,
-        };
-
-    milestone.issues = [];
-
-    milestones[milestone_id] = milestone;
-
-    return milestone;
+const style = {
+    controller: {
+        display:'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: 11
+    },
+    milestones: {
+        paddingTop:0,
+    },
 };
-
-function ensureColumn (card, columns) {
-    const column_id = card.column.id;
-
-    if (columns[column_id])
-        return columns[column_id];
-
-    const column = {...card.column};
-
-    column.issues = [];
-
-    columns[column_id] = column;
-
-    return column;
-};
-
-function makeContents (project, issues) {
-    const milestones = {};
-    const columns = {};
-
-    for (const issue of issues) {
-        const milestone = ensureMilestone (issue, milestones);
-        milestone.issues.push(issue);
-
-        const card = issue.projectCards.nodes.find(d=>d.column.project.id===project.id);
-        const column = ensureColumn(card, columns);
-        column.issues.push(issue);
-    }
-
-    const sorter_m = (a,b) => a.dueOn < b.dueOn ? 1 : -1;
-    const sorter_c = (a,b) => a.name  < b.name ? -1 : 1;
-
-    return {
-        milestones: { ht: milestones, list: Object.values(milestones).sort(sorter_m) },
-        columns:    { ht: columns,    list: Object.values(columns).sort(sorter_c) },
-    };
-}
 
 export default function Contents (props) {
     const [tabs] = useState([
-        { code: 'milestones', label: 'Milestones', selected: true },
-        { code: 'columns',    label: 'Columns',    selected: false },
+        { code: 'overview',   label: 'Overview' },
+        { code: 'milestones', label: 'Milestones' },
+        { code: 'columns',    label: 'Columns' },
     ]);
+    const [core] = useState(props.core);
     const [project, setProject] = useState(null);
-    const [issues, setIssues] = useState([]);
-    const [constens, setConstens] = useState({
-        milestones: { ht: {}, list: [] },
-        columns:    { ht: {}, list: [] },
-    });
+    const [updated_at, setUpdatedAt] = useState(null);
 
-    const sogh = props.sogh;
+    const updated = ()=>setUpdatedAt(new Date());
+    const refresh = ()=>core.fetch(project, ()=>updated());
 
-    useEffect(() => getProjectByID(props.project_id, sogh, setProject), []);
-    useEffect(() => {
-        if (!project)
-            return;
+    useEffect(() => core.getProjectByID(props.project_id, setProject), [core]);
+    useEffect(() => refresh(), [project]);
 
-        setConstens({
-            milestones: { ht: {}, list: [] },
-            columns:    { ht: {}, list: [] },
-        });
-        setIssues([]);
+    const selected_tab = core.selectedTab(useLocation(), tabs);
 
-        let issues_tmp = [];
-        let i = 0;
+    const callbacks = {
+        milestones: {
+            refresh: () => refresh(),
+            filter: {
+                click: (type, id) => core.changeFilter('milestones', type, id, ()=>updated())
+            },
+        },
+        columns: {
+            refresh: () => refresh(),
+            filter: {
+                click: (type, id) => core.changeFilter('columns', type, id, ()=>updated())
+            },
+        },
+    };
 
-        // TODO: Use Promis
-        for (const column of project.columns.nodes) {
-            i++;
+    if (!project) return null;
 
-            sogh.getIssuesByProjectColumn(column, (ret)=> {
-                i--;
-                issues_tmp = issues_tmp.concat(ret);
-
-                if (i>0)
-                    return;
-                setIssues(issues_tmp);
-            });
-        }
-    }, [project]);
-
-    useEffect(() => {
-        setConstens(makeContents(project, issues));
-    }, [issues]);
-
-    const location = useLocation();
-    const selected_tab_code = new URLSearchParams(location.search).get('tab');
-    const selected_tab = tabs.find(d=>d.code===selected_tab_code) || tabs[0];
-
+    const data = core._data;
+    const filters = core._filters;
     return (
-        <>
-          {project && <div>
-                      <Hero sogh={sogh}
-                            project={project}
-                            tabs={tabs}
-                            selected_tab={selected_tab}
-                            root_url={props.root_url}/>
+        <div>
+          <span style={{display:'none'}}>{!!updated_at}</span>
 
-                        {selected_tab.code==='milestones'
-                         && <Milestones milestones={constens.milestones.list}
-                                        project={project} />}
-                        {selected_tab.code==='columns'
-                         && <Columns columns={constens.columns.list}
-                                     project={project} />}
-                    </div>}
-        </>
+          <Hero sogh={core._sogh}
+                project={project}
+                tabs={tabs}
+                selected_tab={selected_tab}
+                root_url={props.root_url} />
+
+          {selected_tab.code==='overview' &&
+           <div>
+             <Overivew core={core} data={data}/>
+           </div>}
+
+          {selected_tab.code==='milestones' &&
+           <div>
+             <div style={style.controller}>
+               <ControllerIssues issues={data.issues}
+                                 filter={filters.milestones}
+                                 callbacks={callbacks.milestones}
+                                 sogh={core._sogh}/>
+             </div>
+
+             <Milestones style={style.milestones}
+                         project={project}
+                         milestones={data.milestones.list}
+                         filter={filters.milestones} />
+           </div>}
+
+          {selected_tab.code==='columns' &&
+           <div>
+             <div style={style.controller}>
+               <ControllerIssues issues={data.issues}
+                                 filter={filters.columns}
+                                 callbacks={callbacks.columns}
+                                 sogh={core._sogh}/>
+             </div>
+
+             <Columns style={style.milestones}
+                      core={core}
+                      columns={data.columns.list}
+                      project={project}
+                      filter={filters.columns} />
+           </div>}
+        </div>
     );
 }

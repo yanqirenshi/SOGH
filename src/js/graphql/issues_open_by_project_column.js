@@ -38,6 +38,8 @@ const query = `{
                     column {
                       id
                       name
+                      url
+                      purpose
                       project {
                         id
                         number

@@ -9,7 +9,7 @@ const style = {
     display:'flex',
     flexWrap: 'wrap',
     paddingLeft: 22,
-    marginBottom: 8,
+    alignItems: 'center'
 };
 
 export default function Filter (props) {
