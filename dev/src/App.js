@@ -17,6 +17,15 @@ function App(props) {
 
     useEffect(() => props.connectGithub(token), [token]);
 
+    useEffect(() => {
+        if (!props.sogh) return;
+
+        props.sogh.fetchRepository('@owner', '@name', (success) => {
+            const repo = props.sogh.getRepository('@owner', '@name');
+            console.log(repo);
+        });
+    }, [props.sogh]);
+
     const connectGithub = (token) => props.connectGithub(token);
 
     return (

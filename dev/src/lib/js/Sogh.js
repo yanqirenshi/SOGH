@@ -27,6 +27,8 @@ export default class Sogh {
                     fetch: {start: null, end: null},
                 }
             },
+            repositories: {
+            }
         };
     }
     connect (token, success, error) {
@@ -465,6 +467,54 @@ export default class Sogh {
 
             api.fetch(query, (results) => {
                 cb(this.addAnotetionValue4Project({...results.data.node}));
+            });
+        };
+
+        getter();
+    }
+    // from core
+    getRepository (owner, name) {
+        const repos = this._data.repositories;
+
+        if (!repos[owner]) return null;
+
+        if (!repos[owner][name]) return null;
+
+        return repos[owner][name].data;
+    }
+    fetchRepository (owner, name, cb) {
+        if (!this.api.v4._token || !owner || !name)
+            cb(null);
+
+        const api = this.api.v4;
+
+        const base_query = query.repository
+              .replace('@owner', owner)
+              .replace('@name', name);
+
+        const addReop = (success, data) => {
+            const repos = this._data.repositories;
+
+            if (!repos[owner])
+                repos[owner] = {};
+
+            repos[owner][name] = {
+                data: success ? data : null,
+                valid: success,
+                error: success ? null : data,
+            };
+        };
+
+        const getter = (endCursor) => {
+            let query = this.ensureEndCursor(base_query, endCursor);
+
+            api.fetch(query, (results) => {
+                if (results.errors)
+                    addReop(false, results.errors);
+                else
+                    addReop(true, results.data.repository);
+
+                if (cb) cb(!results.errors);
             });
         };
 

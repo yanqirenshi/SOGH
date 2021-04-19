@@ -7,6 +7,7 @@ import ProductBacklog from './components/ProductBacklog.js';
 import Reports from './components/Reports.js';
 
 import ControllerIssues from './components/common/ControllerIssues.js';
+import CardIssue from './components/common/CardIssue.js';
 
 import Filter from './js/Filter.js';
 import Sogh from './js/Sogh.js';
@@ -23,6 +24,7 @@ export {
     Reports,
     //
     ControllerIssues,
+    CardIssue,
     //
     Filter
 }
