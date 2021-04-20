@@ -77,7 +77,6 @@ export default function Table (props) {
                 <th colSpan="2">Result</th>
                 <th colSpan="6">Progress</th>
                 {/* <th colSpan="3">Timestamp</th> */}
-                <th rowSpan="2"></th>
               </tr>
               <tr>
                 <th>Priority</th>
@@ -117,7 +116,9 @@ export default function Table (props) {
                            </td>
 
                            <td>
-                             {d.title}
+                             <Link to={props.productbacklog_url_prefix + d.id}>
+                               {d.title}
+                             </Link>
                            </td>
 
                            <td style={style.plan} title={dt(d.plan.start,1)}>{dt(d.plan.start)}</td>
@@ -158,12 +159,6 @@ export default function Table (props) {
                             <td style={style.num}>
                               {Math.floor(d.progress.donePercentage)}%
                             </td>}
-
-                           <td style={{whiteSpace: 'nowrap'}}>
-                             <Link to={props.productbacklog_url_prefix + d.id}>
-                               詳細
-                             </Link>
-                           </td>
                          </tr>;
               })}
             </tbody>

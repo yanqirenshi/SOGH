@@ -15,33 +15,6 @@ export default function Hero (props) {
           <div className="hero-head">
             <nav className="navbar">
               <div className="container">
-                <div className="navbar-start">
-                  <div className="navbar-end"
-                       style={{paddingTop: 8}}>
-                    {props.root_url &&
-                     <a href={props.root_url.to}
-                        target="_blank" rel="noreferrer">
-                       {props.root_url.label}
-                     </a>}
-                  </div>
-                </div>
-
-                {/* <div className="navbar-brand"> */}
-                {/*   <a href={props.root_url.to} */}
-                {/*      target="_blank" rel="noreferrer"> */}
-                {/*     {props.root_url.label} */}
-                {/*   </a> */}
-                {/* </div> */}
-
-                <div className="navbar-menu">
-                  <div className="navbar-end">
-                    {/* <a className="navbar-item is-active"> */}
-                    {/*   <a href={project && project.url} target="_blank" rel="noreferrer"> */}
-                    {/*     Github */}
-                    {/*   </a> */}
-                    {/* </a> */}
-                  </div>
-                </div>
               </div>
             </nav>
           </div>
