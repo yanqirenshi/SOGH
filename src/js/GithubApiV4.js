@@ -32,7 +32,15 @@ export default class GithubApiV4 {
                 else
                     return Promise.reject(response);
             })
-            .then(data => success(data))
-            .catch(err => error(err));
+            .then(data => {
+                if (success)
+                    success(data);
+            })
+            .catch(err => {
+                if (error)
+                    error(err);
+                else
+                    console.error(err);
+            });
     }
 }
