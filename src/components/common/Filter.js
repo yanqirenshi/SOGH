@@ -7,9 +7,12 @@ import FilterOthers from './FilterOthers.js';
 
 const style = {
     display:'flex',
-    flexWrap: 'wrap',
     paddingLeft: 22,
-    alignItems: 'center'
+    alignItems: 'flex-start',
+    item: {
+        marginRight: 11,
+        marginBottom: 8,
+    },
 };
 
 export default function Filter (props) {
@@ -28,32 +31,36 @@ export default function Filter (props) {
 
     return (
         <div style={style}>
-          <IconFilter />
+          <div>
+            <IconFilter />
+          </div>
 
-          {filter.assignees.list.map((d,i)=>{
-              return <FilterDevelopers key={d.id}
-                                       style={{marginLeft: i===0 ? 0 : 11}}
-                                       assignee={d}
-                                       filter={props.filter.assignees()}
-                                       callbacks={props.callbacks} />;
-          })}
+          <div style={{flexGrow:1, display:'flex', flexWrap: 'wrap'}}>
+            {filter.assignees.list.map((d,i)=>{
+                return <FilterDevelopers key={d.id}
+                                         style={style.item}
+                                         assignee={d}
+                                         filter={props.filter.assignees()}
+                                         callbacks={props.callbacks} />;
+            })}
 
-          {filter.statuses.list.map((d)=>{
-              return <FilterStatus key={d.title}
-                                   style={{marginLeft: 11}}
-                                   status={d}
-                                   filter={props.filter.statuses()}
-                                   callbacks={props.callbacks} />;
-          })}
+            {filter.statuses.list.map((d)=>{
+                return <FilterStatus key={d.title}
+                                     style={style.item}
+                                     status={d}
+                                     filter={props.filter.statuses()}
+                                     callbacks={props.callbacks} />;
+            })}
 
-          {props.issues.length>0 &&
-           others.list.map((d)=>{
-              return <FilterOthers key={d.key}
-                                   style={{marginLeft: 11}}
-                                   other={d}
-                                   filter={props.filter.others()}
-                                   callbacks={props.callbacks} />;
-          })}
+            {props.issues.length>0 &&
+             others.list.map((d)=>{
+                 return <FilterOthers key={d.key}
+                                      style={style.item}
+                                      other={d}
+                                      filter={props.filter.others()}
+                                      callbacks={props.callbacks} />;
+             })}
+          </div>
         </div>
     );
 }

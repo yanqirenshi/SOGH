@@ -1,6 +1,6 @@
 {
     "name": "@yanqirenshi/sogh",
-    "version": "0.0.30",
+    "version": "0.0.31",
     "description": "Scram on Github",
     "main": "dist/index.js",
     "scripts": {

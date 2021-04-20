@@ -13,7 +13,9 @@ const style = {
         display:'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        padding: 11
+        padding: 11,
+        paddingLeft: 88,
+        paddingRight: 88,
     },
     milestones: {
         paddingTop:0,

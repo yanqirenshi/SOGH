@@ -6,13 +6,13 @@ function dataID (e) {
 
 export default function FilterDevelopers (props) {
     const style = {
-        ...props.style,
         ...{
             padding: 8,
             height: 30,
             marginBottom: 0,
             fontSize: 12,
         },
+        ...props.style,
     };
 
     const clickItem = (e) => props.callbacks.filter.click('assignee', dataID(e));

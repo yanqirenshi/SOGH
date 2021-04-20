@@ -7,7 +7,7 @@ const style = {
     root: {
         display: 'flex',
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'flex-start'
     },
 };
 

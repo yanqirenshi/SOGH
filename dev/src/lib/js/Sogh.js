@@ -407,8 +407,11 @@ export default class Sogh {
                     return cb([]);
 
                 cards.edges.reduce((list, d) => {
-                    if (d.node.content)
-                        list.push(this.addAnotetionValue4Issue(d.node.content));
+                    const issue = d.node.content;
+
+                    if (issue && issue.id)
+                        list.push(this.addAnotetionValue4Issue(issue));
+
                     return list;
                 }, issues);
 
