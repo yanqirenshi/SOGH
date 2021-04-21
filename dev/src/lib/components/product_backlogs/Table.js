@@ -49,6 +49,32 @@ function priority (d) {
     return lable + ` (${d.priority})`;
 }
 
+function theadContents () {
+    return <>
+             <tr>
+               <th colSpan="6">Product backlog</th>
+               <th colSpan="2">Plan</th>
+               <th colSpan="2">Result</th>
+               <th colSpan="6">Progress</th>
+             </tr>
+             <tr>
+               <th>Priority</th>
+               <th>#</th>
+               <th>Type</th>
+               <th>Title</th>
+               <th>Status</th>
+               <th>Assignee</th>
+               <th>Start</th>
+               <th>End</th>
+               <th>Start</th>
+               <th>End</th>
+               <th colSpan="2">To Do</th>
+               <th colSpan="2" style={{whiteSpace: 'nowrap'}}>In Progress</th>
+               <th colSpan="2">Done</th>
+             </tr>
+           </>;
+}
+
 export default function Table (props) {
     const [selected, setSelected] = useState(null);
 
@@ -70,29 +96,7 @@ export default function Table (props) {
     return (
         <div style={style.root}>
           <table className="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
-            <thead>
-              <tr>
-                <th colSpan="6">Product backlog</th>
-                <th colSpan="2">Plan</th>
-                <th colSpan="2">Result</th>
-                <th colSpan="6">Progress</th>
-              </tr>
-              <tr>
-                <th>Priority</th>
-                <th>#</th>
-                <th>Type</th>
-                <th>Title</th>
-                <th>Status</th>
-                <th>Assignee</th>
-                <th>Start</th>
-                <th>End</th>
-                <th>Start</th>
-                <th>End</th>
-                <th colSpan="2">To Do</th>
-                <th colSpan="2" style={{whiteSpace: 'nowrap'}}>In Progress</th>
-                <th colSpan="2">Done</th>
-              </tr>
-            </thead>
+            <thead>{theadContents()}</thead>
 
             <tbody>
               {projects.map(d => {
@@ -101,7 +105,7 @@ export default function Table (props) {
                   const font = { c: 17, h: 16, n: 15, l: 14};
 
                   return <tr key={d.id}
-                             style={{fontSize:font[d.priority] || 13}}
+                             style={{fontSize:14}}
                              className={selected===d.id ? 'is-selected ' : null}
                              project_id={d.id}
                              onClick={clickRow}>
@@ -119,7 +123,7 @@ export default function Table (props) {
                              {d.type}
                            </td>
 
-                           <td>
+                           <td style={{fontSize:font[d.priority] || 14}}>
                              <Link to={props.productbacklog_url_prefix + d.id}>
                                {d.title}
                              </Link>

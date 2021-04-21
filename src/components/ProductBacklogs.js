@@ -5,30 +5,30 @@ import NotSignIn from './common/NotSignIn.js';
 import Contents from './product_backlogs/Contents.js';
 
 export default function ProductBacklogs (props) {
-    const [productbacklogs, setProductBacklogs] = useState(null);
+    const [core, setCore] = useState(null);
     const [projects, setProjects] = useState([]);
     const sogh = props.sogh;
 
     useEffect(() => {
         if (!sogh) return;
 
-        setProductBacklogs(sogh.productBacklogs());
+        setCore(sogh.productBacklogs());
     }, [sogh]);
 
     useEffect(() => {
-        if (!productbacklogs) return;
+        if (!core) return;
 
-        productbacklogs.getProjectsByRepository(props.repository, (projects) => {
+        core.getProjectsByRepository(props.repository, (projects) => {
             setProjects(projects);
         });
 
-    }, [productbacklogs]);
+    }, [core]);
 
     const callbacks = {
         refresh: () => {
             setProjects([]);
 
-            productbacklogs.getProjectsByRepository(props.repository, (projects) => {
+            core.getProjectsByRepository(props.repository, (projects) => {
                 setProjects(projects);
             });
         },
@@ -38,13 +38,13 @@ export default function ProductBacklogs (props) {
 
     return (
         <>
-          {productbacklogs  && <Contents sogh={sogh}
-                                         productbacklogs={productbacklogs}
-                                         projects={projects}
-                                         repository={props.repository}
-                                         callbacks={callbacks}
-                                         productbacklog_url_prefix={url_prefix} />}
-          {!productbacklogs && <NotSignIn />}
+          {core  && <Contents sogh={sogh}
+                              core={core}
+                              projects={projects}
+                              repository={props.repository}
+                              callbacks={callbacks}
+                              productbacklog_url_prefix={url_prefix} />}
+          {!core && <NotSignIn />}
         </>
     );
 }

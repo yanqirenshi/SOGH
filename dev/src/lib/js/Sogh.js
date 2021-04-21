@@ -146,6 +146,7 @@ export default class Sogh {
 
             return { start: moment(ret[1]), end: moment(ret[2]) };
         };
+
         const scheduleResult = (p) => {
             const ret = /.*@Result:(\s+\d+-\d+-\d+),\s+(\d+-\d+-\d+).*/.exec(p.body);
 
@@ -155,9 +156,16 @@ export default class Sogh {
             return { start: moment(ret[1]), end: moment(ret[2]) };
         };
 
+        const type = (p) => {
+            const ret = /.*@Type:\s+(\S+).*/.exec(p.body);
+
+            return ret ? ret[1] : null;
+        };
+
         const tat = titleAndType(project);
         project.title = tat.title;
-        project.type = tat.type;
+        // project.type = tat.type;
+        project.type = type(project);
 
         project.plan = schedulePlan(project);
         project.result = scheduleResult(project);

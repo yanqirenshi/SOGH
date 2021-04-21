@@ -17,7 +17,7 @@ export default function Contents (props) {
     const [updated_at, setUpdatedAt] = useState(null);
 
     const sogh = props.sogh;
-    const core = props.productbacklogs;
+    const core = props.core;
 
     const callbacks = {
 
