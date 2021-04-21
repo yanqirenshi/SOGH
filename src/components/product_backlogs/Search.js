@@ -24,12 +24,12 @@ export default function Search (props) {
 
           <div style={{display:'flex', width:255}}>
 
-            <input className="input"
+            <input className="input is-small"
                    type="text"
                    placeholder="Search Project Name"
                    onKeyUp={changeKeyword} />
 
-            <button className="button"
+            <button className="button is-small"
                     onClick={clearKeyword}>
               Clear
             </button>

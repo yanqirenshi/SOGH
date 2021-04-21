@@ -1,6 +1,7 @@
+// , states: OPEN
 const query = `{
   repository(name: "@name", owner: "@owner") {
-    projects(after: "", first: 100, states: OPEN) {
+    projects(after: "", first: 100) {
       nodes {
         url
         updatedAt

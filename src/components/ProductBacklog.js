@@ -19,7 +19,8 @@ export default function ProductBacklog (props) {
         <>
           {core  && <Contents core={core} sogh={sogh}
                               repository={props.repository}
-                              project_id={props.project_id} />}
+                              project_id={props.project_id}
+                              root_url={props.root_url} />}
           {!core && <NotSignIn />}
         </>
     );

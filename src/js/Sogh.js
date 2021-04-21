@@ -122,6 +122,12 @@ export default class Sogh {
             return ret[1];
         };
 
+        const assignee = (p) => {
+            const ret = /.*@assignee:\s+(\S+).*/.exec(p.body);
+
+            return ret ? ret[1] : null;
+        };
+
         const titleAndType = (p) => {
             const name = p.name;
             const ret = /^【(.*)】(.*)$/.exec(name);
@@ -157,6 +163,8 @@ export default class Sogh {
         project.result = scheduleResult(project);
 
         project.priority = priority(project);
+
+        project.assignee = assignee(project);
 
         return project;
     }

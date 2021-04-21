@@ -9,6 +9,7 @@ export default class ProductBacklogs {
         this._view_mode = 'table';
 
         this._filter = {
+            status: { open: true, close: false },
             keyword: null,
             priorities: {},
             closing: false,
