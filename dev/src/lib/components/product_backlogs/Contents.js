@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faQuestionCircle } from "@fortawesome/free-solid-svg-icons";
 
-import Search from './Search.js';
-
 import ANewTab from '../common/ANewTab.js';
 import ButtonToggle from '../common/ButtonToggle.js';
 
@@ -11,6 +9,7 @@ import ButtonViewSwitch from './ButtonViewSwitch.js';
 import ButtonRefresh from './ButtonRefresh.js';
 import Cards from './Cards.js';
 import Table from './Table.js';
+import Search from './Search.js';
 
 import style from '../scrum_projects/Style.js';
 

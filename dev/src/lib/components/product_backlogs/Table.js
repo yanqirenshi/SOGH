@@ -72,17 +72,18 @@ export default function Table (props) {
           <table className="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
             <thead>
               <tr>
-                <th colSpan="4">Product backlog</th>
+                <th colSpan="6">Product backlog</th>
                 <th colSpan="2">Plan</th>
                 <th colSpan="2">Result</th>
                 <th colSpan="6">Progress</th>
-                {/* <th colSpan="3">Timestamp</th> */}
               </tr>
               <tr>
                 <th>Priority</th>
                 <th>#</th>
                 <th>Type</th>
                 <th>Title</th>
+                <th>Status</th>
+                <th>Assignee</th>
                 <th>Start</th>
                 <th>End</th>
                 <th>Start</th>
@@ -97,7 +98,10 @@ export default function Table (props) {
               {projects.map(d => {
                   const s = sogh.headerColor(d);
 
+                  const font = { c: 17, h: 16, n: 15, l: 14};
+
                   return <tr key={d.id}
+                             style={{fontSize:font[d.priority] || 13}}
                              className={selected===d.id ? 'is-selected ' : null}
                              project_id={d.id}
                              onClick={clickRow}>
@@ -120,6 +124,10 @@ export default function Table (props) {
                                {d.title}
                              </Link>
                            </td>
+
+                           <td>{d.state}</td>
+
+                           <td>{d.assignee}</td>
 
                            <td style={style.plan} title={dt(d.plan.start,1)}>{dt(d.plan.start)}</td>
                            <td style={style.plan} title={dt(d.plan.end,1)}>{dt(d.plan.end)}</td>

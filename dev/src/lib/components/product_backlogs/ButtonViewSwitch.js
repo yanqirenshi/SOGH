@@ -17,9 +17,10 @@ export default function ButtonViewSwitch (props) {
     };
 
     return (
-        <button className="button"
+        <button className="button is-small"
                 type={'cards'===props.type ? 'table' : 'cards'}
                 onClick={click}>
+
             {'cards'===props.type &&
              <FontAwesomeIcon type="table"
                               icon={faTable} />}

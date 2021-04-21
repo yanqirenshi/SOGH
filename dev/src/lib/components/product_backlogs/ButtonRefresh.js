@@ -7,7 +7,7 @@ export default function ButtonRefresh (props) {
     const click = (e) => props.callbacks.refresh();
 
     return (
-        <button className="button"
+        <button className="button is-small"
                 onClick={click}>
 
           <FontAwesomeIcon type="table"
