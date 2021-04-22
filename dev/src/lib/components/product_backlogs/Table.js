@@ -33,20 +33,22 @@ const style = {
     },
 }
 
-function priority (d) {
+function priority (project) {
+    if (project.state==="CLOSED")
+        return '--';
+
     const m = {
         c: '急',
         h: '高',
         n: '普',
         l: '低',
     };
-
-    const lable = m[d.priority];
+    const lable = m[project.priority];
 
     if (!lable)
         return '??';
 
-    return lable + ` (${d.priority})`;
+    return lable + ` (${project.priority})`;
 }
 
 function theadContents () {

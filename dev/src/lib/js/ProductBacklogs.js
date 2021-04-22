@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 import * as query from './GraphQL.js';
 
 export default class ProductBacklogs {
@@ -71,17 +73,63 @@ export default class ProductBacklogs {
             return n;
         };
 
-        const sorted_projects = projects.sort((a,b)=> v(a.type) - v(b.type));
+        const splitByState = (projects) => {
+            const x = { c: [], h: [], n: [], l: [], '?': [], closed: [] };
 
-        const x = { c: [], h: [], n: [], l: [], '?': [] };
+            for (const project of projects) {
 
-        for (const project of sorted_projects) {
-            const p = project.priority || '?';
+                let p;
+                if (project.state==='CLOSED')
+                    p = 'closed';
+                else
+                    p = project.priority || '?';
 
-            x[p].push(project);
-        }
+                x[p].push(project);
+            }
+            return x;
+        };
 
-        return [...x.c, ...x.h, ...x.n, ...x.l, ...x['?']];
+        const sortByPlanStart = (projects) => {
+            const tmp = projects.reduce((ht,d) => {
+                if (!d.plan.start)
+                    ht[null].push(d);
+                else
+                    ht.exist.push(d);
+                return ht;
+            }, {null:[], exist: []});
+
+            const sorter = (a,b) => {
+                return moment(a.plan.start).isBefore(b.plan.start) ? -1 : 1;
+            };
+
+            return []
+                .concat(tmp.exist.sort(sorter))
+                .concat(tmp.null);
+        };
+
+        const sortByType = (projects) => {
+            const tmp = projects.reduce((ht, d) => {
+                if (!ht[d.type]) ht[d.type] = [];
+                ht[d.type].push(d);
+                return ht;
+            }, {});
+
+            let out = [];
+            for (const k in tmp)
+                out = out.concat(sortByPlanStart(tmp[k]));
+
+            return out;
+        };
+
+        const sorted_projects = splitByState(projects);
+
+        return []
+            .concat(sortByType(sorted_projects.c))
+            .concat(sortByType(sorted_projects.h))
+            .concat(sortByType(sorted_projects.n))
+            .concat(sortByType(sorted_projects.l))
+            .concat(sortByType(sorted_projects['?']))
+            .concat(sortByType(sorted_projects.closed));
     }
     getFilters (projects) {
         const priorities = {};
