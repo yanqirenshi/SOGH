@@ -6,14 +6,17 @@ export default function ButtonToggle (props) {
     };
 
     const style = {
-        height: 30,
-        fontSize: 14,
-        marginRight: 11,
-        paddingLeft: 11,
-        paddingRight: 11,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
+        ...{
+            height: 30,
+            fontSize: 14,
+            marginRight: 11,
+            paddingLeft: 11,
+            paddingRight: 11,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+        },
+        ...props.style || {},
     };
 
     if (props.on) {

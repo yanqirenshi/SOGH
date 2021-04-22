@@ -10,6 +10,7 @@ import ButtonRefresh from './ButtonRefresh.js';
 import Cards from './Cards.js';
 import Table from './Table.js';
 import Search from './Search.js';
+import Controller from './Controller.js';
 
 import style from '../scrum_projects/Style.js';
 
@@ -18,9 +19,10 @@ export default function Contents (props) {
 
     const sogh = props.sogh;
     const core = props.core;
+    const projects = props.projects;
+    const filterd_projects = core.filtering(props.projects);
 
     const callbacks = {
-
         filter: {
             keyword: {
                 change: (v) => {
@@ -29,8 +31,8 @@ export default function Contents (props) {
                 },
             },
             priority: {
-                switch: (code) => {
-                    core.switchFilterPriority(code);
+                switch: (item) => {
+                    core.switchFilterPriority(item);
                     setUpdatedAt(new Date());
                 }
             },
@@ -48,44 +50,20 @@ export default function Contents (props) {
         refresh: () => props.callbacks.refresh(),
     };
 
-    const filterd_projects = core.filtering(props.projects);
-
     return (
         <div style={style.root}>
           <span style={{display:'none'}}>{!!updated_at}</span>
 
-          <div style={{display:'flex', justifyContent: 'center', paddingTop: 11, paddingBottom: 0 }}>
-            <div style={{marginRight:33}}>
-              <ButtonRefresh callbacks={callbacks} />
-            </div>
-
-            <div style={{marginRight:22}}>
-              <ButtonViewSwitch type={core._view_mode}
-                                callbacks={callbacks} />
-            </div>
-
-            <Search filter={core._filter}
-                    projects={props.projects || []}
-                    sogh={sogh}
-                    callbacks={callbacks.filter} />
-
-            {filterd_projects.length>0 &&
-             <div style={{marginRight:22}}>
-               <ButtonToggle label="Closing"
-                             on={!core._filter.closing}
-                             code={'closing'}
-                             callback={callbacks.filter.closing}/>
-             </div>}
-
-            {props.help &&
-             <div style={{marginLeft:22, fontSize: 22, display: 'flex', alignItems:'center'}}>
-               <ANewTab to={props.help.to}>
-                 <FontAwesomeIcon style={{}} icon={faQuestionCircle} />
-               </ANewTab>
-             </div>}
+          <div style={style.controller}>
+            <Controller sogh={sogh}
+                        core={core}
+                        callbacks={callbacks}
+                        projects={projects}
+                        filterd_projects={filterd_projects}
+                        help={props.help} />
           </div>
 
-          <div style={{flexGrow: 1, overflow: 'auto', padding: 22}}>
+          <div style={{flexGrow: 1, overflow: 'auto', padding: 22, paddingTop:11}}>
             {'table'===core._view_mode &&
              <Table projects={filterd_projects}
                     sogh={sogh}

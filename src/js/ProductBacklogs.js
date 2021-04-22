@@ -12,6 +12,8 @@ export default class ProductBacklogs {
             status: { open: true, close: false },
             keyword: null,
             priorities: {},
+            types: {},
+            assignees: {},
             closing: false,
         };
     }
@@ -81,18 +83,74 @@ export default class ProductBacklogs {
 
         return [...x.c, ...x.h, ...x.n, ...x.l, ...x['?']];
     }
+    getFilters (projects) {
+        const priorities = {};
+        const types = {};
+        const assignees = {};
+
+        const x = (project, attr, ht) => {
+            const key = project[attr];
+
+            if (!ht[key]) ht[key]  = 1;
+            else          ht[key] += 1;
+        };
+
+        for (const project of projects) {
+            x(project, 'priority', priorities);
+            x(project, 'type', types);
+            x(project, 'assignee', assignees);
+        }
+
+        const out = {
+            priorities: [],
+            types: [],
+            assignees: [],
+        };
+
+        const makeItem = (type, k, count) => {
+            return {
+                type: type,
+                code: type + k,
+                value: k,
+                count: count
+            };
+        };
+
+        ['c', 'h', 'n', 'l'].reduce((out, k) => {
+            if (k in priorities)
+                out.push(makeItem('priorities', k, priorities[k]));
+
+            return out;
+        }, out.priorities);
+
+        for (const k in types)
+            out.types.push(makeItem('types', k, types[k]));
+
+        for (const k in assignees)
+            out.assignees.push(makeItem('assignees', k, assignees[k]));
+
+        return out;
+    }
     filtering (projects) {
         const filter = this._filter;
 
         const keyword = filter.keyword;
         const priorities = filter.priorities;
+        const types = filter.types;
+        const assignees = filter.assignees;
         const closing = filter.closing;
 
         return this.sortProjectsByPriority(projects.filter(d => {
             if (keyword && !d.name.includes(keyword))
                 return false;
 
-            if (priorities[d.priority])
+            if (priorities['priorities'+d.priority])
+                return false;
+
+            if (types['types'+d.type])
+                return false;
+
+            if (assignees['assignees'+d.assignee])
                 return false;
 
             if (closing)
@@ -115,16 +173,21 @@ export default class ProductBacklogs {
 
         this._filter = new_filter;
     }
-    switchFilterPriority (code) {
+    switchFilterPriority (item) {
+        const type = item.type;
+        const code = item.code;
+        const value = item.value;
+
         const new_filter = {...this._filter};
-        const new_priorities = {...new_filter.priorities};
 
-        if (new_priorities[code])
-            delete new_priorities[code];
+        const new_data = {...new_filter[type]};
+
+        if (new_data[code])
+            delete new_data[code];
         else
-            new_priorities[code] = true;
+            new_data[code] = true;
 
-        new_filter.priorities = new_priorities;
+        new_filter[type] = new_data;
 
         this._filter = new_filter;
     }

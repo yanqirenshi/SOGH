@@ -5,6 +5,10 @@ const style = {
         width:'100%',
         height:'100%',
     },
+    controller: {
+        paddingLeft: 88,
+        paddingRight: 88,
+    },
     contents_area: {
         root: {
             marginBottom:111
