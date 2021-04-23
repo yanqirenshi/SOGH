@@ -101,19 +101,24 @@ export default class ProductBacklog {
             const column = this.ensureColumn(card, columns);
             column.issues.push(issue);
 
-            issue.assignees.nodes.reduce((ht, a) => {
-                if (!ht[a.id]) {
-                    ht[a.id] = {...a};
-                    ht[a.id].columns = {};
+            const addAssgingee = (ht, assignee) => {
+                if (!ht[assignee.id]) {
+                    ht[assignee.id] = {...assignee};
+                    ht[assignee.id].columns = {};
                 }
 
-                if (!ht[a.id].columns[column.id])
-                    ht[a.id].columns[column.id] = [];
+                if (!ht[assignee.id].columns[column.id])
+                    ht[assignee.id].columns[column.id] = [];
 
-                ht[a.id].columns[column.id].push(issue);
+                ht[assignee.id].columns[column.id].push(issue);
 
                 return ht;
-            }, assignees);
+            };
+
+            if(issue.assignees.nodes.length===0)
+                addAssgingee(assignees, { id: null, name: '@未割り当て'});
+
+            issue.assignees.nodes.reduce(addAssgingee, assignees);
         }
 
         const sorter_m = (a,b) => a.dueOn < b.dueOn ? 1 : -1;
@@ -121,7 +126,7 @@ export default class ProductBacklog {
 
         const ht2list = (list, sorter) => Object.values(list).sort(sorter);
 
-        this._data.milestones = { ht: milestones, list:  ht2list(milestones, sorter_m)};
+        this._data.milestones = { ht: milestones, list: ht2list(milestones, sorter_m)};
         this._data.columns    = { ht: columns,    list: ht2list(columns, sorter_c) };
         this._data.assignees  = { ht: assignees,  list: ht2list(assignees, sorter_c) };
     }

@@ -2,13 +2,10 @@ import React from 'react';
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-    faExternalLinkAlt, faWindowMinimize, faWindowMaximize,
+    faWindowMinimize, faWindowMaximize,
 } from "@fortawesome/free-solid-svg-icons";
-import ANewTab from './ANewTab.js';
 
 export default function DueDateHeader (props) {
-    const sogh = props.sogh;
-
     const project = props.project;
 
     const clickClose = () => props.callbacks.clickCloseProductBacklog(project.id);

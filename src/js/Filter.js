@@ -137,6 +137,9 @@ export default class Filter {
     checkAssignees (filter, issue) {
         const id_list = issue.assignees.nodes.map(d=>d.id);
 
+        if (id_list.length===0)
+            return true;
+
         const id_list_filterd = id_list.reduce((list, id)=> {
             if (filter.assignees().indexOf(id)===-1)
                 list.push(id);

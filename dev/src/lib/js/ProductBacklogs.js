@@ -56,23 +56,6 @@ export default class ProductBacklogs {
         getter();
     }
     sortProjectsByPriority (projects) {
-        const v = (type) => {
-            const m = {
-                '障害': 1,
-                'リリース': 2,
-                '案件': 3,
-                '問い合せ': 4,
-                'クラッシュ': 5,
-                '改善': 6,
-            };
-            let  n = m[type];
-
-            if (!n)
-                n = 999;
-
-            return n;
-        };
-
         const splitByState = (projects) => {
             const x = { c: [], h: [], n: [], l: [], '?': [], closed: [] };
 
@@ -224,7 +207,6 @@ export default class ProductBacklogs {
     switchFilterPriority (item) {
         const type = item.type;
         const code = item.code;
-        const value = item.value;
 
         const new_filter = {...this._filter};
 

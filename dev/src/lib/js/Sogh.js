@@ -681,6 +681,9 @@ export default class Sogh {
         return column * w + ((column - 1) * m);
     }
     headerColor (project) {
+        if (project.state==="CLOSED")
+            return { background: 'none', color: '#333' };
+
         const m = {
             c: { background: '#e83929', color: '#fff' },
             h: { background: '#fcc800', color: '#333' },
