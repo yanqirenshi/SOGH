@@ -24,9 +24,9 @@ const style = {
 
 export default function Contents (props) {
     const [tabs] = useState([
-        { code: 'overview',   label: 'Overview' },
-        { code: 'milestones', label: 'Milestones' },
         { code: 'columns',    label: 'Columns' },
+        { code: 'milestones', label: 'Milestones' },
+        { code: 'overview',   label: 'Overview' },
     ]);
     const [core] = useState(props.core);
     const [project, setProject] = useState(null);
