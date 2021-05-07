@@ -20,9 +20,11 @@ function App(props) {
     useEffect(() => {
         if (!props.sogh) return;
 
-        props.sogh.fetchRepository('@owner', '@name', (success) => {
-            const repo = props.sogh.getRepository('@owner', '@name');
-            console.log(repo);
+        const owner = process.env.REACT_APP_GITHUB_REPOSITORY_OWNER;
+        const name  = process.env.REACT_APP_GITHUB_REPOSITORY_NAME;
+        props.sogh.fetchRepository(owner, name, (success) => {
+            const repo = props.sogh.getRepository(owner, name);
+            props.sogh.activeRepository(repo);
         });
     }, [props.sogh]);
 

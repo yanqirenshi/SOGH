@@ -367,7 +367,7 @@ export default class Scrum {
         this.getMilestonesByRepository(repository, (milestones) => {
             this._data.milestones = this.targetMilestones(milestones);
 
-            this._data.milestone = this._data.milestones.length>0 ? this._data.milestones[0] : null;
+            this._data.milestone = this._data.milestones.length > 0 ? this._data.milestones[0] : null;
 
             this.getIssuesByMilestone(this._data.milestone, (issues) => {
 
