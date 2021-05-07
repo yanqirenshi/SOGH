@@ -16,7 +16,8 @@ function buildSprintBacklogs (sogh, props, projects) {
                                project={d}
                                close={close_projects[d.id] || false}
                                sogh={sogh}
-                               callbacks={props.callbacks} />;
+                               callbacks={props.callbacks}
+                               productbacklog_url_prefix={props.productbacklog_url_prefix} />;
     });
 }
 

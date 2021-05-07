@@ -83,7 +83,8 @@ export default function Contents (props) {
                 <ProductBacklogs projects={sorted_projects_filterd}
                                  close_projects={data.close_projects}
                                  callbacks={callbacks}
-                                 sogh={sogh} />
+                                 sogh={sogh}
+                                 productbacklog_url_prefix={props.productbacklog_url_prefix} />
               </div>
             </div>
           </div>

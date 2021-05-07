@@ -19,7 +19,8 @@ export default function ProductBacklog (props) {
           <ProductBacklogHeader sogh={sogh}
                                 project={project}
                                 close={props.close}
-                                callbacks={props.callbacks} />
+                                callbacks={props.callbacks}
+                                productbacklog_url_prefix={props.productbacklog_url_prefix} />
 
           {!props.close &&
            <div className="panel-block">

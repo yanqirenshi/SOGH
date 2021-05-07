@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from "react-router-dom";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -15,14 +16,25 @@ export default function ProductBacklogHeader (props) {
     const clickOpen = () => props.callbacks.projects.open(project.id);
 
     const style_header = {...sogh.headerColor(project), ...{fontSize:14, display: 'flex'}};
+    const pb_to = props.productbacklog_url_prefix + project.id;
 
     return (
         <div className="panel-heading" style={style_header}>
-          <div style={{flexGrow:1}}>
-            <ANewTab to={project.url}>
-              <FontAwesomeIcon style={{}} icon={faExternalLinkAlt} />
-            </ANewTab>
-            {project.name || '@Project 未割り当て'}
+          <div style={{flexGrow:1, display:'flex'}}>
+            {project.id
+             && <Link to={pb_to} style={{color: 'inherit'}}>
+                  <p>{project.name || '@Project 未割り当て'}</p>
+                </Link>}
+
+            {!project.id
+             && <p>{project.name || '@Project 未割り当て'}</p>}
+
+            {project.number
+             && (<p style={{marginLeft:11}}>
+                   <ANewTab to={project.url}>
+                     ({project.number})
+                   </ANewTab>
+                 </p>)}
           </div>
 
           <div>

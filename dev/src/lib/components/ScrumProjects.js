@@ -48,12 +48,16 @@ export default function ScrumProjects (props) {
             }
         },
     };
+
+    const url_prefix = props.productbacklog_url_prefix || "/product-backlogs/";
+
     return (
         <>
           <span style={{display:'none'}}>{!!updated_at}</span>
           {scrum  && <Contents scrum={scrum}
                                callbacks={callbacks}
-                               repository={repository} />}
+                               repository={repository}
+                               productbacklog_url_prefix={url_prefix} />}
           {!scrum && <NotSignIn />}
         </>
     );
