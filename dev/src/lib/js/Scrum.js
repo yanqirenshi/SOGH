@@ -19,6 +19,10 @@ export default class Scrum {
             issues: [],
         };
 
+        this.refreshTimeline();
+        this.refreshProjects();
+    }
+    refreshTimeline () {
         this._timeline = {
             filter: new Filter(),
             issues_filterd: null,
@@ -26,7 +30,8 @@ export default class Scrum {
             duedates_filterd: {ht:[],list:[]},
             close_projects: {},
         };
-
+    }
+    refreshProjects () {
         this._projects = {
             filter: new Filter(),
             issues_filterd: null,
@@ -35,10 +40,21 @@ export default class Scrum {
             close_projects: {},
         };
     }
+    setMilestone (milestone) {
+        this._data.milestone = milestone;
+        this._data.issues = [];
+
+        this.refreshTimeline();
+        this.refreshProjects();
+
+        for (const f of this._listeners)
+            f();
+    }
     apiV4 () {
         return this._sogh.api.v4;
     }
     isNeverFetched () {
+        console.log(this._fetch.start)
         return this._fetch.start ? false : true;
     }
     isCanFetchData () {
@@ -153,6 +169,32 @@ export default class Scrum {
         };
 
         getter();
+    }
+    targetMilestones (milestones) {
+        const now = moment();
+
+        const filter = m => {
+            const ret = /(\d+-\d+-\d+)\s*〜\s*(\d+-\d+-\d+)/.exec(m.title);
+
+            if (!ret) return false;
+
+            const from = moment(ret[1]);
+            const to   = moment(ret[2]);
+
+            if (!from.isValid() || !to.isValid())
+                return false;
+
+            m.term = {
+                from: from,
+                to: to,
+            };
+
+            return from.isSameOrBefore(now) && to.isAfter(now);
+        };
+
+        const sorter = (a,b) => a.dueOn < b.dueOn ? -1 :1;
+
+        return milestones.filter(filter).sort(sorter);
     }
     targetMilestone (milestones) {
         const sorted = milestones.sort((a,b) => a.dueOn < b.dueOn ? -1 :1);
@@ -295,14 +337,37 @@ export default class Scrum {
         data.projects_filterd
             = this.issues2projects(data.issues_filterd);
     }
+    fetchIssues (milestone, cb) {
+        this._fetch.start = new Date();
+        this._fetch.end = null;
+
+        this.setMilestone(milestone);
+
+        this.getIssuesByMilestone(this._data.milestone, (issues) => {
+
+            this._data.issues = issues;
+
+            this.makeFilterdTimeline(issues);
+            this.makeFilterdProjects(issues);
+
+            this._fetch.end = new Date();
+
+            for (const f of this._listeners)
+                f();
+
+            if (cb)
+                cb();
+        });
+
+    }
     fetch (repository, cb) {
         this._fetch.start = new Date();
         this._fetch.end = null;
 
         this.getMilestonesByRepository(repository, (milestones) => {
-            this._data.milestones = milestones;
+            this._data.milestones = this.targetMilestones(milestones);
 
-            this._data.milestone = this.targetMilestone(milestones);
+            this._data.milestone = this._data.milestones.length>0 ? this._data.milestones[0] : null;
 
             this.getIssuesByMilestone(this._data.milestone, (issues) => {
 

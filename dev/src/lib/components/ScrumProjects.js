@@ -41,7 +41,12 @@ export default function ScrumProjects (props) {
         list_pb: {
             cleaAll:  () => scrum.setFilterProjects('all-hide', invokeUpdate),
             checkAll: () => scrum.setFilterProjects('all-view', invokeUpdate),
-        }
+        },
+        milestone: {
+            change: (milestone) => {
+                scrum.fetchIssues(milestone, () => setUpdatedAt(new Date()));
+            }
+        },
     };
     return (
         <>

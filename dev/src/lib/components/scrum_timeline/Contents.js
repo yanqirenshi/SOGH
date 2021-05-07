@@ -10,11 +10,21 @@ import style from './Style.js';
 export default function Contents (props) {
     const scrum = props.scrum;
 
+    const repository = props.repository;
+    const callbacks = props.callbacks;
+
+    const base = scrum._data;
+    const issues = base.issues;
+    const milestone = base.milestone;
+    const milestones = base.milestones;
+
     return (
         <div style={style.root}>
           <div>
-            <ProductAndMilestone repository={props.repository}
-                                 milestone={scrum._data.milestone} />
+            <ProductAndMilestone repository={repository}
+                                 milestones={milestones}
+                                 milestone={milestone}
+                                 callbacks={callbacks} />
           </div>
 
           <div style={{marginBottom: 22, display: 'flex'}}>

@@ -14,17 +14,18 @@ export default function Contents (props) {
     const scrum = props.scrum;
     const sogh = scrum._sogh;
 
-    const base = scrum._data;
-    const data = scrum._projects;
-
-    const projects = data.projects;
-    const projects_filterd = data.projects_filterd;
-
     const repository = props.repository;
+    const callbacks = props.callbacks;
+
+    const base = scrum._data;
     const issues = base.issues;
     const milestone = base.milestone;
+    const milestones = base.milestones;
+
+    const data = scrum._projects;
+    const projects = data.projects;
+    const projects_filterd = data.projects_filterd;
     const filter = data.filter;
-    const callbacks = props.callbacks;
 
     const sorted_projects = sogh.sortProjectsByPriority(projects.list);
     const sorted_projects_filterd = sogh.sortProjectsByPriority(projects_filterd.list);
@@ -36,7 +37,9 @@ export default function Contents (props) {
         <div style={style.contents_area.root}>
           <div style={style.contents_area.head}>
             <ProductAndMilestone repository={repository}
-                                 milestone={milestone} />
+                                 milestones={milestones}
+                                 milestone={milestone}
+                                 callbacks={callbacks} />
           </div>
 
           <div style={style.contents_area.controller}>

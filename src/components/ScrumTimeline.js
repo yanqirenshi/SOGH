@@ -37,6 +37,11 @@ export default function ScrumTimeline (props) {
         filter: {
             click: (type, id) => changeFilter(type, id),
         },
+        milestone: {
+            change: (milestone) => {
+                scrum.fetchIssues(milestone, () => setUpdatedAt(new Date()));
+            }
+        },
     };
 
     return (
