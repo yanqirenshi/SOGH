@@ -11,3 +11,72 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+
+.sogh_markdown h1, h2, h3, h4, h5 {
+    margin-left: 0px;
+    margin-right: 0px;
+    overflow-wrap: break-word;
+}
+
+.sogh_markdown h1 {
+    font-size: 28px;
+    font-weight: 600;
+    line-height: 35px;
+    margin-top: 0px;
+    margin-bottom: 16px;
+    overflow-wrap: break-word;
+    padding-bottom: 8.4px;
+}
+
+.sogh_markdown h2 {
+    font-size: 21px;
+    font-weight: 600;
+    line-height: 26.25px;
+    margin-top: 24px;
+    margin-bottom: 16px;
+    padding-bottom: 6.3px;
+}
+
+.sogh_markdown h3 {
+    font-size: 17.5px;
+    font-weight: 600;
+    line-height: 21.875px;
+    margin-top: 24px;
+    margin-bottom: 16px;
+    padding-bottom: 6.3px;
+}
+
+.sogh_markdown h4 {
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 17.5px;
+    margin-top: 24px;
+    margin-bottom: 16px;
+}
+
+.sogh_markdown h5 {
+    font-size: 12.25px;
+    font-weight: 600;
+    line-height: 15.3125px;
+    margin-top: 24px;
+    margin-bottom: 0px;
+}
+
+.sogh_markdown ul {
+    font-size: 14px;
+    line-height: 21px;
+    list-style-type: disc;
+    margin-bottom: 16px;
+    margin-top: 0px;
+    padding-left: 28px;
+}
+
+.sogh_markdown ol {
+    font-size: 14px;
+    line-height: 21px;
+    list-style-type: decimal;
+    margin-bottom: 16px;
+    margin-top: 0px;
+    padding-left: 28px;
+}

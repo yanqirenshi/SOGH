@@ -1,10 +1,8 @@
 import React from 'react';
 
 import Product from './Product.js';
-import Sprint  from './Sprint.js';
 
 export default function ProductAndMilestone (props) {
-    const milestone = props.milestone;
     const milestones = props.milestones;
 
     const changed  = (e) => {
@@ -24,7 +22,6 @@ export default function ProductAndMilestone (props) {
 
           {milestones &&
            <div>
-             {/* <Sprint milestone={props.milestone}/> */}
              <div className="select">
                <select onChange={changed}>
                  {milestones.map(m => {

@@ -42,8 +42,8 @@ export default class Sogh {
                 repository: null,
                 milestones: {ht:{}, list:[]},
                 projects: {ht:{}, list:[]},
-                // labels: {ht:{}, list:[]},
-                // issues: {ht:{}, list:[]},
+                labels: {ht:{}, list:[]},
+                issues: {ht:{}, list:[]},
             }
         };
     }
@@ -555,15 +555,18 @@ export default class Sogh {
 
         getter();
     }
-    // active repository
+    // active
+    active () {
+        return this._data.active;
+    }
     activeRepository (repo) {
         if (arguments.length > 0) {
             this._data.active = {
                 repository: repo,
-                milestones: {ht:{}, list:[]},
                 projects: {ht:{}, list:[]},
-                // labels: {ht:{}, list:[]},
-                // issues: {ht:{}, list:[]},
+                milestones: {ht:{}, list:[]},
+                labels: {ht:{}, list:[]},
+                issues: {ht:{}, list:[]},
             };
 
             const active = this._data.active;
