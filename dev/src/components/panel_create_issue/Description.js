@@ -9,6 +9,7 @@ const style = {
     left: {
         width: '50%',
         paddingRight: 5,
+        overflow:'auto',
         textarea: {
             minHeight: '100%',
             maxHeight: '100%',
@@ -19,6 +20,7 @@ const style = {
         width: '50%',
         height: '100%',
         paddingLeft: 20,
+        overflow:'auto',
         view: {
             background: '#fcfcfc',
             width: '100%',

@@ -69,7 +69,7 @@ export default function PanelCreateIssue (props) {
         },
         ...(props.callbacks || {})
     };
-    console.log(active)
+
     return (
         <div style={style}>
           <div style={style.relationships}>
@@ -88,12 +88,12 @@ export default function PanelCreateIssue (props) {
            </div>}
 
 
-          <div style={style.body}>
-            <div style={{marginBottom:11}}>
-              <Title contents={data.description}
-                     callbacks={callbacks}/>
-            </div>
+          <div style={{marginBottom:5,marginTop:11}}>
+            <Title contents={data.description}
+                   callbacks={callbacks}/>
+          </div>
 
+          <div style={style.body}>
             <Description contents={data.description}
                          callbacks={callbacks} />
           </div>
