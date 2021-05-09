@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import Title from './panel_create_issue/Title.js'
+import Title from './panel_create_issue/Title.js';
 import Description from './panel_create_issue/Description.js';
 import Relationship from './panel_create_issue/Relationship.js';
 import Finder from './panel_create_issue/Finder.js';
@@ -84,7 +84,7 @@ export default function PanelCreateIssue (props) {
              {c('projects',   active.projects,   callbacks)}
              {c('milestone',  active.milestones, callbacks)}
              {c('labels',     active.labels,     callbacks)}
-             {c('issues',     active.issues,     callbacks)}
+             {c('assignees',  active.assignees,  callbacks)}
            </div>}
 
 

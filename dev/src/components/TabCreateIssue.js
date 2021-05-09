@@ -1,12 +1,21 @@
 import React, { useState } from 'react';
 
-import PanelCreateIssue from './PanelCreateIssue.js';
+import PanelCreateIssue from '../lib/components/PanelCreateIssue.js';
 
 const style = {
     display: 'flex',
+    flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
     paddingTop: 14,
+    controller: {
+        marginTop:11,
+        display: 'flex',
+        width: 888,
+        paddingLeft: 5,
+        paddingRight: 5,
+        justifyContent: 'space-between',
+    },
 };
 
 const template = `## 課題内容
@@ -83,11 +92,26 @@ export default function TabCreateIssue (props) {
         },
     };
 
+    const clickCreate = () => {
+        console.log(data);
+    };
+
     return (
-             <div style={style}>
-               <PanelCreateIssue data={data}
-                                 callbacks={callbacks}
-                                 sogh={sogh}/>
-             </div>
+        <div style={style}>
+          <PanelCreateIssue data={data}
+                            callbacks={callbacks}
+                            sogh={sogh}/>
+
+          <div style={style.controller}>
+            <button className="button is-warning">
+              Cancel
+            </button>
+
+            <button className="button is-danger"
+                    onClick={clickCreate}>
+              Create
+            </button>
+          </div>
+        </div>
     );
 }

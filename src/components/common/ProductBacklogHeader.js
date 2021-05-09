@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-    faExternalLinkAlt, faWindowMinimize, faWindowMaximize,
+    faWindowMinimize, faWindowMaximize,
 } from "@fortawesome/free-solid-svg-icons";
 import ANewTab from './ANewTab.js';
 

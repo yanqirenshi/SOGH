@@ -8,7 +8,8 @@ const style = {
     display: 'flex',
     left: {
         width: '50%',
-        paddingRight: 5,
+        flexGrow: 1,
+        paddingRight: 10,
         overflow:'auto',
         textarea: {
             minHeight: '100%',
@@ -18,13 +19,13 @@ const style = {
     },
     right: {
         width: '50%',
-        height: '100%',
-        paddingLeft: 20,
-        overflow:'auto',
+        flexGrow: 1,
+        paddingLeft: 10,
+        overflow: 'auto',
+        background: '#fcfcfc',
+        position: 'relative',
         view: {
-            background: '#fcfcfc',
-            width: '100%',
-            height: '100%',
+            position: 'absolute',
         },
     },
 };
@@ -44,7 +45,10 @@ export default function Description (props) {
 
           <div style={style.right}
                className="sogh_markdown">
-            <ReactMarkdown remarkPlugins={[gfm]} children={props.contents} />,
+            <div style={style.right.view}>
+              <ReactMarkdown remarkPlugins={[gfm]}
+                             children={props.contents} />,
+            </div>
           </div>
         </div>
     );

@@ -28,7 +28,9 @@ function contents (v) {
         <div key={v.id}
              style={{display: 'flex', fontSize:14, flexWrap: 'wrap'}}>
           <p>{v.title}</p>
-          <p style={{marginLeft:6}}>({v.number})</p>
+
+          {v.number
+           && <p style={{marginLeft:6}}>({v.number})</p>}
         </div>
     );
 }

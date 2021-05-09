@@ -8,6 +8,16 @@ import Gtd from './Gtd.js';
 import Scrum from './Scrum.js';
 import ProductBacklogs from './ProductBacklogs.js';
 import ProductBacklog from './ProductBacklog.js';
+import Pool from './Pool.js';
+
+const POOL = new Pool();
+
+function owner (repo) {
+    if ("string" === (typeof repo.owner))
+        return repo.owner;
+
+    return repo.owner.login;
+}
 
 export default class Sogh {
     constructor (token) {
@@ -27,7 +37,13 @@ export default class Sogh {
                     fetch: {start: null, end: null},
                 }
             },
-            repositories: {
+            repositories: {},
+            active: {
+                repository: null,
+                milestones: {ht:{}, list:[]},
+                projects: {ht:{}, list:[]},
+                labels: {ht:{}, list:[]},
+                assignees: {ht:{}, list:[]},
             }
         };
     }
@@ -58,36 +74,6 @@ export default class Sogh {
             return query.replace('after: "",', `after: "${endCursor}",`);
 
         return query.replace('after: "",', '');
-    }
-    getMilestonesByRepository (repository, cb) {
-        if (!this.api.v4._token)
-            cb([]);
-
-        const api = this.api.v4;
-
-        const base_query = query.milestone_by_reposigory
-              .replace('@owner', repository.owner)
-              .replace('@name',  repository.name);
-
-        let milestones = [];
-        const getter = (endCursor) => {
-            let query = this.ensureEndCursor(base_query, endCursor);
-
-            api.fetch(query, (results) => {
-                const data = results.data.repository.milestones;
-                const page_info = data.pageInfo;
-
-                milestones = milestones.concat(data.nodes);
-
-                if (page_info.hasNextPage) {
-                    getter(page_info.endCursor);
-                } else {
-                    cb(milestones);
-                }
-            });
-        };
-
-        getter();
     }
     point (v) {
         const plan = /.*@Point\.Plan:\s+(\d+).*/.exec(v);
@@ -442,6 +428,36 @@ export default class Sogh {
 
         getter();
     }
+    getMilestonesByRepository (repository, cb) {
+        if (!this.api.v4._token)
+            cb([]);
+
+        const api = this.api.v4;
+
+        const base_query = query.milestone_by_reposigory
+              .replace('@owner', owner(repository))
+              .replace('@name',  repository.name);
+
+        let milestones = [];
+        const getter = (endCursor) => {
+            let query = this.ensureEndCursor(base_query, endCursor);
+
+            api.fetch(query, (results) => {
+                const data = results.data.repository.milestones;
+                const page_info = data.pageInfo;
+
+                milestones = milestones.concat(data.nodes);
+
+                if (page_info.hasNextPage) {
+                    getter(page_info.endCursor);
+                } else {
+                    cb(milestones);
+                }
+            });
+        };
+
+        getter();
+    }
     getProjectsByRepository (repository, cb) {
         if (!this.api.v4._token || !repository)
             cb([]);
@@ -449,7 +465,7 @@ export default class Sogh {
         const api = this.api.v4;
 
         const base_query = query.projects_by_repository
-              .replace('@owner', repository.owner)
+              .replace('@owner', owner(repository))
               .replace('@name', repository.name);
 
         let projects = [];
@@ -466,6 +482,66 @@ export default class Sogh {
                     getter(page_info.endCursor);
                 } else {
                     cb(projects.map(this.addAnotetionValue4Project));
+                }
+            });
+        };
+
+        getter();
+    }
+    getAssigneesByRepository (repository, cb) {
+        if (!this.api.v4._token || !repository)
+            cb([]);
+
+        const api = this.api.v4;
+
+        const base_query = query.assignees_by_repository
+              .replace('@owner', owner(repository))
+              .replace('@name', repository.name);
+
+        let assignees = [];
+        const getter = (endCursor) => {
+            let query = this.ensureEndCursor(base_query, endCursor);
+
+            api.fetch(query, (results) => {
+                const data = results.data.repository.assignableUsers;
+                const page_info = data.pageInfo;
+
+                assignees = assignees.concat(data.nodes);
+
+                if (page_info.hasNextPage) {
+                    getter(page_info.endCursor);
+                } else {
+                    cb(assignees.map(this.addAnotetionValue4Project));
+                }
+            });
+        };
+
+        getter();
+    }
+    getLabelsByRepository (repository, cb) {
+        if (!this.api.v4._token || !repository)
+            cb([]);
+
+        const api = this.api.v4;
+
+        const base_query = query.labels_by_repository
+              .replace('@owner', owner(repository))
+              .replace('@name', repository.name);
+
+        let labels = [];
+        const getter = (endCursor) => {
+            let query = this.ensureEndCursor(base_query, endCursor);
+
+            api.fetch(query, (results) => {
+                const data = results.data.repository.labels;
+                const page_info = data.pageInfo;
+
+                labels = labels.concat(data.nodes);
+
+                if (page_info.hasNextPage) {
+                    getter(page_info.endCursor);
+                } else {
+                    cb(labels.map(this.addAnotetionValue4Project));
                 }
             });
         };
@@ -538,6 +614,29 @@ export default class Sogh {
         };
 
         getter();
+    }
+    // active
+    active () {
+        return this._data.active;
+    }
+    activeRepository (repo) {
+        if (arguments.length > 0) {
+            this._data.active = {
+                repository: repo,
+                projects:   {ht:{}, list:[]},
+                milestones: {ht:{}, list:[]},
+                assignees:  {ht:{}, list:[]},
+                labels:     {ht:{}, list:[]},
+            };
+
+            const active = this._data.active;
+            this.getMilestonesByRepository(repo, (l)=> active.milestones = POOL.list2Pool(l));
+            this.getProjectsByRepository(repo,   (l)=> active.projects   = POOL.list2Pool(l));
+            this.getAssigneesByRepository(repo,  (l)=> active.assignees  = POOL.list2Pool(l));
+            this.getLabelsByRepository(repo,     (l)=> active.labels     = POOL.list2Pool(l));
+        }
+
+        return this._data.active.repository;
     }
     // from core
     addPool (data, pool) {

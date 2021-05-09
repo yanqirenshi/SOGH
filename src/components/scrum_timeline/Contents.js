@@ -14,7 +14,6 @@ export default function Contents (props) {
     const callbacks = props.callbacks;
 
     const base = scrum._data;
-    const issues = base.issues;
     const milestone = base.milestone;
     const milestones = base.milestones;
 
