@@ -7,7 +7,7 @@ import Finder from './panel_create_issue/Finder.js';
 
 const style = {
     width: 888,
-    height: 666,
+    height: 555,
     borderRadius: 8,
     display: 'flex',
     flexDirection: 'column',
@@ -23,6 +23,8 @@ const style = {
         col: {
             width: '25%',
             padding: 5,
+            paddingTop: 0,
+            paddingBottom: 0,
         }
     },
     selector: {
@@ -31,13 +33,13 @@ const style = {
         col: {
             width: '25%',
             padding: 5,
+            paddingTop: 0,
+            paddingBottom: 0,
         }
     },
 };
 
 function r (title, contents, callbacks) {
-    console.log('d4----------------');
-    console.log([title, contents, callbacks]);
     return (
         <div style={style.relationships.col}>
           <Relationship title={title}
@@ -48,8 +50,6 @@ function r (title, contents, callbacks) {
 }
 
 function c (type, contents, callbacks) {
-    console.log('d5----------------');
-    console.log([type, contents, callbacks]);
     return (
         <div style={style.selector.col}>
           <Finder type={type}
@@ -60,14 +60,10 @@ function c (type, contents, callbacks) {
 }
 
 export default function PanelCreateIssue (props) {
-    console.log('d1----------------');
-    console.log(props);
     const [selector, setSelector] = useState(false);
 
     const data = props.data;
     const active = props.sogh.active();
-
-    console.log('d2----------------');
 
     const callbacks = {
         ...{
@@ -78,10 +74,8 @@ export default function PanelCreateIssue (props) {
         ...(props.callbacks || {})
     };
 
-    console.log('d3----------------');
-
     return (
-        <div style={style}>
+        <div style={{...style, ...(props.style || {})}}>
           <div style={style.relationships}>
             {r("Projects",  data.projects,  callbacks)}
             {r("Milestone", data.milestone, callbacks)}

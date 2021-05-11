@@ -24,9 +24,7 @@ function item (d, props) {
 }
 
 export default function Finder (props) {
-    console.log('d2-2-1');
     const list = props.contents.list.sort((a,b)=>a.updatedAt<b.updatedAt ? 1 : -1);
-    console.log('d2-2-2');
 
     return (
         <div style={style}>

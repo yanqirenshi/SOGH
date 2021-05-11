@@ -5,6 +5,7 @@ const style = {
     height: '100%',
     display: 'flex',
     flexDirection: 'column',
+    fontSize: 14,
     title: {
         textAlign: 'center',
     },
@@ -36,19 +37,16 @@ function contents (v) {
 }
 
 export default function Relationship (props) {
-    console.log('d2-3-1');
-
     const callbacks = props.callbacks;
 
     const clickSelector = () => callbacks.selector.swith();
 
-    console.log('d2-3-2');
     return (
         <div style={style}>
           <div style={style.title}>
             <button className="button is-small"
                     onClick={clickSelector}>
-              <h1 className="title is-6">{props.title}</h1>
+              {props.title}
             </button>
           </div>
 
