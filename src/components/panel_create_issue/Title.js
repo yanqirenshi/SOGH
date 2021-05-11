@@ -6,8 +6,10 @@ const style = {
 };
 
 export default function Title (props) {
+    console.log('d2-4-1');
     const callback = props.callbacks.change.title;
     const change = (e) => callback(e.target.value);
+    console.log('d2-4-2');
 
     return (
         <div style={style}>

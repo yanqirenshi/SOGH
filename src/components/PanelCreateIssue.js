@@ -36,6 +36,8 @@ const style = {
 };
 
 function r (title, contents, callbacks) {
+    console.log('d4----------------');
+    console.log([title, contents, callbacks]);
     return (
         <div style={style.relationships.col}>
           <Relationship title={title}
@@ -46,6 +48,8 @@ function r (title, contents, callbacks) {
 }
 
 function c (type, contents, callbacks) {
+    console.log('d5----------------');
+    console.log([type, contents, callbacks]);
     return (
         <div style={style.selector.col}>
           <Finder type={type}
@@ -56,10 +60,14 @@ function c (type, contents, callbacks) {
 }
 
 export default function PanelCreateIssue (props) {
+    console.log('d1----------------');
+    console.log(props);
     const [selector, setSelector] = useState(false);
 
     const data = props.data;
     const active = props.sogh.active();
+
+    console.log('d2----------------');
 
     const callbacks = {
         ...{
@@ -69,6 +77,8 @@ export default function PanelCreateIssue (props) {
         },
         ...(props.callbacks || {})
     };
+
+    console.log('d3----------------');
 
     return (
         <div style={style}>

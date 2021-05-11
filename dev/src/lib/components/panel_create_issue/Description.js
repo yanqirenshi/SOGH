@@ -31,8 +31,10 @@ const style = {
 };
 
 export default function Description (props) {
+    console.log('d2-1-1');
     const callback = props.callbacks.change.description;
     const change = (e) => callback(e.target.value);
+    console.log('d2-1-2');
 
     return (
         <div style={style}>

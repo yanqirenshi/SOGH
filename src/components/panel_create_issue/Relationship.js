@@ -36,10 +36,13 @@ function contents (v) {
 }
 
 export default function Relationship (props) {
+    console.log('d2-3-1');
+
     const callbacks = props.callbacks;
 
     const clickSelector = () => callbacks.selector.swith();
 
+    console.log('d2-3-2');
     return (
         <div style={style}>
           <div style={style.title}>
