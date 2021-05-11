@@ -19,18 +19,15 @@ export default function ButtonToggle (props) {
         ...props.style || {},
     };
 
-    if (props.on) {
-        style.border = '1px solid #eeeeee';
-        style.boxShadow = 'none';
-    }
+    const selected = props.on;
 
     return (
-        <div key={props.code}
-             code={props.code}
-             className="card"
-             style={style}
-             onClick={clickButton}>
+        <button className={ "button is-small " + (selected ? '' : 'is-info')}
+                key={props.code}
+                code={props.code}
+                style={style}
+                onClick={clickButton}>
           {props.label}
-        </div>
+        </button>
     );
 }

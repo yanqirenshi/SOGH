@@ -15,24 +15,16 @@ export default function FilterOthers (props) {
         props.callbacks.filter.click('others', e.target.getAttribute('data_id'));
     };
 
-    if (!props.filter[props.other.key]) {
-        style.boxShadow = 'none';
-        style.border = '1px solid #eeee';
-    }
+    const selected = !props.filter[props.other.key];
 
     const title = props.other.title;
     const key = props.other.key;
     return (
-        <div className="box"
-             style={style}
+        <button className={ "button is-small " + (selected ? '' : 'is-info')}
+                style={style}
              data_id={key}
              onClick={clickItem}>
-
-          <div className="contents" data_id={key}>
-            <p data_id={key} style={{marginTop: -2}}>
               {title}
-            </p>
-          </div>
-        </div>
+        </button>
     );
 }

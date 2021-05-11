@@ -148,9 +148,7 @@ export default class Sogh {
             return ret ? ret[1] : null;
         };
 
-        const tat = titleAndType(project);
-        project.title = tat.title;
-        // project.type = tat.type;
+        project.title = project.name;
         project.type = type(project);
 
         project.plan = schedulePlan(project);

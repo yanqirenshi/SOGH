@@ -17,25 +17,15 @@ export default function FilterDevelopers (props) {
 
     const clickItem = (e) => props.callbacks.filter.click('assignee', dataID(e));
 
-    if (props.filter.indexOf(props.assignee.id)!==-1) {
-        style.boxShadow = 'none';
-        style.border = '1px solid #eeee';
-    }
+    const selected = props.filter.indexOf(props.assignee.id)>-1;
 
     return (
-        <div className="box"
-             style={style}
-             data_id={props.assignee.id}
-             onClick={clickItem}>
-
-          <div className="contents"
-               data_id={props.assignee.id}>
-            <p data_id={props.assignee.id} style={{marginTop: -2}}>
-              {(props.assignee.name || props.assignee.login).trim()}
-            </p>
-          </div>
-
-        </div>
+        <button className={ "button is-small " + (selected ? '' : 'is-info')}
+                style={style}
+                data_id={props.assignee.id}
+                onClick={clickItem}>
+          {(props.assignee.name || props.assignee.login).trim()}
+        </button>
     );
 
 }

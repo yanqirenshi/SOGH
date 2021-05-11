@@ -15,25 +15,16 @@ export default function FilterStatus (props) {
         props.callbacks.filter.click('status', e.target.getAttribute('data_id'));
     };
 
-    if (!props.filter[props.status.title]) {
-        style.boxShadow = 'none';
-        style.border = '1px solid #eeee';
-    }
+    const selected = !props.filter[props.status.title];
 
     const title = props.status.title;
     return (
-        <div className="box"
-             style={style}
-             data_id={title}
-             onClick={clickItem}>
-
-          <div className="contents"
-               data_id={title}>
-            <p data_id={title} style={{marginTop: -2}}>
+        <button className={ "button is-small " + (selected ? '' : 'is-info')}
+                style={style}
+                data_id={title}
+                onClick={clickItem}>
               {title}
-            </p>
-          </div>
-        </div>
+        </button>
     );
 
 }
