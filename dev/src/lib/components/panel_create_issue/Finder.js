@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import Item from './finder/Item.js';
 
@@ -23,17 +23,39 @@ function item (d, props) {
     );
 }
 
+function applyFilter (filter, list) {
+    if (!filter)
+        return list;
+
+    const f = filter.toUpperCase();
+
+    return list.filter(d => {
+        return (d.id+'').toUpperCase().indexOf(f)>-1
+            || d.title.toUpperCase().indexOf(f)>-1;
+    });
+}
+
 export default function Finder (props) {
+    const [filter, setFilter] = useState(null);
+
     const list = props.contents.list.sort((a,b)=>a.updatedAt<b.updatedAt ? 1 : -1);
+
+    const change = (e) => {
+        const str = e.target.value;
+        setFilter(str.length > 0 ? str : null);
+    };
 
     return (
         <div style={style}>
           <div style={{marginTop:5}}>
-            <input className="input is-small" type="text" placeholder="Search" />
+            <input className="input is-small"
+                   type="text"
+                   placeholder="Search"
+                   onKeyUp={change} />
           </div>
 
           <div style={style.list}>
-            {list.map(d=>item(d, props))}
+            {applyFilter(filter, list).map(d=>item(d, props))}
           </div>
         </div>
     );
