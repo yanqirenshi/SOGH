@@ -364,10 +364,20 @@ export default class Scrum {
         this._fetch.start = new Date();
         this._fetch.end = null;
 
+        const getTargetMilestone = (milestone, milestones) => {
+            if (this._data.milestones.length===0)
+                return null;
+
+            if (!milestone)
+                return this._data.milestones[0];
+
+            return this._data.milestones.find(d=>d.id===milestone.id) || this._data.milestones[0];
+        };
+
         this.getMilestonesByRepository(repository, (milestones) => {
             this._data.milestones = this.targetMilestones(milestones);
 
-            this._data.milestone = this._data.milestones.length > 0 ? this._data.milestones[0] : null;
+            this._data.milestone = getTargetMilestone(this._data.milestone ,this._data.milestones);
 
             this.getIssuesByMilestone(this._data.milestone, (issues) => {
 

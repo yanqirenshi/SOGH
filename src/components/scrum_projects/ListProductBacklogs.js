@@ -69,7 +69,7 @@ export default function ListProductBacklogs (props) {
                                 onChange={clickProjectCheckbox}/>
                        </p>
                        <p>
-                         {d.name}
+                         {d.name || "@Project 未割り当て"}
                        </p>
                      </div>;
           })}

@@ -110,7 +110,7 @@ export default function TableSprintBacklogs (props) {
     const project = props.project;
 
     return (
-        <table className="table is-bordered is-striped is-narrow is-hoverable is-fullwidth"
+        <table className="table is-striped is-narrow is-hoverable is-fullwidth"
                style={{fontSize:14}}>
           <thead>
             <tr>

@@ -36,6 +36,7 @@ export default function Filter (props) {
           </div>
 
           <div style={{flexGrow:1, display:'flex', flexWrap: 'wrap'}}>
+            {filter.assignees.list.length>0 && <p style={{marginRight: 8}}>Assignee:</p>}
             {filter.assignees.list.map((d,i)=>{
                 return <FilterDevelopers key={d.id}
                                          style={style.item}
@@ -44,6 +45,7 @@ export default function Filter (props) {
                                          callbacks={props.callbacks} />;
             })}
 
+            {filter.statuses.list.length>0 && <p style={{marginRight: 8}}>Status:</p>}
             {filter.statuses.list.map((d)=>{
                 return <FilterStatus key={d.title}
                                      style={style.item}
@@ -52,6 +54,7 @@ export default function Filter (props) {
                                      callbacks={props.callbacks} />;
             })}
 
+            {props.issues.length>0 && <p style={{marginRight: 8}}>Other:</p>}
             {props.issues.length>0 &&
              others.list.map((d)=>{
                  return <FilterOthers key={d.key}
