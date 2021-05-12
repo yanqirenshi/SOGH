@@ -49,11 +49,12 @@ function r (title, contents, callbacks) {
     );
 }
 
-function c (type, contents, callbacks) {
+function finder (type, contents, selected, callbacks) {
     return (
         <div style={style.selector.col}>
           <Finder type={type}
                   contents={contents}
+                  selected={selected}
                   callbacks={callbacks}/>
         </div>
     );
@@ -85,10 +86,10 @@ export default function PanelCreateIssue (props) {
 
           {selector &&
            <div style={style.selector}>
-             {c('projects',   active.projects,   callbacks)}
-             {c('milestone',  active.milestones, callbacks)}
-             {c('labels',     active.labels,     callbacks)}
-             {c('assignees',  active.assignees,  callbacks)}
+             {finder('projects',   active.projects,   data.projects,  callbacks)}
+             {finder('milestone',  active.milestones, data.milestone, callbacks)}
+             {finder('labels',     active.labels,     data.labels,    callbacks)}
+             {finder('assignees',  active.assignees,  data.assignees, callbacks)}
            </div>}
 
 

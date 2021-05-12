@@ -12,6 +12,12 @@ const style = {
     value: {
         marginTop:5,
         textAlign: 'center',
+        contents: {
+            display: 'flex',
+            fontSize:14,
+            flexWrap: 'wrap',
+            justifyContent: 'center'
+        },
     }
 };
 
@@ -27,11 +33,17 @@ function contents (v) {
 
     return (
         <div key={v.id}
-             style={{display: 'flex', fontSize:14, flexWrap: 'wrap'}}>
-          <p>{v.title}</p>
+             style={style.value.contents}>
+          <p>{v.title || v.login || '???'}</p>
 
           {v.number
-           && <p style={{marginLeft:6}}>({v.number})</p>}
+           && <p style={{marginLeft:6}}>
+                (
+                <a href={v.url} target="_blank" rel="noreferrer">
+                  {v.number}
+                </a>
+                )
+              </p>}
         </div>
     );
 }

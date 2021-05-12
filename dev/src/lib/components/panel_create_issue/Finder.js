@@ -18,6 +18,7 @@ function item (d, props) {
     return (
         <Item key={d.id}
               data={d}
+              selected={props.selected}
               type={props.type}
               callbacks={props.callbacks}/>
     );
@@ -29,9 +30,12 @@ function applyFilter (filter, list) {
 
     const f = filter.toUpperCase();
 
+    const val = (d) =>  !d ? '' : (d + '').toUpperCase();
+
     return list.filter(d => {
-        return (d.id+'').toUpperCase().indexOf(f)>-1
-            || d.title.toUpperCase().indexOf(f)>-1;
+        return val(d.id).indexOf(f)>-1
+            || val(d.title).indexOf(f)>-1
+            || val(d.login).indexOf(f)>-1;
     });
 }
 

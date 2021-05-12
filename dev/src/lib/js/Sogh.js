@@ -114,16 +114,6 @@ export default class Sogh {
             return ret ? ret[1] : null;
         };
 
-        const titleAndType = (p) => {
-            const name = p.name;
-            const ret = /^【(.*)】(.*)$/.exec(name);
-
-            if (!ret)
-                return { title: name, type: null };
-
-            return { title: ret[2], type: ret[1] };
-        };
-
         const schedulePlan = (p) => {
             const ret = /.*@Plan:(\s+\d+-\d+-\d+),\s+(\d+-\d+-\d+).*/.exec(p.body);
 

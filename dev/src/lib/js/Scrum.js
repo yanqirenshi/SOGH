@@ -54,7 +54,6 @@ export default class Scrum {
         return this._sogh.api.v4;
     }
     isNeverFetched () {
-        console.log(this._fetch.start)
         return this._fetch.start ? false : true;
     }
     isCanFetchData () {
