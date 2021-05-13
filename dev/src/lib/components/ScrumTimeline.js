@@ -10,7 +10,8 @@ export default function ScrumTimeline (props) {
 
     const repository = props.repository;
 
-    const refresh = () => scrum.fetch(repository, () => setUpdatedAt(new Date()));
+    const invokeUpdate = () => setUpdatedAt(new Date());
+    const refresh = () => scrum.fetch(repository, () => invokeUpdate());
 
     useEffect(() => {
         if (props.sogh)
@@ -20,16 +21,14 @@ export default function ScrumTimeline (props) {
     useEffect(() => {
         if (!scrum) return;
 
-        scrum.addListeners(() => setUpdatedAt(new Date()));
+        scrum.addListeners(() => invokeUpdate());
 
         if (scrum.isNeverFetched())
             refresh();
     }, [scrum]);
 
     const changeFilter = (type, id) => {
-        scrum.changeFilter('timeline', type, id, () => {
-            setUpdatedAt(new Date());
-        });
+        scrum.changeFilter('timeline', type, id, () => invokeUpdate());
     };
 
     const callbacks = {
@@ -41,6 +40,10 @@ export default function ScrumTimeline (props) {
             change: (milestone) => {
                 scrum.fetchIssues(milestone, () => setUpdatedAt(new Date()));
             }
+        },
+        duedate: {
+            close: (v) => scrum.changeCloseDueDates('close', v, invokeUpdate),
+            open:  (v) => scrum.changeCloseDueDates('open',  v, invokeUpdate),
         },
     };
 

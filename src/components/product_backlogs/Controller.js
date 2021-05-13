@@ -49,6 +49,7 @@ export default function Controller (props) {
 
           {filterd_projects.length>0 &&
            <div style={style.item1}>
+
              <ButtonToggle label="Closing"
                            on={!core._filter.closing}
                            code={'closing'}

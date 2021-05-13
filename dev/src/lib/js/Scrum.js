@@ -28,7 +28,7 @@ export default class Scrum {
             issues_filterd: null,
             duedates: {ht:[],list:[]},
             duedates_filterd: {ht:[],list:[]},
-            close_projects: {},
+            close_duedates: {},
         };
     }
     refreshProjects () {
@@ -445,6 +445,32 @@ export default class Scrum {
                 ht[v] = true;
 
                 this._projects.close_projects = ht;
+            }
+        }
+
+        if (cb) cb();
+    }
+    changeCloseDueDates (type, v, cb) {
+        if (v==='all') {
+            const all = () => this._timeline.duedates.list.reduce((ht,d)=> {
+                ht[d.due_date] = true;
+                return ht;
+            }, {});
+
+            this._timeline.close_duedates = (type==='open') ? {} : all();
+        } else {
+            if ('open'===type) {
+                const ht = {...this._timeline.close_duedates};
+
+                if (ht[v])
+                    delete ht[v];
+                this._timeline.close_duedates = ht;
+            } else if ('close'===type) {
+                const ht = {...this._timeline.close_duedates};
+
+                ht[v] = true;
+
+                this._timeline.close_duedates = ht;
             }
         }
 

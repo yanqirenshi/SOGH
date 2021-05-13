@@ -7,7 +7,12 @@ import ButtonToggle from '../common/ButtonToggle.js';
 const style = {
     display:'flex',
     icon: { fontSize: 14, paddingTop: 4, marginRight: 11, color: '#888' },
-    search: { display:'flex', width:255 },
+    search: {
+        display:'flex',
+        width:255,
+        marginRight: 11,
+        marginBottom: 11,
+    },
     toggles: {
         display: 'flex',
         flexWrap: 'wrap',
@@ -53,20 +58,19 @@ export default function Search (props) {
             <FontAwesomeIcon icon={faFilter} />
           </div>
 
-
-          <div style={style.search}>
-            <input className="input is-small"
-                   type="text"
-                   placeholder="Search Project Name"
-                   onKeyUp={changeKeyword} />
-
-            <button className="button is-small"
-                    onClick={clearKeyword}>
-              Clear
-            </button>
-          </div>
-
           <div style={style.toggles}>
+            <div style={style.search}>
+              <input className="input is-small"
+                     type="text"
+                     placeholder="Search Project Name"
+                     onKeyUp={changeKeyword} />
+
+              <button className="button is-small"
+                      onClick={clearKeyword}>
+                Clear
+              </button>
+            </div>
+
             <p style={{marginBottom: 11}}>Priority：</p>
             {filters.priorities.map(d => {
                 const label = makeLabelString(d);

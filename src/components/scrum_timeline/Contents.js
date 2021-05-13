@@ -4,6 +4,7 @@ import ButtonRefresh from '../common/ButtonRefresh.js';
 import ProductAndMilestone from '../common/ProductAndMilestone.js';
 import DueDates from '../common/DueDates.js';
 import Filter from '../common/Filter.js';
+import OperatorOpenClose from '../common/OperatorOpenClose.js';
 
 import style from './Style.js';
 
@@ -16,6 +17,7 @@ export default function Contents (props) {
     const base = scrum._data;
     const milestone = base.milestone;
     const milestones = base.milestones;
+    const timeline = scrum._timeline;
 
     return (
         <div style={style.root}>
@@ -31,14 +33,18 @@ export default function Contents (props) {
               <ButtonRefresh callbacks={props.callbacks} />
             </div>
 
-            <Filter issues={scrum._data.issues}
-                    filter={scrum._timeline.filter}
+            <Filter issues={base.issues}
+                    filter={timeline.filter}
                     callbacks={props.callbacks}
                     sogh={scrum._sogh} />
           </div>
 
           <div>
-            <DueDates duedates={scrum._timeline.duedates_filterd}
+            <OperatorOpenClose callbacks={callbacks.duedate} />
+
+            <DueDates duedates={timeline.duedates_filterd}
+                      close_duedates={timeline.close_duedates}
+                      callbacks={props.callbacks}
                       sogh={scrum._sogh} />
           </div>
         </div>

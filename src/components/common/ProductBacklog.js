@@ -5,7 +5,6 @@ import TablePointProductBacklog from './TablePointProductBacklog.js';
 import TableSprintBacklogs from './TableSprintBacklogs.js';
 
 const style = {
-    maxWidth: 1000,
     marginLeft: 22,
 };
 

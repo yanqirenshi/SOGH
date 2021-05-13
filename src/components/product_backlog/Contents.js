@@ -71,7 +71,9 @@ export default function Contents (props) {
 
           {selected_tab.code==='overview' &&
            <div>
-             <Overivew core={core} data={data}/>
+             <Overivew core={core}
+                       project={project}
+                       data={data}/>
            </div>}
 
           {selected_tab.code==='milestones' &&

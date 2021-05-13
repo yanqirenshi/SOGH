@@ -21,7 +21,9 @@ export default function DueDates (props) {
               return <DueDate key={key}
                               sogh={sogh}
                               title={key}
-                              issues={duedates.ht[key]} />;
+                              issues={duedates.ht[key]}
+                              close={props.close_duedates[key] || false}
+                              callbacks={props.callbacks} />;
           })}
         </div>
     );

@@ -7,6 +7,7 @@ const style = {
         borderRadius: 5,
         padding: '6px 11px',
         marginTop: 11,
+        marginLeft: 22,
     }
 };
 
@@ -16,13 +17,13 @@ export default function HeroHead (props) {
           <nav className="navbar">
             <div className="container">
               {props.root_url &&
-               <div style={style.link}>
-                 <p>
-                   <Link to={props.root_url.to}
-                         style={{color: '#333'}}>
+               <div>
+                 <Link to={props.root_url.to}
+                       style={{color: '#333'}}>
+                   <p style={style.link}>
                      {props.root_url.label}
-                   </Link>
-                 </p>
+                   </p>
+                 </Link>
                </div>}
             </div>
           </nav>

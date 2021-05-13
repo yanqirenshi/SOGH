@@ -4,6 +4,10 @@ import DueDateHeader from './DueDateHeader.js';
 import TableIssues from './TableIssues.js';
 import TablePointProductBacklog from './TablePointProductBacklog.js';
 
+const style = {
+    marginLeft: 22,
+};
+
 export default function DueDate (props) {
     const sogh = props.sogh;
 
@@ -13,15 +17,16 @@ export default function DueDate (props) {
     const issues_sorted =  sogh.sortIssuesByProjectAndPriority(issues);
 
     return (
-        <nav className="panel">
+        <nav className="panel" style={style}>
           <DueDateHeader sogh={sogh}
                          date={title}
                          close={props.close}
                          callbacks={props.callbacks} />
 
-          <div className="panel-block">
-            <TableIssues issues={issues_sorted} sogh={sogh} />
-          </div>
+          {!props.close &&
+           <div className="panel-block">
+             <TableIssues issues={issues_sorted} sogh={sogh} />
+           </div>}
 
           <div className="panel-block">
             <TablePointProductBacklog issues={issues || []} />

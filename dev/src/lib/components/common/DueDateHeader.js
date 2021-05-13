@@ -8,8 +8,8 @@ import {
 export default function DueDateHeader (props) {
     const project = props.project;
 
-    const clickClose = () => props.callbacks.clickCloseProductBacklog(project.id);
-    const clickOpen = () => props.callbacks.clickOpenProductBacklog(project.id);
+    const clickClose = () => props.callbacks.duedate.close(props.date);
+    const clickOpen  = () => props.callbacks.duedate.open(props.date);
 
     const style_header = {
         ...{fontSize:14, display: 'flex'}
