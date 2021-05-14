@@ -1,6 +1,7 @@
 import React from 'react';
 import moment from 'moment';
 import ANewTab from './ANewTab.js';
+import {LinkBlank} from './Links.js';
 
 function dt (v) {
     if (!v) return '';
@@ -68,9 +69,9 @@ function due (v) {
 function makeTrs (issue) {
     return <tr key={issue.id}>
              <td style={style.right}>
-               <ANewTab to={issue.url}>
+               <LinkBlank href={issue.url}>
                  {issue.number}
-               </ANewTab>
+               </LinkBlank>
              </td>
              <td style={style.nowrap}>
                {prjColumn(issue)}
@@ -80,9 +81,9 @@ function makeTrs (issue) {
                  const label_style = labelStyle(l);
                  return <p key={l.id}
                            style={label_style}>
-                          <ANewTab to={l.url} style={aStyle(label_style.background)}>
+                          <LinkBlank href={l.url}>
                             {l.name}
-                          </ANewTab>
+                          </LinkBlank>
                         </p>;
              })}</td>
              <td style={style.nowrap}>

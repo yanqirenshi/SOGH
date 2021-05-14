@@ -1,6 +1,7 @@
 import React from 'react';
 import moment from 'moment';
 import ANewTab from './ANewTab.js';
+import {LinkBlank} from './Links.js';
 
 function dt (v) {
     if (!v) return '';
@@ -71,9 +72,11 @@ function prjNum (issue) {
     if (!project.id)
         return '';
 
-    return <a href={project.url} target="_blank" rel="noreferrer">
-             {project.number}
-           </a>;
+    return (
+        <LinkBlank href={project.url}>
+          {project.number}
+        </LinkBlank>
+    );
 }
 
 function prjName (issue) {
@@ -95,18 +98,18 @@ function makeTrs (sogh, issue) {
                {prjColumn(issue)}
              </td>
              <td style={style.right}>
-               <ANewTab to={issue.url}>
+               <LinkBlank href={issue.url}>
                  {issue.number}
-               </ANewTab>
+               </LinkBlank>
              </td>
              <td>{issue.title}</td>
              <td>{issue.labels.nodes.map(l => {
                  const label_style = labelStyle(l);
                  return <p key={l.id}
                            style={label_style}>
-                          <ANewTab to={l.url} style={aStyle(label_style.background)}>
+                          <LinkBlank href={l.url}>
                             {l.name}
-                          </ANewTab>
+                          </LinkBlank>
                         </p>;
              })}</td>
              <td style={style.nowrap}>
