@@ -80,7 +80,6 @@ export default function TabCreateIssue (props) {
     });
 
     const sogh = props.sogh;
-
     const callbacks = {
         change: {
             title:       (v) => setData(setSingle('title', v, data)),
@@ -93,7 +92,26 @@ export default function TabCreateIssue (props) {
     };
 
     const clickCreate = () => {
-        console.log(data);
+        const ids = (l) => l.map(d=>d.id);
+
+        const repository = sogh.getRepository(
+            process.env.REACT_APP_GITHUB_REPOSITORY_OWNER,
+            process.env.REACT_APP_GITHUB_REPOSITORY_NAME,
+        );
+
+        const issue_data = {
+            repositoryId: repository.id,
+            title: data.title,
+            body: data.description,
+            projectIds:  ids(data.projects),
+            milestoneId: data.milestone ? data.milestone.id : null,
+            labelIds:    ids(data.labels),
+            assigneeIds: ids(data.assignees),
+        };
+
+        sogh.createIssue(issue_data, () => {
+            console.log('yy');
+        });
     };
 
     return (

@@ -13,6 +13,7 @@ import labels_by_repository from './graphql/labels_by_repository.js';
 import project_by_id from './graphql/project_by_id.js';
 import repository from './graphql/repository.js';
 import viwer from './graphql/viwer.js';
+import create_issue from './graphql/create_issue.js';
 
 export {
     issues_by_milestone,
@@ -28,4 +29,5 @@ export {
     project_by_id,
     repository,
     viwer,
+    create_issue,
 }

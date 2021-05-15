@@ -555,6 +555,47 @@ export default class Sogh {
 
         getter();
     }
+    makeGraphQLDataItem (v) {
+        if ("string"===(typeof v))
+            return JSON.stringify(v);
+
+        if (Array.isArray(v))
+            return '[' + v.map(d => this.makeGraphQLDataItem(d)).join(', ') + ']';
+
+        return v;
+    }
+    makeGraphQLData (data) {
+        const x = Object.keys(data).map(key => {
+            const val = data[key];
+
+            if (val===null
+                || (Array.isArray(val) && val.length===0))
+                return null;
+
+            return key + ': ' + this.makeGraphQLDataItem(data[key]);
+        });
+
+        return '{ ' + x.filter(d=>d!==null).join(', ') + ' }';
+    }
+    createIssue (data, cb_success, cb_error) {
+        if (!this.api.v4._token || !data)
+            cb_success(null);
+
+        const api = this.api.v4;
+
+        const q = query.create_issue
+              .replace('@issue-data', this.makeGraphQLData(data));
+
+        const getter = (endCursor) => {
+            api.fetch(
+                q,
+                (results) => { if (cb_success) cb_success(results); },
+                (error)   => { if (cb_error)   cb_error(error); },
+            );
+        };
+
+        getter();
+    }
     // from core
     getRepository (owner, name) {
         const repos = this._data.repositories;

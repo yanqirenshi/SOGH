@@ -1,9 +1,16 @@
 import React from 'react';
 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faGithub } from "@fortawesome/free-brands-svg-icons";
+// import { faCalendar } from "@fortawesome/free-regular-svg-icons";
+// import { faCoffee } from "@fortawesome/free-solid-svg-icons";
+
 import Product from './Product.js';
+import {LinkBlank} from './Links.js';
 
 export default function ProductAndMilestone (props) {
     const milestones = props.milestones;
+    const milestone = props.milestone;
 
     const changed  = (e) => {
         const id = e.target.value;
@@ -21,7 +28,7 @@ export default function ProductAndMilestone (props) {
            </div>}
 
           {milestones &&
-           <div>
+           <div style={{display: 'flex'}}>
              <div className="select">
                <select onChange={changed}>
                  {milestones.map(m => {
@@ -33,6 +40,13 @@ export default function ProductAndMilestone (props) {
                  })}
                </select>
              </div>
+
+             {milestone &&
+              <div style={{display: 'flex', alignItems: 'center', marginLeft: 11, fontSize:24}}>
+                <LinkBlank href={milestone.url}>
+                  <FontAwesomeIcon style={null} icon={faGithub} />
+                </LinkBlank>
+              </div>}
            </div>}
 
         </div>
