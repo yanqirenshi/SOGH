@@ -14,6 +14,7 @@ import { connectGithub } from './actions/sogh.js';
 
 function App(props) {
     const [token] = useState(process.env.REACT_APP_GITHUB_PARSONAL_TOKEN || null);
+    const [updated_at, setUpdatedAt] = useState(null);
 
     useEffect(() => props.connectGithub(token), [token]);
 
@@ -22,9 +23,11 @@ function App(props) {
 
         const owner = process.env.REACT_APP_GITHUB_REPOSITORY_OWNER;
         const name  = process.env.REACT_APP_GITHUB_REPOSITORY_NAME;
+
         props.sogh.fetchRepository(owner, name, (success) => {
             const repo = props.sogh.getRepository(owner, name);
             props.sogh.activeRepository(repo);
+            setUpdatedAt(new Date());
         });
     }, [props.sogh]);
 
@@ -32,6 +35,7 @@ function App(props) {
 
     return (
         <>
+          <span>{!!updated_at}</span>
           {!(token || props.sogh) && <SignIn callback={connectGithub}/>}
 
           <Router>

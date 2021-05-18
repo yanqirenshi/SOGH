@@ -1,5 +1,8 @@
 import React from 'react';
 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faGithub } from "@fortawesome/free-brands-svg-icons";
+
 const style = {
     normal: {
         color: 'inherit',
@@ -20,5 +23,13 @@ export function LinkBlank (props) {
            rel="noopener noreferrer">
           {props.label || props.children || props.href}
         </a>
+    );
+}
+
+export function LinkBlankGithub (props) {
+    return (
+        <LinkBlank href={props.href}>
+          <FontAwesomeIcon style={null} icon={faGithub} />
+        </LinkBlank>
     );
 }

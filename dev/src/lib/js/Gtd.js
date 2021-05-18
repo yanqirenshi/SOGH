@@ -111,7 +111,11 @@ export default class Gtd {
             const cards = issue.projectCards.nodes;
             if (cards.length>0)
                 for (const card of cards) {
+                    if (!card.column)
+                        continue;
+
                     const project = card.column.project;
+
                     if (!projects[project.id]) {
                         projects[project.id] = project;
                         projects[project.id].active = active('projects', project);
@@ -143,9 +147,12 @@ export default class Gtd {
             const cards = d.projectCards.nodes;
             let exist = false;
             if (cards.length > 0)
-                for (const card of cards)
+                for (const card of cards) {
+                    if (!card.column) continue;
+
                     if (projects[card.column.project.id])
                         exist = true;
+                }
 
             if (!exist)
                 return false;

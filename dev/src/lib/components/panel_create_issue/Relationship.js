@@ -56,7 +56,7 @@ export default function Relationship (props) {
     return (
         <div style={style}>
           <div style={style.title}>
-            <button className="button is-small"
+            <button className={props.is_opened ? "button is-small is-warning" : "button is-small"}
                     onClick={clickSelector}>
               {props.title}
             </button>

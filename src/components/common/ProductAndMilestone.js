@@ -2,11 +2,9 @@ import React from 'react';
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
-// import { faCalendar } from "@fortawesome/free-regular-svg-icons";
-// import { faCoffee } from "@fortawesome/free-solid-svg-icons";
 
 import Product from './Product.js';
-import {LinkBlank} from './Links.js';
+import {LinkBlankGithub} from './Links.js';
 
 export default function ProductAndMilestone (props) {
     const milestones = props.milestones;
@@ -43,9 +41,7 @@ export default function ProductAndMilestone (props) {
 
              {milestone &&
               <div style={{display: 'flex', alignItems: 'center', marginLeft: 11, fontSize:24}}>
-                <LinkBlank href={milestone.url}>
-                  <FontAwesomeIcon style={null} icon={faGithub} />
-                </LinkBlank>
+                <LinkBlankGithub href={milestone.url} />
               </div>}
            </div>}
 

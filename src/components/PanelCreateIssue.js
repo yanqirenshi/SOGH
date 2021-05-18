@@ -4,6 +4,7 @@ import Title from './panel_create_issue/Title.js';
 import Description from './panel_create_issue/Description.js';
 import Relationship from './panel_create_issue/Relationship.js';
 import Finder from './panel_create_issue/Finder.js';
+import {LinkBlankGithub} from './common/Links.js';
 
 const style = {
     width: 888,
@@ -28,8 +29,8 @@ const style = {
         }
     },
     selector: {
-        display:'flex',
         height: 333,
+        marginBottom: 11,
         col: {
             width: '25%',
             padding: 5,
@@ -39,12 +40,13 @@ const style = {
     },
 };
 
-function r (title, contents, callbacks) {
+function r (title, contents, selector, callbacks) {
     return (
         <div style={style.relationships.col}>
           <Relationship title={title}
-                        callbacks={callbacks}
-                        contents={contents}/>
+                        is_opened={selector}
+                        contents={contents}
+                        callbacks={callbacks}/>
         </div>
     );
 }
@@ -60,11 +62,42 @@ function finder (type, contents, selected, callbacks) {
     );
 }
 
+function setSingle (type, v, data) {
+    const new_data = {...data};
+
+    new_data[type] = v;
+
+    return new_data;
+}
+
+function switchSingle (type, v, data) {
+    const new_data = {...data};
+
+    if (!new_data[type] || new_data[type].id!==v.id)
+        new_data[type] = v;
+    else
+        new_data[type] = null;
+
+    return new_data;
+}
+
+function switchMulti (type, v, data) {
+    const new_data = {...data};
+
+    if (new_data[type].find(d=>d.id===v.id))
+        new_data[type] = new_data[type].filter(d=>d.id!==v.id);
+    else
+        new_data[type].push(v);
+
+    return new_data;
+}
+
 export default function PanelCreateIssue (props) {
     const [selector, setSelector] = useState(false);
 
     const data = props.data;
     const active = props.sogh.active();
+    const change = props.callback || (() => {});
 
     const callbacks = {
         ...{
@@ -72,24 +105,51 @@ export default function PanelCreateIssue (props) {
                 swith: () => setSelector(!selector),
             }
         },
-        ...(props.callbacks || {})
+        change: {
+            title:       (v) => change(setSingle('title', v, data)),
+            description: (v) => change(setSingle('description', v, data)),
+            projects:    (v) => change(switchMulti('projects', v, data)),
+            milestone:   (v) => change(switchSingle('milestone', v, data)),
+            labels:      (v) => change(switchMulti('labels', v, data)),
+            assignees:   (v) => change(switchMulti('assignees',v, data)),
+        },
     };
 
     return (
         <div style={{...style, ...(props.style || {})}}>
+          {data.repository
+           && <div style={{display:'flex', justifyContent: 'center', alignItems: 'center', marginBottom:11}}>
+                <h1 className="title is-5" style={{marginBottom:0}}>
+                  {data.repository.name}
+                </h1>
+                <p style={{marginLeft:11}}>
+                  <LinkBlankGithub href="{data.repository.url}"/>
+                </p>
+              </div>}
+
           <div style={style.relationships}>
-            {r("Projects",  data.projects,  callbacks)}
-            {r("Milestone", data.milestone, callbacks)}
-            {r("Labels",    data.labels,    callbacks)}
-            {r("Assignees", data.assignees, callbacks)}
+            {r("Projects",  data.projects,  selector, callbacks)}
+            {r("Milestone", data.milestone, selector, callbacks)}
+            {r("Labels",    data.labels,    selector, callbacks)}
+            {r("Assignees", data.assignees, selector, callbacks)}
           </div>
 
           {selector &&
            <div style={style.selector}>
-             {finder('projects',   active.projects,   data.projects,  callbacks)}
-             {finder('milestone',  active.milestones, data.milestone, callbacks)}
-             {finder('labels',     active.labels,     data.labels,    callbacks)}
-             {finder('assignees',  active.assignees,  data.assignees, callbacks)}
+             <div style={{display:'flex', height: '100%'}}>
+               <div style={{flexGrow: 1, display:'flex'}}>
+                 {finder('projects',   active.projects,   data.projects,  callbacks)}
+                 {finder('milestone',  active.milestones, data.milestone, callbacks)}
+                 {finder('labels',     active.labels,     data.labels,    callbacks)}
+                 {finder('assignees',  active.assignees,  data.assignees, callbacks)}
+               </div>
+             </div>
+             {/* <div style={{textAlign: 'right', paddingTop:11}}> */}
+             {/*   <button className="button is-small is-warning" */}
+             {/*           onClick={callbacks.selector.swith}> */}
+             {/*     Close */}
+             {/*   </button> */}
+             {/* </div> */}
            </div>}
 
 

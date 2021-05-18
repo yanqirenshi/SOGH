@@ -577,6 +577,31 @@ export default class Sogh {
 
         return '{ ' + x.filter(d=>d!==null).join(', ') + ' }';
     }
+    // Create Issue
+    makeIssueData () {
+        return {
+            repository: null,
+            title: '',
+            description: '',
+            projects: [],
+            milestone: null,
+            labels: [],
+            assignees: [],
+        };
+    }
+    issueData2requestData (data) {
+        const ids = (l) => l.map(d=>d.id);
+
+        return {
+            repositoryId: data.repository.id,
+            title:        data.title,
+            body:         data.description,
+            projectIds:   ids(data.projects),
+            milestoneId:  data.milestone ? data.milestone.id : null,
+            labelIds:     ids(data.labels),
+            assigneeIds:  ids(data.assignees),
+        };
+    }
     createIssue (data, cb_success, cb_error) {
         if (!this.api.v4._token || !data)
             cb_success(null);
