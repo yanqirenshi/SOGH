@@ -1,6 +1,5 @@
 import React from 'react';
 import moment from 'moment';
-import ANewTab from './ANewTab.js';
 import {LinkBlank} from './Links.js';
 
 function dt (v) {
@@ -19,9 +18,19 @@ const style = {
     },
 };
 
+function color (hexcolor) {
+    var r = parseInt( hexcolor.substr( 1, 2 ), 16 ) ;
+    var g = parseInt( hexcolor.substr( 3, 2 ), 16 ) ;
+    var b = parseInt( hexcolor.substr( 5, 2 ), 16 ) ;
+
+    return ( ( ( (r * 299) + (g * 587) + (b * 114) ) / 1000 ) < 128 ) ? "white" : "black" ;
+};
+
 function labelStyle (d) {
+    const background = '#' + d.color;
     return {
-        background: '#' + d.color,
+        color: color(background),
+        background: background,
         whiteSpace: 'nowrap',
         padding: ' 2px 4px',
         borderRadius: 5,
@@ -31,16 +40,6 @@ function labelStyle (d) {
         fontSize: 12,
     };
 }
-
-function aStyle (hexcolor) {
-    var r = parseInt( hexcolor.substr( 1, 2 ), 16 ) ;
-    var g = parseInt( hexcolor.substr( 3, 2 ), 16 ) ;
-    var b = parseInt( hexcolor.substr( 5, 2 ), 16 ) ;
-
-    const color = ( ( ( (r * 299) + (g * 587) + (b * 114) ) / 1000 ) < 128 ) ? "white" : "black" ;
-
-    return { color: color };
-};
 
 function diff (plan, result) {
     return plan - result;
