@@ -75,7 +75,9 @@ export default class ProductBacklog {
     getCard (project, issue) {
         const cards = issue.projectCards.nodes;
 
-        return cards.find(d=>d.column.project.id===project.id);
+        return cards.find(d=> {
+            return d.column && d.column.project.id===project.id;
+        });
     }
     makeColumns (project) {
         return project.columns.nodes.reduce((ht,c) => {

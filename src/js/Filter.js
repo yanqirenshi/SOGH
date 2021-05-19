@@ -121,7 +121,8 @@ export default class Filter {
     }
     checkProjects (filter, issue) {
         const id_list = issue.projectCards.nodes.reduce((out, d) => {
-            out.push(d.column.project.id);
+            if (d.column)
+                out.push(d.column.project.id);
             return out;
         }, []);
 
