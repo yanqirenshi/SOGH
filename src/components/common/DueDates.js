@@ -23,7 +23,8 @@ export default function DueDates (props) {
                               title={key}
                               issues={duedates.ht[key]}
                               close={props.close_duedates[key] || false}
-                              callbacks={props.callbacks} />;
+                              callbacks={props.callbacks}
+                              productbacklog_url_prefix={props.productbacklog_url_prefix} />;
           })}
         </div>
     );

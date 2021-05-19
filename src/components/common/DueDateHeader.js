@@ -6,8 +6,6 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 export default function DueDateHeader (props) {
-    const project = props.project;
-
     const clickClose = () => props.callbacks.duedate.close(props.date);
     const clickOpen  = () => props.callbacks.duedate.open(props.date);
 
