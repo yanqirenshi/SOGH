@@ -45,7 +45,8 @@ export default function Contents (props) {
             <DueDates duedates={timeline.duedates_filterd}
                       close_duedates={timeline.close_duedates}
                       callbacks={props.callbacks}
-                      sogh={scrum._sogh} />
+                      sogh={scrum._sogh}
+                      productbacklog_url_prefix={props.productbacklog_url_prefix} />
           </div>
         </div>
     );

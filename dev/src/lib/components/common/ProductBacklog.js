@@ -1,8 +1,8 @@
 import React from 'react';
 
 import ProductBacklogHeader from './ProductBacklogHeader.js';
-import TablePointProductBacklog from './TablePointProductBacklog.js';
 import TableSprintBacklogs from './TableSprintBacklogs.js';
+import TablePointProductBacklog from './TablePointProductBacklog.js';
 
 const style = {
     marginLeft: 22,

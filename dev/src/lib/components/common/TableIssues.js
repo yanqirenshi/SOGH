@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from "react-router-dom";
 import moment from 'moment';
 import {LinkBlank} from './Links.js';
 
@@ -78,63 +79,83 @@ function prjNum (issue) {
     );
 }
 
-function prjName (issue) {
-    return issue.project.name || '';
+function prjName (issue, productbacklog_url_prefix) {
+    const style = {
+        normal: {
+            color: 'inherit',
+            textDecoration: 'underline',
+            textUnderlineOffset: 2,
+            textDecorationColor: '#ddd',
+            textDecorationStyle: 'dotted',
+        },
+    };
+
+    return (
+        <Link style={style.normal}
+              to={productbacklog_url_prefix + issue.project.id}>
+          {issue.project.name || ''}
+        </Link>
+    );
 }
 
 function prjPri (sogh, issue) {
     return sogh.priorityLabel(issue.project.priority);
 }
 
-function makeTrs (sogh, issue) {
-    return <tr key={issue.id}>
-             <td style={sogh.headerColor(issue.project)}>
-               {prjPri(sogh, issue)}
-             </td>
-             <td>{prjNum(issue)}</td>
-             <td>{prjName(issue)}</td>
-             <td style={style.nowrap}>
-               {prjColumn(issue)}
-             </td>
-             <td style={style.right}>
-               <LinkBlank href={issue.url}>
-                 {issue.number}
-               </LinkBlank>
-             </td>
-             <td>{issue.title}</td>
-             <td>{issue.labels.nodes.map(l => {
-                 const label_style = labelStyle(l);
-                 return <p key={l.id}
-                           style={label_style}>
-                          <LinkBlank href={l.url}>
-                            {l.name}
-                          </LinkBlank>
-                        </p>;
-             })}</td>
-             <td style={style.nowrap}>
-               {issue.assignees.nodes.map(a => {
-                   return <p key={issue.id+'.'+a.id}>
-                            {a.name || a.login}
-                          </p>;
-               })}
-             </td>
-             <td style={style.nowrap}>
-               {due(issue.due_date)}
-             </td>
-             <td style={style.right}>{issue.point.plan}</td>
-             <td style={style.right}>{issue.point.result}</td>
-             <td style={style.right}>
-               {diff(issue.point.plan, issue.point.result)}
-             </td>
-             {/* <td style={style.nowrap}>{dt(issue.createdAt)}</td> */}
-             <td style={style.nowrap}>{dt(issue.updatedAt)}</td>
-             <td style={style.nowrap}>{dt(issue.closedAt)}</td>
-           </tr>;
+function makeTrs (issue, sogh, productbacklog_url_prefix) {
+    return (
+        <tr key={issue.id}>
+          <td style={sogh.headerColor(issue.project)}>
+            {prjPri(sogh, issue)}
+          </td>
+          <td>{prjNum(issue)}</td>
+          <td>{prjName(issue, productbacklog_url_prefix)}</td>
+          <td style={style.nowrap}>
+            {prjColumn(issue)}
+          </td>
+          <td style={style.right}>
+            <LinkBlank href={issue.url}>
+              {issue.number}
+            </LinkBlank>
+          </td>
+          <td>{issue.title}</td>
+          <td>{issue.labels.nodes.map(l => {
+              const label_style = labelStyle(l);
+              return <p key={l.id}
+                               style={label_style}>
+                               <LinkBlank href={l.url}>
+                                 {l.name}
+                               </LinkBlank>
+                             </p>;
+          })}</td>
+          <td style={style.nowrap}>
+            {issue.assignees.nodes.map(a => {
+                return (
+                    <p key={issue.id+'.'+a.id}>
+                      {a.name || a.login}
+                    </p>
+                );
+            })}
+          </td>
+          <td style={style.nowrap}>
+            {due(issue.due_date)}
+          </td>
+          <td style={style.right}>{issue.point.plan}</td>
+          <td style={style.right}>{issue.point.result}</td>
+          <td style={style.right}>
+            {diff(issue.point.plan, issue.point.result)}
+          </td>
+          {/* <td style={style.nowrap}>{dt(issue.createdAt)}</td> */}
+          <td style={style.nowrap}>{dt(issue.updatedAt)}</td>
+          <td style={style.nowrap}>{dt(issue.closedAt)}</td>
+        </tr>
+    );
 }
 
 export default function TableIssues (props) {
     const sogh = props.sogh;
     const issues = props.issues;
+    const productbacklog_url_prefix = props.productbacklog_url_prefix;
 
     return (
         <table className="table is-striped is-narrow is-hoverable is-fullwidth"
@@ -168,7 +189,7 @@ export default function TableIssues (props) {
           </thead>
 
           <tbody>
-            {issues.map(d => makeTrs(sogh, d))}
+            {issues.map(d => makeTrs(d, sogh, productbacklog_url_prefix))}
           </tbody>
         </table>
     );

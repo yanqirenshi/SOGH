@@ -25,7 +25,9 @@ export default function DueDate (props) {
 
           {!props.close &&
            <div className="panel-block">
-             <TableIssues issues={issues_sorted} sogh={sogh} />
+             <TableIssues issues={issues_sorted}
+                          sogh={sogh}
+                          productbacklog_url_prefix={props.productbacklog_url_prefix} />
            </div>}
 
           <div className="panel-block">
