@@ -165,14 +165,14 @@ export default class ProductBacklogs {
     filtering (projects) {
         const filter = this._filter;
 
-        const keyword = filter.keyword;
+        const keyword = filter.keyword ? filter.keyword.toUpperCase() : null;
         const priorities = filter.priorities;
         const types = filter.types;
         const assignees = filter.assignees;
         const closing = filter.closing;
 
         return this.sortProjectsByPriority(projects.filter(d => {
-            if (keyword && !d.name.includes(keyword))
+            if (keyword && !d.name.toUpperCase().includes(keyword))
                 return false;
 
             if (priorities['priorities'+d.priority])

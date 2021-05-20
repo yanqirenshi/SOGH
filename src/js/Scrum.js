@@ -288,7 +288,11 @@ export default class Scrum {
 
                 pool.ht[project.id].issues.push(issue);
             } else {
-                const project = this.addAnotetionValue4Project(issue.projectCards.nodes[0].column.project);
+                const column = issue.projectCards.nodes[0].column;
+
+                if (!column) continue;
+
+                const project = this.addAnotetionValue4Project(column.project);
 
                 this.addPool(project, pool);
 
