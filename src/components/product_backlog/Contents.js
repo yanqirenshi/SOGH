@@ -44,13 +44,19 @@ export default function Contents (props) {
         milestones: {
             refresh: () => refresh(),
             filter: {
-                click: (type, id) => core.changeFilter('milestones', type, id, ()=>updated())
+                click: (type, id) => core.changeFilter('milestones', type, id, ()=>updated()),
+                keyword: {
+                    change: (val) => core.changeFilter('milestones', 'keyword', val, ()=>updated()),
+                } ,
             },
         },
         columns: {
             refresh: () => refresh(),
             filter: {
-                click: (type, id) => core.changeFilter('columns', type, id, ()=>updated())
+                click: (type, id) => core.changeFilter('columns', type, id, ()=>updated()),
+                keyword: {
+                    change: (val) => core.changeFilter('columns', 'keyword', val, ()=>updated()),
+                } ,
             },
         },
     };
@@ -59,6 +65,7 @@ export default function Contents (props) {
 
     const data = core._data;
     const filters = core._filters;
+
     return (
         <div>
           <span style={{display:'none'}}>{!!updated_at}</span>

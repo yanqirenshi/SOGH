@@ -15,7 +15,7 @@ export default function ViwerIssues (props) {
     const repository = props.repository;
 
     useEffect(() => {
-        if (!props.sogh) return
+        if (!props.sogh) return;
 
         const gtd = sogh.gtd();
 

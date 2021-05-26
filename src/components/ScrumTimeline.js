@@ -35,6 +35,9 @@ export default function ScrumTimeline (props) {
         refresh: () => refresh(),
         filter: {
             click: (type, id) => changeFilter(type, id),
+            keyword: {
+                change: (val) => changeFilter('keyword', val),
+            },
         },
         milestone: {
             change: (milestone) => {

@@ -1069,6 +1069,16 @@ export default class Sogh {
 
         return true;
     }
+    checkToday (filter, issue) {
+        const fmt = (v) => moment(v).format('YYYYMMDD');
+
+        const today = fmt(moment());
+
+        if (filter.others().today)
+            return fmt(issue.updatedAt)===today;
+
+        return true;
+    }
     checkWaiting (filter, issue) {
         if (!filter.others().Waiting)
             return true;
@@ -1096,15 +1106,28 @@ export default class Sogh {
 
         return false;
     }
+    checkKeyword (filter, issue) {
+        const val = filter.keyword();
+
+        if (val===null)
+            return true;
+
+        const keyword = val.toUpperCase();
+
+        return (issue.number + '').toUpperCase().includes(keyword) ||
+            issue.title.toUpperCase().includes(keyword);
+    }
     filteringIssue (filter, issues) {
         return issues.reduce((list, issue) => {
             if (this.checkProjects(filter, issue) &&
                 this.checkAssignees(filter, issue) &&
+                this.checkToday(filter, issue) &&
                 this.checkStatus(filter, issue) &&
                 this.checkYesterday(filter, issue) &&
                 this.checkEmptyPlan(filter, issue) &&
                 this.checkWaiting(filter, issue) &&
-                this.checkDiffMinus(filter, issue))
+                this.checkDiffMinus(filter, issue) &&
+                this.checkKeyword(filter, issue))
                 list.push(issue);
 
             return list;
@@ -1120,6 +1143,9 @@ export default class Sogh {
 
         return color;
     }
+    /////
+    addListener () {}
+    listeners () {}
     /////
     scrum() {
         if (!this._scrum) {

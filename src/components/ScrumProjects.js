@@ -32,6 +32,9 @@ export default function ScrumProjects (props) {
         refresh: () => refresh(),
         filter: {
             click: (type, id) => scrum.changeFilter('projects', type, id, invokeUpdate),
+            keyword: {
+                change: (val) => scrum.changeFilter('projects', 'keyword', val, invokeUpdate),
+            },
         },
         projects: {
             close: (v) => scrum.changeCloseProjects('close', v, invokeUpdate),

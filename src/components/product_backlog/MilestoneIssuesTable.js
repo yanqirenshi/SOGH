@@ -77,6 +77,7 @@ function makeTr (d, project) {
           <td style={{whiteSpace: 'nowrap'}}>{due(d.due_date)}</td>
           <td>{d.point.plan}</td>
           <td>{d.point.result}</td>
+          <td>{due(d.updatedAt)}</td>
         </tr>
     );
 }
@@ -93,6 +94,7 @@ export default function MilestoneIssuesTable (props) {
               <th colSpan="4">Issue</th>
               <th>Due</th>
               <th colSpan="2">Point</th>
+              <th>Updated</th>
             </tr>
             <tr>
               <th>Column</th>
@@ -103,6 +105,7 @@ export default function MilestoneIssuesTable (props) {
               <th>Date</th>
               <th>Plan</th>
               <th>Result</th>
+              <th>At</th>
             </tr>
           </thead>
 

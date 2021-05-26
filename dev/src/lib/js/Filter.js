@@ -7,10 +7,12 @@ export default class Filter {
     }
     defaultFilter () {
         return {
+            keyword: null,
             assignee: [],
             project: [],
             status: { Open: true, Close: false },
             others: {
+                today: false,
                 Yesterday: false,
                 Waiting: false,
                 EmptyPlan: false,
@@ -22,6 +24,15 @@ export default class Filter {
         return merge(this.defaultFilter(), filter);
     }
     // change
+    changeFilterKeyword (str) {
+        if ((typeof str)!=='string')
+            return null;
+
+        if (str.length===0)
+            return null;
+
+        return str;
+    }
     changeFilterList (id, filter) {
         const new_filter = [...filter];
 
@@ -41,15 +52,17 @@ export default class Filter {
 
         return new_filter;
     }
-    change (type, id) {
+    change (type, value) {
         if (type==='assignee')
-            this.assignees(this.changeFilterList(id, this.assignees()));
+            this.assignees(this.changeFilterList(value, this.assignees()));
         else if (type==='projects' || type==='project')
-            this.projects(this.changeFilterList(id, this.projects()));
+            this.projects(this.changeFilterList(value, this.projects()));
         else if (type==='status')
-            this.statuses(this.changeFilterHt(id, this.statuses()));
+            this.statuses(this.changeFilterHt(value, this.statuses()));
         else if (type==='others')
-            this.others(this.changeFilterHt(id, this.others()));
+            this.others(this.changeFilterHt(value, this.others()));
+        else if (type==='keyword')
+            this.keyword(this.changeFilterKeyword(value));
     }
     set (type, v) {
         if (type==='assignee')
@@ -62,6 +75,12 @@ export default class Filter {
             this.others(v);
     }
     //
+    keyword (v) {
+        if (arguments.length>0)
+            this._filter.keyword = v;
+
+        return this._filter.keyword;
+    }
     assignees (v) {
         if (arguments.length>0)
             this._filter.assignee = v;
@@ -160,11 +179,22 @@ export default class Filter {
         return true;
     }
     checkYesterday (filter, issue) {
-        const yesterday = moment().startOf('day').add('d',-1);
+        const fmt = (v) => moment(v).format('YYYYMMDD');
+
+        const yesterday = fmt(moment().add('d',-1));
 
         if (filter.others().Yesterday)
-            if (moment(issue.updatedAt).isBefore(yesterday))
-                return false;
+            return fmt(issue.updatedAt)===yesterday;
+
+        return true;
+    }
+    checkToday (filter, issue) {
+        const fmt = (v) => moment(v).format('YYYYMMDD');
+
+        const today = fmt(moment());
+
+        if (filter.others().today)
+            return fmt(issue.updatedAt)===today;
 
         return true;
     }
@@ -195,6 +225,17 @@ export default class Filter {
 
         return false;
     }
+    checkKeyword (filter, issue) {
+        const val = filter.keyword();
+
+        if (val===null)
+            return true;
+
+        const keyword = val.toUpperCase();
+
+        return (issue.number + '').toUpperCase().includes(keyword) ||
+            issue.title.toUpperCase().includes(keyword);
+    }
     apply (issues) {
         const filter = this;
 
@@ -203,9 +244,11 @@ export default class Filter {
                 this.checkAssignees(filter, issue) &&
                 this.checkStatus(filter, issue) &&
                 this.checkYesterday(filter, issue) &&
+                this.checkToday(filter, issue) &&
                 this.checkEmptyPlan(filter, issue) &&
                 this.checkWaiting(filter, issue) &&
-                this.checkDiffMinus(filter, issue))
+                this.checkDiffMinus(filter, issue) &&
+                this.checkKeyword(filter, issue))
                 list.push(issue);
 
             return list;

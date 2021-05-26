@@ -72,6 +72,9 @@ export default function Contents (props) {
         refresh: () => fetchIssues(milestone),
         filter: {
             click: (type, id) => changeFilter(type, id),
+            keyword: {
+                change: (val) => changeFilter('keyword', val),
+            },
         },
         clickMilestone: (m) => changeMilestone(m),
         clearMilestone: () => changeMilestone(null),

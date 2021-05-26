@@ -1,5 +1,12 @@
 import * as query from './GraphQL.js';
 
+function owner (owner) {
+    if ("string" === (typeof owner))
+        return owner;
+
+    return owner.login;
+}
+
 export default class Gtd {
     constructor (token) {
         this._listeners = [];
@@ -57,7 +64,7 @@ export default class Gtd {
         const api = this.apiV4();
 
         const base_query = query.issues_open_by_repository
-              .replace('@owner', repository.owner)
+              .replace('@owner', owner(repository.owner))
               .replace('@name', repository.name);
 
         const isViewer = (issue) => {

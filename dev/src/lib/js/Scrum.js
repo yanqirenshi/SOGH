@@ -309,9 +309,11 @@ export default class Scrum {
                 this._sogh.checkAssignees(filter, issue) &&
                 this._sogh.checkStatus(filter, issue) &&
                 this._sogh.checkYesterday(filter, issue) &&
+                this._sogh.checkToday(filter, issue) &&
                 this._sogh.checkEmptyPlan(filter, issue) &&
                 this._sogh.checkWaiting(filter, issue) &&
-                this._sogh.checkDiffMinus(filter, issue))
+                this._sogh.checkDiffMinus(filter, issue) &&
+                this._sogh.checkKeyword(filter, issue))
                 list.push(issue);
 
             return list;
