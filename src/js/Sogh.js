@@ -726,6 +726,9 @@ export default class Sogh {
 
                 pool.ht[project.id].issues.push(issue);
             } else {
+                if (!issue.projectCards.nodes[0].column)
+                    continue;
+
                 const project = this.addAnotetionValue4Project(issue.projectCards.nodes[0].column.project);
 
                 this.addPool(project, pool);

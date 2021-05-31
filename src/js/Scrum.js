@@ -170,7 +170,7 @@ export default class Scrum {
         getter();
     }
     targetMilestones (milestones) {
-        const now = moment();
+        const now = moment().startOf('date');
 
         const filter = m => {
             const ret = /(\d+-\d+-\d+)\s*〜\s*(\d+-\d+-\d+)/.exec(m.title);
@@ -188,7 +188,7 @@ export default class Scrum {
                 to: to,
             };
 
-            return from.isSameOrBefore(now) && to.isAfter(now);
+            return from.isSameOrBefore(now) && to.isSameOrAfter(now);
         };
 
         const sorter = (a,b) => a.dueOn < b.dueOn ? -1 :1;
