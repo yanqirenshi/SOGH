@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import { connect } from 'react-redux';
 
 import 'react-bulma-components/dist/react-bulma-components.min.css';
@@ -16,9 +16,7 @@ function isActive (a,b) {
 };
 
 function PageHome (props) {
-    const sogh = props.sogh;
-
-    const tabs = [
+    const [tabs] = useState([
         { code: 'ci',  label: 'Create Issue' },
         { code: 'vis', label: 'Issues' },
         { code: 'sct', label: 'Scrum (Timeline)' },
@@ -26,7 +24,10 @@ function PageHome (props) {
         { code: 'sp',  label: 'Sprint planning' },
         { code: 'pb',  label: 'Product backlog' },
         { code: 'rp',  label: 'Reports' },
-    ];
+    ]);
+
+    const sogh = props.sogh;
+
     const pathname = window.location.pathname;
     const params = new URLSearchParams(window.location.search);
     const selected = params.get('tab') || tabs[0].code;
@@ -36,9 +37,12 @@ function PageHome (props) {
         name:  process.env.REACT_APP_GITHUB_REPOSITORY_NAME,
     };
 
-    const listener = () => {
-        console.log('finish get issues by gtd');
-    };
+    const listener = () => console.log('finish get issues by gtd');
+
+    useEffect(() => {
+        if (!sogh) return;
+        sogh.getIssuesOpenByLabel(repository, '会議', (x)=> console.log(x));
+    }, [sogh]);
 
     return (
         <div>

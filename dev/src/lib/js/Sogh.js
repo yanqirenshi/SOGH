@@ -20,7 +20,7 @@ function owner (repo) {
 }
 
 export default class Sogh {
-    constructor (token) {
+    constructor (token, options) {
         this._token = null;
 
         this._viewer = null;
@@ -28,6 +28,13 @@ export default class Sogh {
         this.api = {
             v3: null,
             v4: null,
+        };
+
+        // TODO: options.labels で受け取る。 
+        this._labels = {
+            meeging: null,
+            waiting: null,
+            release: null,
         };
 
         this._data = {
@@ -249,6 +256,37 @@ export default class Sogh {
 
                     cb(issues);
                 }
+            });
+        };
+
+        getter();
+    }
+    getIssuesOpenByLabel (repository, label_name, cb) {
+        if (!this.api.v4._token || !repository)
+            cb([]);
+
+        const api = this.api.v4;
+
+        const base_query = query.issues_open_by_label
+              .replace('@owner', repository.owner)
+              .replace('@name', repository.name)
+              .replace('@label_name', label_name);
+
+        let issues = [];
+        const getter = (endCursor) => {
+            let query = this.ensureEndCursor(base_query, endCursor);
+
+            api.fetch(query, (results) => {
+                const data = results.data.repository.label.issues;
+                const page_info = data.pageInfo;
+
+                for(const issue of data.nodes)
+                    issues.push(this.addAnotetionValue4Issue(issue));
+
+                if (page_info.hasNextPage)
+                    getter(page_info.endCursor);
+                else
+                    cb(issues);
             });
         };
 
