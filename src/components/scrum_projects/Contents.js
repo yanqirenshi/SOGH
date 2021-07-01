@@ -8,6 +8,8 @@ import Filter from '../common/Filter.js';
 import ChartBardown from '../common/ChartBardown.js';
 import OperatorOpenClose from '../common/OperatorOpenClose.js';
 
+import Summary from './Summary.js';
+
 import style from './Style.js';
 
 export default function Contents (props) {
@@ -59,11 +61,19 @@ export default function Contents (props) {
               <div>
                 <OperatorOpenClose callbacks={callbacks.projects} />
 
-                <ProductBacklogs projects={sorted_projects_filterd}
-                                 close_projects={data.close_projects}
-                                 callbacks={callbacks}
-                                 sogh={sogh}
-                                 productbacklog_url_prefix={props.productbacklog_url_prefix} />
+                <div style={{display:'flex'}}>
+                  <div>
+                    <Summary source={sorted_projects_filterd}/>
+                  </div>
+
+                  <div style={{flexGrow:1}}>
+                    <ProductBacklogs projects={sorted_projects_filterd}
+                                     close_projects={data.close_projects}
+                                     callbacks={callbacks}
+                                     sogh={sogh}
+                                     productbacklog_url_prefix={props.productbacklog_url_prefix} />
+                  </div>
+                </div>
               </div>
             </div>
           </div>

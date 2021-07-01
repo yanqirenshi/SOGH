@@ -6,6 +6,8 @@ import DueDates from '../common/DueDates.js';
 import Filter from '../common/Filter.js';
 import OperatorOpenClose from '../common/OperatorOpenClose.js';
 
+import Summary from './Summary.js';
+
 import style from './Style.js';
 
 export default function Contents (props) {
@@ -42,11 +44,19 @@ export default function Contents (props) {
           <div>
             <OperatorOpenClose callbacks={callbacks.duedate} />
 
-            <DueDates duedates={timeline.duedates_filterd}
-                      close_duedates={timeline.close_duedates}
-                      callbacks={props.callbacks}
-                      sogh={scrum._sogh}
-                      productbacklog_url_prefix={props.productbacklog_url_prefix} />
+            <div style={{display:'flex'}}>
+              <div>
+                <Summary source={timeline.duedates_filterd}/>
+              </div>
+
+              <div style={{flexGrow:1}}>
+                <DueDates duedates={timeline.duedates_filterd}
+                          close_duedates={timeline.close_duedates}
+                          callbacks={props.callbacks}
+                          sogh={scrum._sogh}
+                          productbacklog_url_prefix={props.productbacklog_url_prefix} />
+              </div>
+            </div>
           </div>
         </div>
     );
