@@ -94,9 +94,19 @@ export default class Sogh {
     addAnotetionValue4Issue (issue) {
         issue.point = this.point(issue.body);
 
-        const duedate = /.*@Due\.Date:\s+(\d+-\d+-\d+).*/.exec(issue.body);
-
+        const duedate =
+              /.*@Date\.Due:\s+(\d+-\d+-\d+).*/.exec(issue.body) ||
+              /.*@Due\.Date:\s+(\d+-\d+-\d+).*/.exec(issue.body);
         issue.due_date = duedate ? duedate[1] : null;
+        issue.date_due = duedate ? duedate[1] : null;
+
+        const next_action = /.*@Date\.Next\.Action:\s+(\d+-\d+-\d+).*/.exec(issue.body);
+        issue.date_next_action = next_action ? next_action[1] : null;
+
+        const owner = /.*@担当:\s+(\S+).*/.exec(issue.body);
+        if (owner!==null)
+            console.log(owner)
+        issue.owner = owner ? owner[1] : null;
 
         return issue;
     }

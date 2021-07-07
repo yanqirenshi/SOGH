@@ -7,6 +7,7 @@ import * as SOGH from './lib/index.js';
 
 import Tabs from './components/Tabs.js';
 import TabCreateIssue from './components/TabCreateIssue.js';
+import IssueDescription from './components/IssueDescription.js';
 
 function isActive (a,b) {
     if (a.code===b)
@@ -17,6 +18,7 @@ function isActive (a,b) {
 
 function PageHome (props) {
     const [tabs] = useState([
+        { code: 'id',  label: 'Issue Description' },
         { code: 'ci',  label: 'Create Issue' },
         { code: 'vis', label: 'Issues' },
         { code: 'sct', label: 'Scrum (Timeline)' },
@@ -41,7 +43,7 @@ function PageHome (props) {
 
     useEffect(() => {
         if (!sogh) return;
-        sogh.getIssuesOpenByLabel(repository, '会議', (x)=> console.log(x));
+        sogh.getIssuesOpenByLabel(repository, '会議', (x)=> x);
     }, [sogh]);
 
     return (
@@ -50,39 +52,44 @@ function PageHome (props) {
             <Tabs tabs={tabs} selected={selected} pathname={pathname} />
           </div>
 
+
           <div style={isActive(tabs[0], selected)}>
-            {sogh && <TabCreateIssue sogh={sogh} />}
+            {sogh && <IssueDescription sogh={sogh} />}
           </div>
 
           <div style={isActive(tabs[1], selected)}>
+            {sogh && <TabCreateIssue sogh={sogh} />}
+          </div>
+
+          <div style={isActive(tabs[2], selected)}>
             <SOGH.ViwerIssues sogh={sogh}
                               repository={repository}
                               listener={listener}/>
           </div>
 
 
-          <div style={isActive(tabs[2], selected)}>
+          <div style={isActive(tabs[3], selected)}>
             <SOGH.ScrumTimeline sogh={sogh}
                                 repository={repository} />
           </div>
 
-          <div style={isActive(tabs[3], selected)}>
+          <div style={isActive(tabs[4], selected)}>
             <SOGH.ScrumProjects sogh={sogh}
                                 repository={repository} />
           </div>
 
-          <div style={isActive(tabs[4], selected)}>
+          <div style={isActive(tabs[5], selected)}>
             <SOGH.SprintPlanning sogh={sogh}
                                  repository={repository} />
           </div>
 
-          <div style={isActive(tabs[5], selected)}>
+          <div style={isActive(tabs[6], selected)}>
             <SOGH.ProductBacklogs sogh={sogh}
                                   repository={repository}
                                   productbacklog_url_prefix="/product-backlogs/" />
           </div>
 
-          <div style={isActive(tabs[6], selected)}>
+          <div style={isActive(tabs[7], selected)}>
             <SOGH.Reports sogh={sogh}
                           repository={repository} />
           </div>
