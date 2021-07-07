@@ -12,7 +12,7 @@ const data = [
     { title: '納期(旧)',     regex: '.*@[D|d]ate\\.[D|d]ue:*\\s+(\\d+-\\d+-\\d+).*' },
     { title: '納期(新)',     regex: '.*@[D|d]ue\\.[D|d]ate:*\\s+(\\d+-\\d+-\\d+).*' },
     { title: 'Owner',        regex: '.*\\$[O|o]wner:*\\s+(\\S+).*' },
-    { title: '次の作業日付', regex: '.*@[D|d]ate\\.[N|n]ext:*\\s+(\\d+-\\d+-\\d+).*' },
+    { title: '次の作業日付', regex: '.*\\$[D|d]ate\\.[N|n]ext:*\\s+(\\d+-\\d+-\\d+).*' },
 ];
 
 function getValue (regex_string, description) {
@@ -27,7 +27,7 @@ function getValue (regex_string, description) {
 }
 
 function getResults (description) {
-    const rs = /\$[R|r]esult\:*\s+(\S+)\s+(\d+-\d+-\d+)\s+(\d+)/g;
+    const rs = /\$Point.[R|r]esult\:*\s+(\S+)\s+(\d+-\d+-\d+)\s+(\d+)/g;
     const regex = new RegExp(rs);
 
     return [...description.matchAll(regex)];
@@ -113,9 +113,9 @@ YYYY
 - @Point.Result 2
 - @Due.Date 2020-01-01
 - @Date.Due 2020-01-02
-- @Date.Next 2020-01-03
+- $Date.Next 2020-01-03
 - $Owner XXX
-- $Result 人1 2020-02-01 3
-- $Result 人2 2020-02-02 2
-- $Result 人3 2020-02-03 1
+- $Point.Result 人1 2020-02-01 3
+- $Point.Result 人2 2020-02-02 2
+- $Point.Result 人3 2020-02-03 1
 `;

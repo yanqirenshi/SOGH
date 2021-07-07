@@ -63,7 +63,7 @@ function makeTrs (issue, sogh, productbacklog_url_prefix) {
             {issue.owner}
           </td>
           <td style={style.nowrap}>
-            {due(issue.date_due)}
+            {due(issue.due_date)}
           </td>
           <td style={style.nowrap}>
             {issue.assignees.nodes.map(a => {

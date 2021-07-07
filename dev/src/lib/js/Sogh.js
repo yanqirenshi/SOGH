@@ -19,6 +19,72 @@ function owner (repo) {
     return repo.owner.login;
 }
 
+class Issue {
+    constructor (data) {
+        this._data = data;
+    }
+    getPointResultsFromBody (body) {
+        const rs = /\$Point.[R|r]esult\:*\s+(\S+)\s+(\d+-\d+-\d+)\s+(\d+)/g;
+        const regex = new RegExp(rs);
+
+        const result = [...body.matchAll(regex)];
+
+        if (result.length===0)
+            return null;
+
+        let total = 0;
+        const details = [];
+        return result.reduce((ht, d)=>{
+            const parson = d[1];
+            const date = d[2];
+            const point = d[3] *1;
+
+            ht.total += point;
+            ht.details.push({parson: parson, date: date, point: point});
+
+            return ht;
+        }, { total: 0, details: [] });
+    }
+    getPointFromBody (body) {
+        const plan = /.*[@|\$]Point\.Plan:\s+(\d+).*/.exec(body);
+        const result = /.*[@|\$]Point\.Result:\s+(\d+).*/.exec(body);
+        const results = this.getPointResultsFromBody(body);
+
+        return {
+            plan:   plan ? plan[1] * 1 : null,
+            result: result ? result[1] * 1 : null,
+            results : results,
+        };
+    }
+    getDueDateFromBody (body) {
+        const a = /.*[@|\$]Date\.Due:\s+(\d+-\d+-\d+).*/.exec(body);
+
+        if (a) return a[1];
+
+        const b = /.*[@|\$]Due\.Date:\s+(\d+-\d+-\d+).*/.exec(body);
+
+        if (b) return b[1];
+
+        return null;
+    };
+    getNextActionFromBody (body) {
+        const next_action = /.*[@|\$]Date\.Next\.Action:\s+(\d+-\d+-\d+).*/.exec(body);
+        return next_action ? next_action[1] : null;;
+    }
+    getOwnerFromBody (body) {
+        const owner = /.*\$[O|o]wner:\s+(\S+).*/.exec(body);
+        return owner ? owner[1] : null;
+    }
+    addAnotetionValue (issue) {
+        issue.point = this.getPointFromBody(issue.body);
+        issue.due_date = this.getDueDateFromBody(issue.body);
+        issue.date_next_action = this.getNextActionFromBody(issue.body);
+        issue.owner = this.getOwnerFromBody(issue.body);
+
+        return issue;
+    }
+}
+
 export default class Sogh {
     constructor (token, options) {
         this._token = null;
@@ -30,7 +96,7 @@ export default class Sogh {
             v4: null,
         };
 
-        // TODO: options.labels で受け取る。 
+        // TODO: options.labels で受け取る。
         this._labels = {
             meeging: null,
             waiting: null,
@@ -52,6 +118,10 @@ export default class Sogh {
                 labels: {ht:{}, list:[]},
                 assignees: {ht:{}, list:[]},
             }
+        };
+
+        this.tools ={
+            issue: new Issue(),
         };
     }
     connect (token, success, error) {
@@ -82,33 +152,8 @@ export default class Sogh {
 
         return query.replace('after: "",', '');
     }
-    point (v) {
-        const plan = /.*@Point\.Plan:\s+(\d+).*/.exec(v);
-        const result = /.*@Point\.Result:\s+(\d+).*/.exec(v);
-
-        return {
-            plan:   plan ? plan[1] * 1 : null,
-            result: result ? result[1] * 1 : null,
-        };
-    }
     addAnotetionValue4Issue (issue) {
-        issue.point = this.point(issue.body);
-
-        const duedate =
-              /.*@Date\.Due:\s+(\d+-\d+-\d+).*/.exec(issue.body) ||
-              /.*@Due\.Date:\s+(\d+-\d+-\d+).*/.exec(issue.body);
-        issue.due_date = duedate ? duedate[1] : null;
-        issue.date_due = duedate ? duedate[1] : null;
-
-        const next_action = /.*@Date\.Next\.Action:\s+(\d+-\d+-\d+).*/.exec(issue.body);
-        issue.date_next_action = next_action ? next_action[1] : null;
-
-        const owner = /.*@担当:\s+(\S+).*/.exec(issue.body);
-        if (owner!==null)
-            console.log(owner)
-        issue.owner = owner ? owner[1] : null;
-
-        return issue;
+        return this.tools.issue.addAnotetionValue(issue);
     }
     addAnotetionValue4Project (project) {
         const priority = (p) => {
