@@ -27,7 +27,7 @@ function getValue (regex_string, description) {
 }
 
 function getResults (description) {
-    const rs = /\$Point.[R|r]esult\:*\s+(\S+)\s+(\d+-\d+-\d+)\s+(\d+)/g;
+    const rs = /\$Point.[R|r]esult:*\s+(\S+)\s+(\d+-\d+-\d+)\s+(\d+)/g;
     const regex = new RegExp(rs);
 
     return [...description.matchAll(regex)];

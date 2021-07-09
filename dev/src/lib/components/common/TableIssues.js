@@ -3,7 +3,7 @@ import moment from 'moment';
 import {LinkBlank} from './Links.js';
 
 import SprintBacklogName from './table_issues/SprintBacklogName.js';
-import Labels from './table_issues/Labels.js';
+import Labels from './Labels.js';
 
 function dt (v) {
     if (!v) return '';
@@ -42,6 +42,8 @@ function prjPri (sogh, issue) {
 }
 
 function makeTrs (issue, sogh, productbacklog_url_prefix) {
+    const point_result = issue.point.results ? issue.point.results.total : issue.point.result;
+
     return (
         <tr key={issue.id}>
           <td style={sogh.headerColor(issue.project)}>
@@ -78,9 +80,11 @@ function makeTrs (issue, sogh, productbacklog_url_prefix) {
             {issue.date_next_action}
           </td>
           <td style={style.right}>{issue.point.plan}</td>
-          <td style={style.right}>{issue.point.result}</td>
           <td style={style.right}>
-            {diff(issue.point.plan, issue.point.result)}
+            {point_result}
+          </td>
+          <td style={style.right}>
+            {diff(issue.point.plan, point_result)}
           </td>
           {/* <td style={style.nowrap}>{dt(issue.createdAt)}</td> */}
           <td style={style.nowrap}>{dt(issue.updatedAt)}</td>
@@ -101,7 +105,7 @@ export default function TableIssues (props) {
             <tr>
               <th colSpan="4">Sprint Backlog</th>
               <th colSpan="2">Management</th>
-              <th colSpan="2">Working</th>
+              <th colSpan="2">Work</th>
               <th colSpan="3">Point</th>
               {/* <th>Create</th> */}
               <th>Update</th>
@@ -113,9 +117,9 @@ export default function TableIssues (props) {
               <th>Title</th>
               <th style={style.nowrap}>Labels</th>
               <th style={style.nowrap}>Owner</th>
-              <th style={style.nowrap}>Due Date</th>
+              <th style={style.nowrap}>Due</th>
               <th style={style.nowrap}>Assignees</th>
-              <th style={style.nowrap}>Next Action</th>
+              <th style={style.nowrap}>Next</th>
               <th>Plan</th>
               <th>Result</th>
               <th>Diff</th>

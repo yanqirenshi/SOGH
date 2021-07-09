@@ -1,6 +1,7 @@
 import React from 'react';
 import moment from 'moment';
 import {LinkBlank} from './Links.js';
+import Labels from './Labels.js';
 
 function dt (v) {
     if (!v) return '';
@@ -66,6 +67,8 @@ function due (v) {
 }
 
 function makeTrs (issue) {
+    const point_result = issue.point.results ? issue.point.results.total : issue.point.result;
+
     return <tr key={issue.id}>
              <td style={style.right}>
                <LinkBlank href={issue.url}>
@@ -75,16 +78,18 @@ function makeTrs (issue) {
              <td style={style.nowrap}>
                {prjColumn(issue)}
              </td>
-             <td>{issue.title}</td>
-             <td>{issue.labels.nodes.map(l => {
-                 const label_style = labelStyle(l);
-                 return <p key={l.id}
-                           style={label_style}>
-                          <LinkBlank href={l.url}>
-                            {l.name}
-                          </LinkBlank>
-                        </p>;
-             })}</td>
+             <td>
+               {issue.title}
+             </td>
+             <td>
+               <Labels issue={issue}/>
+             </td>
+             <td style={style.nowrap}>
+               {issue.owner}
+             </td>
+             <td style={style.nowrap}>
+               {due(issue.due_date)}
+             </td>
              <td style={style.nowrap}>
                {issue.assignees.nodes.map(a => {
                    return <span key={issue.id+'.'+a.id}>
@@ -92,16 +97,18 @@ function makeTrs (issue) {
                           </span>;
                })}
              </td>
-             <td style={style.nowrap}>
-               {due(issue.due_date)}
+             <td>
+               {dt(issue.date_next_action)}
              </td>
              <td style={style.right}>{issue.point.plan}</td>
-             <td style={style.right}>{issue.point.result}</td>
              <td style={style.right}>
-               {diff(issue.point.plan, issue.point.result)}
+               {point_result}
              </td>
-             <td style={style.nowrap}>{dt(issue.createdAt)}</td>
-             <td style={style.nowrap}>{dt(issue.updatedAt)}</td>
+             <td style={style.right}>
+               {diff(issue.point.plan, point_result)}
+             </td>
+             {/* <td style={style.nowrap}>{dt(issue.createdAt)}</td> */}
+             {/* <td style={style.nowrap}>{dt(issue.updatedAt)}</td> */}
              <td style={style.nowrap}>{dt(issue.closedAt)}</td>
            </tr>;
 }
@@ -118,19 +125,23 @@ export default function TableSprintBacklogs (props) {
               <th rowSpan="2">Col</th>
               <th rowSpan="2">Title</th>
               <th rowSpan="2">Labels</th>
-              <th rowSpan="2">Assignees</th>
-              <th rowSpan="2">Due Date</th>
+              <th colSpan="2">Manegement</th>
+              <th colSpan="2">Work</th>
               <th colSpan="3">Point</th>
-              <th>Create</th>
-              <th>Update</th>
+              {/* <th>Create</th> */}
+              {/* <th>Update</th> */}
               <th>Close</th>
             </tr>
             <tr>
+              <th>Owner</th>
+              <th>Due</th>
+              <th>Assignees</th>
+              <th>Next</th>
               <th>Plan</th>
               <th>Result</th>
               <th>Diff</th>
-              <th>At</th>
-              <th>At</th>
+              {/* <th>At</th> */}
+              {/* <th>At</th> */}
               <th>At</th>
             </tr>
           </thead>

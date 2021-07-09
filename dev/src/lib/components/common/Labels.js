@@ -1,5 +1,5 @@
 import React from 'react';
-import {LinkBlank} from '../Links.js';
+import {LinkBlank} from './Links.js';
 
 function color (hexcolor) {
     var r = parseInt( hexcolor.substr( 1, 2 ), 16 ) ;

@@ -24,7 +24,7 @@ class Issue {
         this._data = data;
     }
     getPointResultsFromBody (body) {
-        const rs = /\$Point.[R|r]esult\:*\s+(\S+)\s+(\d+-\d+-\d+)\s+(\d+)/g;
+        const rs = /\$Point.[R|r]esult:*\s+(\S+)\s+(\d+-\d+-\d+)\s+(\d+)/g;
         const regex = new RegExp(rs);
 
         const result = [...body.matchAll(regex)];
@@ -32,8 +32,6 @@ class Issue {
         if (result.length===0)
             return null;
 
-        let total = 0;
-        const details = [];
         return result.reduce((ht, d)=>{
             const parson = d[1];
             const date = d[2];
@@ -46,8 +44,8 @@ class Issue {
         }, { total: 0, details: [] });
     }
     getPointFromBody (body) {
-        const plan = /.*[@|\$]Point\.Plan:\s+(\d+).*/.exec(body);
-        const result = /.*[@|\$]Point\.Result:\s+(\d+).*/.exec(body);
+        const plan = /.*[@|$]Point\.Plan:*\s+(\d+).*/.exec(body);
+        const result = /.*[@|$]Point\.Result:*\s+(\d+).*/.exec(body);
         const results = this.getPointResultsFromBody(body);
 
         return {
@@ -57,18 +55,18 @@ class Issue {
         };
     }
     getDueDateFromBody (body) {
-        const a = /.*[@|\$]Date\.Due:\s+(\d+-\d+-\d+).*/.exec(body);
+        const a = /.*[@|$]Date\.Due:*\s+(\d+-\d+-\d+).*/.exec(body);
 
         if (a) return a[1];
 
-        const b = /.*[@|\$]Due\.Date:\s+(\d+-\d+-\d+).*/.exec(body);
+        const b = /.*[@|$]Due\.Date:*\s+(\d+-\d+-\d+).*/.exec(body);
 
         if (b) return b[1];
 
         return null;
     };
     getNextActionFromBody (body) {
-        const next_action = /.*[@|\$]Date\.Next\.Action:\s+(\d+-\d+-\d+).*/.exec(body);
+        const next_action = /.*[@|$]Date\.Next:*\s+(\d+-\d+-\d+).*/.exec(body);
         return next_action ? next_action[1] : null;;
     }
     getOwnerFromBody (body) {

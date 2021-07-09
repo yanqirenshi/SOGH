@@ -4,9 +4,11 @@ import {LinkBlank} from '../Links.js';
 
 function prjColumn (issue) {
     return issue.projectCards.nodes.map((d,i)=>{
-        return <p key={d.column.id}>
-                 {d.column.name}
-               </p>;
+        return (
+            <p key={d.column.id}>
+              {d.column.name}
+            </p>
+        );
     });
 }
 
