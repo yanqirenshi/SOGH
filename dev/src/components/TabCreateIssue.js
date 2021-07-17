@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 
 import PanelCreateIssue from '../lib/components/PanelCreateIssue.js';
 
+import Issue from '../lib/js/Issue.js';
+
+const ISSUE = new Issue();
 const style = {
     display: 'flex',
     flexDirection: 'column',
@@ -24,7 +27,7 @@ export default function TabCreateIssue (props) {
     const sogh = props.sogh;
 
     useEffect(() => {
-        const issue_data = sogh.makeIssueData();
+        const issue_data = ISSUE.makeIssueData();
 
         issue_data.repository = sogh.activeRepository();
         issue_data.description = description_template;
@@ -35,7 +38,7 @@ export default function TabCreateIssue (props) {
     const changeData = (data) => setData(data);
 
     const clickCreate = () => {
-        sogh.createIssue(sogh.issueData2requestData(data), (ret) => {
+        sogh.createIssue(ISSUE.issueData2requestData(data), (ret) => {
             console.log(ret.errors ? 'error' : 'success');
         });
     };

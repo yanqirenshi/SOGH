@@ -3,35 +3,6 @@ import moment from 'moment';
 
 import Labels from '../common/Labels.js';
 
-function makeLabels (d,i) {
-    const aStyle = (hexcolor) => {
-        var r = parseInt( hexcolor.substr( 1, 2 ), 16 ) ;
-        var g = parseInt( hexcolor.substr( 3, 2 ), 16 ) ;
-        var b = parseInt( hexcolor.substr( 5, 2 ), 16 ) ;
-
-        const color = ( ( ( (r * 299) + (g * 587) + (b * 114) ) / 1000 ) < 128 ) ? "white" : "black" ;
-
-        return color;
-    };
-
-    const style = {
-        whiteSpace: 'nowrap',
-        background: '#' + d.color,
-        color: aStyle('#' + d.color),
-        padding: '3px 6px',
-        borderRadius: 5,
-        fontSize: 12,
-        textAlign: 'center',
-        marginTop: i===0 ? 0 : 3,
-        marginRight: 6,
-        display: 'inline-block',
-    };
-
-    return <p key={d.id} style={style}>
-             {d.name}
-           </p>;
-}
-
 function makeProjectColumn (d, project) {
     const cards = d.projectCards.nodes;
 

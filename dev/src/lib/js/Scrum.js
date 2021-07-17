@@ -1,8 +1,9 @@
 import moment from 'moment';
 
 import Filter from './Filter.js';
+import Pool from './Pool.js';
 
-import * as query from './GraphQL.js';
+const POOL = new Pool();
 
 export default class Scrum {
     constructor (token) {
@@ -50,9 +51,6 @@ export default class Scrum {
         for (const f of this._listeners)
             f();
     }
-    apiV4 () {
-        return this._sogh.api.v4;
-    }
     isNeverFetched () {
         return this._fetch.start ? false : true;
     }
@@ -67,15 +65,6 @@ export default class Scrum {
     }
     addListeners (listener) {
         this._listeners.push(listener);
-    }
-    addPool (data, pool) {
-        if (pool.ht[data.id])
-            return;
-
-        data.issues = [];
-
-        pool.ht[data.id] = data;
-        pool.list.push(data);
     }
     addAnotetionValue4Issue (issue) {
         issue.point = this.point(issue.body);
@@ -139,36 +128,6 @@ export default class Scrum {
 
         return project;
     }
-    getMilestonesByRepository (repository, cb) {
-        if (!this.apiV4()._token)
-            cb([]);
-
-        const api = this.apiV4();
-
-        const base_query = query.milestone_by_reposigory
-              .replace('@owner', repository.owner)
-              .replace('@name',  repository.name);
-
-        let milestones = [];
-        const getter = (endCursor) => {
-            let query = this._sogh.ensureEndCursor(base_query, endCursor);
-
-            api.fetch(query, (results) => {
-                const data = results.data.repository.milestones;
-                const page_info = data.pageInfo;
-
-                milestones = milestones.concat(data.nodes);
-
-                if (page_info.hasNextPage) {
-                    getter(page_info.endCursor);
-                } else {
-                    cb(milestones);
-                }
-            });
-        };
-
-        getter();
-    }
     targetMilestones (milestones) {
         const now = moment().startOf('date');
 
@@ -204,37 +163,6 @@ export default class Scrum {
                 return m;
 
         return null;
-    }
-    getIssuesByMilestone (milestone, cb) {
-        if (!this.apiV4()._token)
-            cb([]);
-
-        if (!milestone) return;
-
-        const api = this.apiV4();
-
-        const base_query = query.issues_by_milestone
-              .replace('@milestone-id', milestone.id);
-
-        let issues = [];
-        const getter = (endCursor) => {
-            let query = this._sogh.ensureEndCursor(base_query, endCursor);
-
-            api.fetch(query, (results) => {
-                const data = results.data.node.issues;
-                const page_info = data.pageInfo;
-
-                for(const d of data.nodes)
-                    issues.push(this._sogh.addAnotetionValue4Issue(d));
-
-                if (page_info.hasNextPage)
-                    getter(page_info.endCursor);
-                else
-                    cb(issues);
-            });
-        };
-
-        getter();
     }
     issues2dueDates (issues) {
         const ht = {};
@@ -284,7 +212,7 @@ export default class Scrum {
             if (issue.projectCards.nodes.length===0) {
                 const project = empyProject();
 
-                this.addPool(project, pool);
+                POOL.addPool(project, pool);
 
                 pool.ht[project.id].issues.push(issue);
             } else {
@@ -294,7 +222,7 @@ export default class Scrum {
 
                 const project = this.addAnotetionValue4Project(column.project);
 
-                this.addPool(project, pool);
+                POOL.addPool(project, pool);
 
                 pool.ht[project.id].issues.push(issue);
             }
@@ -302,42 +230,24 @@ export default class Scrum {
 
         return pool;
     }
-    filteringIssue (filter, issues) {
-
-        const x = issues.reduce((list, issue) => {
-            if (this._sogh.checkProjects(filter, issue) &&
-                this._sogh.checkAssignees(filter, issue) &&
-                this._sogh.checkStatus(filter, issue) &&
-                this._sogh.checkYesterday(filter, issue) &&
-                this._sogh.checkToday(filter, issue) &&
-                this._sogh.checkEmptyPlan(filter, issue) &&
-                this._sogh.checkWaiting(filter, issue) &&
-                this._sogh.checkDiffMinus(filter, issue) &&
-                this._sogh.checkKeyword(filter, issue))
-                list.push(issue);
-
-            return list;
-        }, []);
-        return x;
-    }
     makeFilterdTimeline (issues) {
         const data = this._timeline;
+        const filter = data.filter;
 
         data.duedates = this.issues2dueDates(issues);
 
-        data.issues_filterd
-            = this.filteringIssue(data.filter, issues);
+        data.issues_filterd = filter.apply(issues);
 
         data.duedates_filterd
             = this.issues2dueDates(data.issues_filterd);
     }
     makeFilterdProjects (issues) {
         const data = this._projects;
+        const filter = data.filter;
 
         data.projects = this.issues2projects(issues);
 
-        data.issues_filterd
-            = this.filteringIssue(data.filter, issues);
+        data.issues_filterd = filter.apply(issues);
 
         data.projects_filterd
             = this.issues2projects(data.issues_filterd);
@@ -348,7 +258,7 @@ export default class Scrum {
 
         this.setMilestone(milestone);
 
-        this.getIssuesByMilestone(this._data.milestone, (issues) => {
+        this._sogh.getIssuesByMilestone(this._data.milestone, (issues) => {
 
             this._data.issues = issues;
 
@@ -379,12 +289,12 @@ export default class Scrum {
             return this._data.milestones.find(d=>d.id===milestone.id) || this._data.milestones[0];
         };
 
-        this.getMilestonesByRepository(repository, (milestones) => {
+        this._sogh.getMilestonesByRepository(repository, (milestones) => {
             this._data.milestones = this.targetMilestones(milestones);
 
             this._data.milestone = getTargetMilestone(this._data.milestone ,this._data.milestones);
 
-            this.getIssuesByMilestone(this._data.milestone, (issues) => {
+            this._sogh.getIssuesByMilestone(this._data.milestone, (issues) => {
 
                 this._data.issues = issues;
 

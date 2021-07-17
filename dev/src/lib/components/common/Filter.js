@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import IconFilter from './IconFilter.js';
 import FilterDevelopers from './FilterDevelopers.js';
 import FilterStatus from './FilterStatus.js';
 import FilterOthers from './FilterOthers.js';
+
+import Core from '../../js/Filter.js';
 
 const style = {
     display:'flex',
@@ -22,9 +24,9 @@ const style = {
 };
 
 export default function Filter (props) {
-    const sogh = props.sogh;
+    const [core] = useState(new Core());
 
-    const filter = sogh.issues2filter(props.issues);
+    const filter = core.issues2filter(props.issues);
 
     const others = {
         list: [

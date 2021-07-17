@@ -59,7 +59,7 @@ export default function Contents (props) {
     useEffect(() => fetchIssues(milestone), [milestone]);
 
     useEffect(() => {
-        const filterd_issue = sogh.filteringIssue(filter, issues);
+        const filterd_issue = filter.apply(issues);
         setProjects(sogh.issues2projects(filterd_issue));
     }, [issues, sogh, changed]);
 

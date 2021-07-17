@@ -32,7 +32,7 @@ export default function ViwerIssues (props) {
     useEffect(() => {
         if (gtd && gtd.isCanFetchData())
             gtd.getIssuesOpenByRepository(repository, gtd.viewer(), (issues) => {
-                gtd._filter = gtd.issues2filterContents(gtd._filter, issues);
+                gtd._filter = gtd.issues2filter(gtd._filter, issues);
                 setUpdatedAt(new Date());
             });
     }, [fetched_at]);
