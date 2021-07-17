@@ -1,10 +1,10 @@
 import React from 'react';
 
-import ButtonRefresh from '../common/ButtonRefresh.js';
+import ButtonRefresh       from '../common/ButtonRefresh.js';
 import ProductAndMilestone from '../common/ProductAndMilestone.js';
-import DueDates from '../common/DueDates.js';
-import Filter from '../common/Filter.js';
-import OperatorOpenClose from '../common/OperatorOpenClose.js';
+import DueDates            from '../common/DueDates.js';
+import Filter              from '../common/Filter.js';
+import OperatorOpenClose   from '../common/OperatorOpenClose.js';
 
 import Summary from './Summary.js';
 
