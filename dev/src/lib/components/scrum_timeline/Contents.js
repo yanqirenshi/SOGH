@@ -8,7 +8,15 @@ import OperatorOpenClose   from '../common/OperatorOpenClose.js';
 
 import Summary from './Summary.js';
 
-import style from './Style.js';
+const style = {
+    root: {
+        display:'flex',
+        flexDirection: 'column',
+        width:'100%',
+        height:'100%',
+        padding: 22,
+    },
+};
 
 export default function Contents (props) {
     const scrum = props.scrum;

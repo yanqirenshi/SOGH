@@ -10,7 +10,22 @@ import OperatorOpenClose from '../common/OperatorOpenClose.js';
 
 import Summary from './Summary.js';
 
-import style from './Style.js';
+const style = {
+    root: {
+        marginBottom:111
+    },
+    head: {
+        padding: '11px 22px 0px 22px'
+    },
+    controller: {
+        padding: '0px 22px 8px 22px',
+        display:'flex',
+    },
+    body: {
+        display:'flex',
+        padding: '11px 22px'
+    },
+};
 
 export default function Contents (props) {
     const scrum = props.scrum;
@@ -31,15 +46,15 @@ export default function Contents (props) {
     const sorted_projects_filterd = sogh.sortProjectsByPriority(projects_filterd.list);
 
     return (
-        <div style={style.contents_area.root}>
-          <div style={style.contents_area.head}>
+        <div style={style.root}>
+          <div style={style.head}>
             <ProductAndMilestone repository={repository}
                                  milestones={milestones}
                                  milestone={milestone}
                                  callbacks={callbacks} />
           </div>
 
-          <div style={style.contents_area.controller}>
+          <div style={style.controller}>
             <div>
               <ButtonRefresh callbacks={callbacks} />
             </div>
@@ -50,7 +65,7 @@ export default function Contents (props) {
                     sogh={sogh} />
           </div>
 
-          <div style={style.contents_area.body}>
+          <div style={style.body}>
 
             <div style={{flexGrow:1}}>
               <div>
