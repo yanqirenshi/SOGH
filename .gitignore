@@ -28,3 +28,9 @@ dist/
 #####
 dev/.env.local
 dev/.eslintcache
+
+
+#####
+##### documents
+#####
+documents/.env.local

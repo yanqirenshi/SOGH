@@ -1,0 +1,73 @@
+  c:/Users/satoshi_iwasaki/prj/appl/SOGH/documents:
+  total used in directory 970 available 370012324
+  drwxrwxrwx  1 satoshi_iwasaki なし   4096 07-17 19:55 ..
+  drwxrwxrwx  1 satoshi_iwasaki なし   4096 07-17 19:55 .
+  -rw-rw-rw-  1 satoshi_iwasaki なし    171 07-17 08:08 .env.local.bk
+C -rw-rw-rw-  1 satoshi_iwasaki なし    116 07-17 19:55 .env.local.template
+  drwxrwxrwx  1 satoshi_iwasaki なし 327680 07-17 08:03 node_modules
+  -rw-rw-rw-  1 satoshi_iwasaki なし   1233 07-17 07:56 package.json
+  -rw-rw-rw-  1 satoshi_iwasaki なし 641564 07-17 07:56 package-lock.json
+  drwxrwxrwx  1 satoshi_iwasaki なし   4096 07-17 08:09 public
+  -rw-rw-rw-  1 satoshi_iwasaki なし   2183 07-17 07:56 README.md
+  -rw-rw-rw-  1 satoshi_iwasaki なし   2891 07-17 07:56 README.react.md
+  drwxrwxrwx  1 satoshi_iwasaki なし   4096 07-17 10:04 src
+
+  c:/Users/satoshi_iwasaki/prj/appl/SOGH/documents/src:
+  total used in directory 34 available 370012324
+  drwxrwxrwx  1 satoshi_iwasaki なし 4096 07-17 19:55 ..
+  drwxrwxrwx  1 satoshi_iwasaki なし 4096 07-17 10:04 .
+  -rw-rw-rw-  1 satoshi_iwasaki なし  959 07-17 09:51 App.js
+  -rw-rw-rw-  1 satoshi_iwasaki なし  280 07-17 07:56 App.test.js
+  drwxrwxrwx  1 satoshi_iwasaki なし 4096 07-17 10:34 classes
+  drwxrwxrwx  1 satoshi_iwasaki なし 4096 07-17 10:24 components
+  drwxrwxrwx  1 satoshi_iwasaki なし 4096 07-17 07:56 data
+  -rw-rw-rw-  1 satoshi_iwasaki なし  546 07-17 08:32 index.css
+  -rw-rw-rw-  1 satoshi_iwasaki なし  576 07-17 07:56 index.js
+  drwxrwxrwx  1 satoshi_iwasaki なし 4096 07-17 17:49 pages
+  -rw-rw-rw-  1 satoshi_iwasaki なし  369 07-17 07:56 Pages.js
+  -rw-rw-rw-  1 satoshi_iwasaki なし 1994 07-17 10:03 RootPc.js
+  -rw-rw-rw-  1 satoshi_iwasaki なし 5086 07-17 07:56 serviceWorker.js
+  -rw-rw-rw-  1 satoshi_iwasaki なし  255 07-17 07:56 setupTests.js
+
+  c:/Users/satoshi_iwasaki/prj/appl/SOGH/documents/src/data:
+  total used in directory 17 available 370012324
+  drwxrwxrwx  1 satoshi_iwasaki なし 4096 07-17 10:04 ..
+  drwxrwxrwx  1 satoshi_iwasaki なし 4096 07-17 07:56 .
+  -rw-rw-rw-  1 satoshi_iwasaki なし 2500 07-17 07:56 DEPLOYMENT_DIAGRAM.js
+  -rw-rw-rw-  1 satoshi_iwasaki なし  937 07-17 07:56 GraphData.js
+  drwxrwxrwx  1 satoshi_iwasaki なし    0 07-17 07:56 relationships
+  drwxrwxrwx  1 satoshi_iwasaki なし 4096 07-17 17:54 wbs
+  -rw-rw-rw-  1 satoshi_iwasaki なし  845 07-17 07:56 WBS_DATA.js
+
+  c:/Users/satoshi_iwasaki/prj/appl/SOGH/documents/src/data/wbs:
+  total used in directory 13 available 370012324
+  drwxrwxrwx  1 satoshi_iwasaki なし 4096 07-17 07:56 ..
+  drwxrwxrwx  1 satoshi_iwasaki なし 4096 07-17 17:54 .
+  -rw-rw-rw-  1 satoshi_iwasaki なし  126 07-17 08:22 PROJECTS.js
+  -rw-rw-rw-  1 satoshi_iwasaki なし  798 07-17 17:52 WBS.js
+  -rw-rw-rw-  1 satoshi_iwasaki なし 1708 07-17 17:54 WORKPACKAGES.js
+  -rw-rw-rw-  1 satoshi_iwasaki なし 1659 07-17 17:53 #WORKPACKAGES.js#
+
+  c:/Users/satoshi_iwasaki/prj/appl/SOGH/documents/src/pages:
+  total used in directory 19 available 370012324
+  drwxrwxrwx  1 satoshi_iwasaki なし 4096 07-17 10:04 ..
+  drwxrwxrwx  1 satoshi_iwasaki なし 4096 07-17 17:49 .
+  -rw-rw-rw-  1 satoshi_iwasaki なし  678 07-17 07:56 Backlog.js
+  drwxrwxrwx  1 satoshi_iwasaki なし 4096 07-17 07:56 components
+  drwxrwxrwx  1 satoshi_iwasaki なし 4096 07-17 10:37 home
+  -rw-rw-rw-  1 satoshi_iwasaki なし 1919 07-17 17:49 Home.js
+
+  c:/Users/satoshi_iwasaki/prj/appl/SOGH/documents/src/pages/home:
+  total used in directory 13 available 370012324
+  drwxrwxrwx  1 satoshi_iwasaki なし 4096 07-17 17:49 ..
+  drwxrwxrwx  1 satoshi_iwasaki なし 4096 07-17 10:37 .
+  -rw-rw-rw-  1 satoshi_iwasaki なし  771 07-17 07:56 Backlogs.js
+  -rw-rw-rw-  1 satoshi_iwasaki なし  925 07-17 10:23 Classes.js
+  -rw-rw-rw-  1 satoshi_iwasaki なし  225 07-17 10:35 Issue.js
+  -rw-rw-rw-  1 satoshi_iwasaki なし  149 07-17 10:36 Milestone.js
+  -rw-rw-rw-  1 satoshi_iwasaki なし  294 07-17 09:13 Overview.js
+  -rw-rw-rw-  1 satoshi_iwasaki なし  147 07-17 10:37 Project.js
+  -rw-rw-rw-  1 satoshi_iwasaki なし  150 07-17 10:37 Repository.js
+  -rw-rw-rw-  1 satoshi_iwasaki なし  145 07-17 10:35 Sogh.js
+  -rw-rw-rw-  1 satoshi_iwasaki なし  447 07-17 10:28 Tabs.js
+  -rw-rw-rw-  1 satoshi_iwasaki なし 1486 07-17 07:56 Wbs.js

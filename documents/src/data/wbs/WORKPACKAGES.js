@@ -16,6 +16,14 @@ function SEED_CLASSES () {
         { _id: 1010013, _parent: 10001, label: 'Loader' },
         { _id: 1010014, _parent: 10003, label: 'Label' },
         { _id: 1010015, _parent: 10003, label: 'Column' },
+        { _id: 1010016, _parent: 10004, label: 'ProductBacklogs' },
+        { _id: 1010017, _parent: 10004, label: 'ProductBacklog' },
+        { _id: 1010018, _parent: 10004, label: 'SprintPlanning' },
+        { _id: 1010019, _parent: 10004, label: 'ScrumTimeline' },
+        { _id: 1010020, _parent: 10004, label: 'ScrumProjects' },
+        { _id: 1010021, _parent: 10004, label: 'Reports' },
+        { _id: 1010022, _parent: 10004, label: 'PanelCreateIssue' },
+        { _id: 1010023, _parent: 10004, label: 'ViwerIssues' },
     ];
 }
 

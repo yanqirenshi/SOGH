@@ -6,10 +6,11 @@ import Contents from './reports/Contents.js';
 
 export default function Reports (props) {
     const sogh = props.sogh;
+    const repository = props.repository;
 
     return (
         <>
-          {sogh  && <Contents sogh={props.sogh} repository={props.repository} />}
+          {sogh  && <Contents sogh={sogh} repository={repository} />}
           {!sogh && <NotSignIn />}
         </>
     );

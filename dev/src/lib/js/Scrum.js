@@ -1,12 +1,16 @@
 import moment from 'moment';
 
+import SoghChild from './SoghChild.js';
+
 import Filter from './Filter.js';
 import Pool from './Pool.js';
 
 const POOL = new Pool();
 
-export default class Scrum {
+export default class Scrum extends SoghChild {
     constructor (token) {
+        super();
+
         this._listeners = [];
 
         this._fetch = {

@@ -9,13 +9,13 @@ const WBS01 = [
 const WBS02 = [
     {
         _id: 10000, _parent: 100,
-        order: 10,
+        order: 15,
         label: 'DAO',
     },
     {
         _id: 10001, _parent: 100,
-        order: 10,
-        label: 'API',
+        order: 80,
+        label: 'Library (API)',
     },
     {
         _id: 10002, _parent: 100,
@@ -24,8 +24,13 @@ const WBS02 = [
     },
     {
         _id: 10003, _parent: 100,
-        order: 10,
+        order: 90,
         label: 'Utility',
+    },
+    {
+        _id: 10004, _parent: 100,
+        order: 5,
+        label: 'Component',
     },
 ];
 

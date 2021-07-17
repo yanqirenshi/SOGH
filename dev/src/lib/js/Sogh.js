@@ -44,6 +44,7 @@ export default class Sogh extends Loader {
             issue: new Issue(),
         };
     }
+    // Active Data
     getRepository (owner, name) {
         const repos = this._data.repositories;
 

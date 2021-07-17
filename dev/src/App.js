@@ -14,15 +14,14 @@ import { connectGithub } from './actions/sogh.js';
 
 function App(props) {
     const [token] = useState(process.env.REACT_APP_GITHUB_PARSONAL_TOKEN || null);
+    const [owner] = useState(process.env.REACT_APP_GITHUB_REPOSITORY_OWNER || null);
+    const [name]  = useState(process.env.REACT_APP_GITHUB_REPOSITORY_NAME || null);
     const [updated_at, setUpdatedAt] = useState(null);
 
     useEffect(() => props.connectGithub(token), [token]);
 
     useEffect(() => {
         if (!props.sogh) return;
-
-        const owner = process.env.REACT_APP_GITHUB_REPOSITORY_OWNER;
-        const name  = process.env.REACT_APP_GITHUB_REPOSITORY_NAME;
 
         props.sogh.fetchRepository(owner, name, (success) => {
             const repo = props.sogh.getRepository(owner, name);

@@ -22,6 +22,9 @@ export default class Loader {
             v4: null,
         };
     }
+    viewer () {
+        return this._viewer;
+    }
     connect (token, success, error) {
         const api = new GithubApiV4(token);
 

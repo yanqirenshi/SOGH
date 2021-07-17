@@ -1,8 +1,10 @@
 import Filter from './Filter.js';
 
-export default class ProductBacklog {
-    constructor (token) {
-        this._sogh = null;
+import SoghChild from './SoghChild.js';
+
+export default class ProductBacklog extends SoghChild {
+    constructor () {
+        super();
 
         this._projects = [];
 
@@ -16,12 +18,6 @@ export default class ProductBacklog {
             milestones: new Filter(),
             columns: new Filter(),
         };
-    }
-    apiV4 () {
-        return this._sogh.api.v4;
-    }
-    viewer () {
-        return this._sogh._viewer;
     }
     clearData () {
         this._data = {

@@ -7,20 +7,23 @@ import Contents from './product_backlog/Contents.js';
 export default function ProductBacklog (props) {
     const [core, setCore] = useState(null);
 
-    useEffect(() => {
-        if (!props.sogh) return;
-
-        setCore(props.sogh.productBacklog());
-    }, [props.sogh]);
-
     const sogh = props.sogh;
+    const repository = props.repository;
+    const project_id = props.project_id;
+    const root_url   = props.root_url;
+
+    useEffect(() => {
+        if (!sogh) return;
+
+        setCore(sogh.productBacklog());
+    }, [sogh]);
 
     return (
         <>
           {core  && <Contents core={core} sogh={sogh}
-                              repository={props.repository}
-                              project_id={props.project_id}
-                              root_url={props.root_url} />}
+                              repository={repository}
+                              project_id={project_id}
+                              root_url={root_url} />}
           {!core && <NotSignIn />}
         </>
     );

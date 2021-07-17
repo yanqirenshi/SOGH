@@ -7,7 +7,10 @@ import Contents from './product_backlogs/Contents.js';
 export default function ProductBacklogs (props) {
     const [core, setCore] = useState(null);
     const [projects, setProjects] = useState([]);
+
     const sogh = props.sogh;
+    const repository = props.repository;
+    const productbacklog_url_prefix = props.productbacklog_url_prefix;
 
     useEffect(() => {
         if (!sogh) return;
@@ -18,7 +21,7 @@ export default function ProductBacklogs (props) {
     useEffect(() => {
         if (!core) return;
 
-        core.getProjectsByRepository(props.repository, (projects) => {
+        core.getProjectsByRepository(repository, (projects) => {
             setProjects(projects);
         });
 
@@ -28,20 +31,20 @@ export default function ProductBacklogs (props) {
         refresh: () => {
             setProjects([]);
 
-            core.getProjectsByRepository(props.repository, (projects) => {
+            core.getProjectsByRepository(repository, (projects) => {
                 setProjects(projects);
             });
         },
     };
 
-    const url_prefix = props.productbacklog_url_prefix || "/product-backlogs/";
+    const url_prefix = productbacklog_url_prefix || "/product-backlogs/";
 
     return (
         <>
           {core  && <Contents sogh={sogh}
                               core={core}
                               projects={projects}
-                              repository={props.repository}
+                              repository={repository}
                               callbacks={callbacks}
                               productbacklog_url_prefix={url_prefix} />}
           {!core && <NotSignIn />}

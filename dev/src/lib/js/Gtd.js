@@ -1,5 +1,6 @@
 import * as query from './GraphQL.js';
 
+import SoghChild from './SoghChild.js';
 import FilterGtd from './FilterGtd.js';
 
 const FILTER = new FilterGtd();
@@ -11,11 +12,11 @@ function owner (owner) {
     return owner.login;
 }
 
-export default class Gtd {
-    constructor (token) {
-        this._listeners = [];
+export default class Gtd extends SoghChild{
+    constructor () {
+        super();
 
-        this._sogh = null;
+        this._listeners = [];
 
         this._pool = {
             ht:{},

@@ -20,10 +20,10 @@ function Home (props) {
         { code: 'overview',   label: 'Overview' },
         { code: 'backlogs',   label: 'Backlogs' },
         { code: 'sogh',       label: 'Sogh' },
-        { code: 'issue',      label: 'Issue' },
-        { code: 'milestone',  label: 'Milestone' },
-        { code: 'project',    label: 'Project' },
-        { code: 'repository', label: 'Repository' },
+        // { code: 'issue',      label: 'Issue' },
+        // { code: 'milestone',  label: 'Milestone' },
+        // { code: 'project',    label: 'Project' },
+        // { code: 'repository', label: 'Repository' },
         { code: 'classes',    label: 'Classes' },
         { code: 'wbs',        label: 'Wbs' },
     ]);
@@ -36,10 +36,10 @@ function Home (props) {
         case 'overview':   return <Tab.Overview wbs={wbs_data} />;
         case 'backlogs':   return <Tab.Backlogs wbs={wbs_data} sogh={props.sogh} repo={props.repo}/>;
         case 'sogh':       return <Tab.Sogh />;
-        case 'issue':      return <Tab.Issue />;
-        case 'milestone':  return <Tab.Milestone />;
-        case 'project':    return <Tab.Project />;
-        case 'repository': return <Tab.Repository />;
+        // case 'issue':      return <Tab.Issue />;
+        // case 'milestone':  return <Tab.Milestone />;
+        // case 'project':    return <Tab.Project />;
+        // case 'repository': return <Tab.Repository />;
         case 'classes':    return <Tab.Classes wbs={wbs_data} />;
         case 'wbs':        return <Tab.Wbs wbs={wbs_data} />;
         default: return  null;
