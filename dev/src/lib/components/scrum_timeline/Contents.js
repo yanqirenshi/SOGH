@@ -5,8 +5,7 @@ import ProductAndMilestone from '../common/ProductAndMilestone.js';
 import DueDates            from '../common/DueDates.js';
 import Filter              from '../common/Filter.js';
 import OperatorOpenClose   from '../common/OperatorOpenClose.js';
-
-import Summary from './Summary.js';
+import Summary             from '../common/Summary.js';
 
 const style = {
     root: {
@@ -54,7 +53,7 @@ export default function Contents (props) {
 
             <div style={{display:'flex'}}>
               <div>
-                <Summary source={timeline.duedates_filterd}/>
+                <Summary source={scrum.summaryDuedates(timeline.duedates_filterd)}/>
               </div>
 
               <div style={{flexGrow:1}}>

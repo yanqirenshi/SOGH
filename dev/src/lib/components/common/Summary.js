@@ -13,15 +13,8 @@ function dt (v) {
     return m.format('MM-DD ddd');
 };
 
-function point (type, issues) {
-    return issues.reduce((total, issue) => {
-        return total + (issue.point[type] || 0);
-    }, 0);
-}
-
 export default function Summary (props) {
-    const ht = props.source.ht;
-    const dates = Object.keys(ht).sort();
+    const data = props.source;
 
     return (
         <div>
@@ -40,27 +33,25 @@ export default function Summary (props) {
                     <th>Date</th>
                     <th>Plan</th>
                     <th>Result</th>
+                    <th>Total</th>
                   </tr>
                 </thead>
 
                 <tbody>
-                  {dates.map(date=>{
-                      const plan = point('plan', ht[date]);
-                      const result = point('result', ht[date]);
-
+                  {data.map(d=>{
                       return (
-                          <tr key={date}>
+                          <tr key={d.date}>
                             <td style={{whiteSpace: 'nowrap'}}>
-                              {dt(date)}
+                              {dt(d.date)}
                             </td>
                             <td style={{textAlign:'right'}}>
-                              {plan}
+                              {d.plan}
                             </td>
                             <td style={{textAlign:'right'}}>
-                              {result}
+                              {d.result}
                             </td>
                             <td style={{textAlign:'right'}}>
-                              {plan - result}
+                              {d.plan - d.result}
                             </td>
                           </tr>
                       );
