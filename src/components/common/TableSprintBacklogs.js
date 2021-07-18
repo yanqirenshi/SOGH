@@ -52,11 +52,9 @@ function makeTrs (issue) {
                  {issue.number}
                </LinkBlank>
              </td>
-             <td style={style.nowrap}>
-               {prjColumn(issue)}
-             </td>
              <td>
-               {issue.title}
+               <p style={{fontSize: 12}}>{prjColumn(issue)}</p>
+               <p>{issue.title}</p>
              </td>
              <td>
                <Labels issue={issue}/>
@@ -99,7 +97,6 @@ export default function TableSprintBacklogs (props) {
           <thead>
             <tr>
               <th rowSpan="2">#</th>
-              <th rowSpan="2">Col</th>
               <th rowSpan="2">Title</th>
               <th rowSpan="2">Labels</th>
               <th colSpan="2">Manegement</th>
