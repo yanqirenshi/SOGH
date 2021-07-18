@@ -396,26 +396,33 @@ export default class Scrum extends SoghChild {
 
         if (cb) cb();
     }
+    summaryIssueInRecord (record, issue) {
+        const point = issue.point;
+
+        record.plan += (point.plan || 0);
+
+        const results = point.results;
+        record.result += ((results ? results.total : point.result) || 0);
+
+        return record;
+    }
     summaryDuedates (duedates) {
         const ht = duedates.ht;
         const dates = Object.keys(ht).sort();
 
-        const sumRecord = (record, issue) => {
-            const point = issue.point;
-
-            record.plan += (point.plan || 0);
-
-            const results = point.results;
-            record.result += ((results ? results.total : point.result) || 0);
-
-            return record;
-        };
-
         return dates.map(date=>{
             const issues = ht[date];
-            const record = { date: date, plan: 0, result: 0 };
+            const record = { key: date, plan: 0, result: 0 };
 
-            return issues.reduce(sumRecord, record);
+            return issues.reduce(this.summaryIssueInRecord, record);
+        });
+    }
+    summaryProjects (projects) {
+        return projects.map(project=>{
+            const issues = project.issues;
+            const record = { key: project, plan: 0, result: 0 };
+
+            return issues.reduce(this.summaryIssueInRecord, record);
         });
     }
 }

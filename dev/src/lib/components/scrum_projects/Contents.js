@@ -1,14 +1,12 @@
 import React from 'react';
 
-import ButtonRefresh from '../common/ButtonRefresh.js';
-import ProductBacklogs from '../common/ProductBacklogs.js';
-
+import ButtonRefresh       from '../common/ButtonRefresh.js';
+import ProductBacklogs     from '../common/ProductBacklogs.js';
 import ProductAndMilestone from '../common/ProductAndMilestone.js';
-import Filter from '../common/Filter.js';
-import ChartBardown from '../common/ChartBardown.js';
-import OperatorOpenClose from '../common/OperatorOpenClose.js';
-
-import Summary from './Summary.js';
+import Filter              from '../common/Filter.js';
+import ChartBardown        from '../common/ChartBardown.js';
+import OperatorOpenClose   from '../common/OperatorOpenClose.js';
+import Summary             from '../common/Summary.js';
 
 const style = {
     root: {
@@ -78,7 +76,8 @@ export default function Contents (props) {
 
                 <div style={{display:'flex'}}>
                   <div>
-                    <Summary source={sorted_projects_filterd}/>
+                    <Summary type="projects"
+                             source={scrum.summaryProjects(sorted_projects_filterd)}/>
                   </div>
 
                   <div style={{flexGrow:1}}>

@@ -53,7 +53,8 @@ export default function Contents (props) {
 
             <div style={{display:'flex'}}>
               <div>
-                <Summary source={scrum.summaryDuedates(timeline.duedates_filterd)}/>
+                <Summary type="duedates"
+                         source={scrum.summaryDuedates(timeline.duedates_filterd)}/>
               </div>
 
               <div style={{flexGrow:1}}>
