@@ -19,7 +19,6 @@
 #####
 node_modules
 example/node_modules
-dev/node_modules
 dist/
 
 
@@ -28,9 +27,11 @@ dist/
 #####
 dev/.env.local
 dev/.eslintcache
+dev/node_modules
 
 
 #####
 ##### documents
 #####
 documents/.env.local
+documents/node_modules
