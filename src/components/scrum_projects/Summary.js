@@ -1,17 +1,4 @@
 import React from 'react';
-import moment from 'moment';
-
-function dt (v) {
-    if (v==='null')
-        return '未設定';
-
-    const m = moment(v);
-
-    if (!m.isValid())
-        return `??? (${v})`;
-
-    return m.format('MM-DD ddd');
-};
 
 function point (type, issues) {
     // issues
@@ -54,7 +41,7 @@ export default function Summary (props) {
                 <tbody>
                   {projects.map(project=>{
                       return (
-                          <tr>
+                          <tr key={project.title}>
                             <td>
                               {project.title}
                             </td>

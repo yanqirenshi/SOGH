@@ -8,15 +8,14 @@ export default function ScrumTimeline (props) {
     const [scrum, setScrum] = useState(null);
     const [updated_at, setUpdatedAt] = useState(null);
 
+    const sogh = props.sogh;
     const repository = props.repository;
+    const productbacklog_url_prefix = props.productbacklog_url_prefix;
 
     const invokeUpdate = () => setUpdatedAt(new Date());
     const refresh = () => scrum.fetch(repository, () => invokeUpdate());
 
-    useEffect(() => {
-        if (props.sogh)
-            setScrum(props.sogh.scrum());
-    }, [props.sogh]);
+    useEffect(() => sogh && setScrum(sogh.scrum()), [sogh]);
 
     useEffect(() => {
         if (!scrum) return;
@@ -50,7 +49,7 @@ export default function ScrumTimeline (props) {
         },
     };
 
-    const url_prefix = props.productbacklog_url_prefix || "/product-backlogs/";
+    const url_prefix = productbacklog_url_prefix || "/product-backlogs/";
 
     return (
         <>

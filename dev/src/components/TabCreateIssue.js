@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 
+import Issue from '../lib/js/Issue.js';
 import PanelCreateIssue from '../lib/components/PanelCreateIssue.js';
 
-import Issue from '../lib/js/Issue.js';
 
 const ISSUE = new Issue();
 const style = {
@@ -27,12 +27,12 @@ export default function TabCreateIssue (props) {
     const sogh = props.sogh;
 
     useEffect(() => {
-        const issue_data = ISSUE.makeIssueData();
+        const new_data = ISSUE.makeIssueData();
 
-        issue_data.repository = sogh.activeRepository();
-        issue_data.description = description_template;
+        new_data.repository = sogh.activeRepository();
+        new_data.description = description_template;
 
-        setData(issue_data);
+        setData(new_data);
     }, [sogh.activeRepository()]);
 
     const changeData = (data) => setData(data);
@@ -47,7 +47,9 @@ export default function TabCreateIssue (props) {
         <>
           {data &&
            <div style={style}>
-             <PanelCreateIssue data={data} callback={changeData} sogh={sogh}/>
+             <PanelCreateIssue data={data}
+                               sogh={sogh}
+                               callback={changeData}/>
 
              <div style={style.controller}>
                <button className="button is-warning">

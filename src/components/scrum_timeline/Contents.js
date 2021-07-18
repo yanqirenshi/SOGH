@@ -1,14 +1,21 @@
 import React from 'react';
 
-import ButtonRefresh from '../common/ButtonRefresh.js';
+import ButtonRefresh       from '../common/ButtonRefresh.js';
 import ProductAndMilestone from '../common/ProductAndMilestone.js';
-import DueDates from '../common/DueDates.js';
-import Filter from '../common/Filter.js';
-import OperatorOpenClose from '../common/OperatorOpenClose.js';
+import DueDates            from '../common/DueDates.js';
+import Filter              from '../common/Filter.js';
+import OperatorOpenClose   from '../common/OperatorOpenClose.js';
+import Summary             from '../common/Summary.js';
 
-import Summary from './Summary.js';
-
-import style from './Style.js';
+const style = {
+    root: {
+        display:'flex',
+        flexDirection: 'column',
+        width:'100%',
+        height:'100%',
+        padding: 22,
+    },
+};
 
 export default function Contents (props) {
     const scrum = props.scrum;
@@ -46,7 +53,8 @@ export default function Contents (props) {
 
             <div style={{display:'flex'}}>
               <div>
-                <Summary source={timeline.duedates_filterd}/>
+                <Summary type="duedates"
+                         source={scrum.summaryDuedates(timeline.duedates_filterd)}/>
               </div>
 
               <div style={{flexGrow:1}}>

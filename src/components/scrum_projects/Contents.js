@@ -1,16 +1,29 @@
 import React from 'react';
 
-import ButtonRefresh from '../common/ButtonRefresh.js';
-import ProductBacklogs from '../common/ProductBacklogs.js';
-
+import ButtonRefresh       from '../common/ButtonRefresh.js';
+import ProductBacklogs     from '../common/ProductBacklogs.js';
 import ProductAndMilestone from '../common/ProductAndMilestone.js';
-import Filter from '../common/Filter.js';
-import ChartBardown from '../common/ChartBardown.js';
-import OperatorOpenClose from '../common/OperatorOpenClose.js';
+import Filter              from '../common/Filter.js';
+import ChartBardown        from '../common/ChartBardown.js';
+import OperatorOpenClose   from '../common/OperatorOpenClose.js';
+import Summary             from '../common/Summary.js';
 
-import Summary from './Summary.js';
-
-import style from './Style.js';
+const style = {
+    root: {
+        marginBottom:111
+    },
+    head: {
+        padding: '11px 22px 0px 22px'
+    },
+    controller: {
+        padding: '0px 22px 8px 22px',
+        display:'flex',
+    },
+    body: {
+        display:'flex',
+        padding: '11px 22px'
+    },
+};
 
 export default function Contents (props) {
     const scrum = props.scrum;
@@ -31,15 +44,15 @@ export default function Contents (props) {
     const sorted_projects_filterd = sogh.sortProjectsByPriority(projects_filterd.list);
 
     return (
-        <div style={style.contents_area.root}>
-          <div style={style.contents_area.head}>
+        <div style={style.root}>
+          <div style={style.head}>
             <ProductAndMilestone repository={repository}
                                  milestones={milestones}
                                  milestone={milestone}
                                  callbacks={callbacks} />
           </div>
 
-          <div style={style.contents_area.controller}>
+          <div style={style.controller}>
             <div>
               <ButtonRefresh callbacks={callbacks} />
             </div>
@@ -50,7 +63,7 @@ export default function Contents (props) {
                     sogh={sogh} />
           </div>
 
-          <div style={style.contents_area.body}>
+          <div style={style.body}>
 
             <div style={{flexGrow:1}}>
               <div>
@@ -63,7 +76,8 @@ export default function Contents (props) {
 
                 <div style={{display:'flex'}}>
                   <div>
-                    <Summary source={sorted_projects_filterd}/>
+                    <Summary type="projects"
+                             source={scrum.summaryProjects(sorted_projects_filterd)}/>
                   </div>
 
                   <div style={{flexGrow:1}}>

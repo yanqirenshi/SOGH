@@ -40,7 +40,7 @@ export default function Contents (props) {
         return a.updatedAt < b.updatedAt ? -1 : 1;
     };
 
-    const issues_filterd = gtd.filteringIssues2filter(filter, issues).sort(sorter);
+    const issues_filterd = gtd.applyFilter(filter, issues).sort(sorter);
 
     return (
         <div style={style.root}>

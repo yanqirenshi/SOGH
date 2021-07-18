@@ -19,15 +19,6 @@ const style = {
             border: '1px solid #dddddd',
             padding: 3,
         },
-        item: {
-            padding: '4px 6px',
-            fontSize: 14,
-            background: '#eee',
-            marginBottom: 3,
-            border: '1px solid #dddddd',
-            borderRadius: 3,
-            display: 'flex',
-        },
     },
 };
 
@@ -40,7 +31,7 @@ function marker (d) {
     };
 
     return (
-        <div style={style}/>
+        <div style={style} data_id={d.id} />
     );
 }
 
@@ -56,12 +47,52 @@ function filtering (keyword, list) {
     });
 }
 
+function itemStyle (label, selected_labels) {
+    const slected = selected_labels.find(d=>d===label.id);
+
+    return {
+        padding: '4px 6px',
+        fontSize: 14,
+        color: slected ? 'rgb(162, 32, 65)' : '#333',
+        background: '#fff',
+        marginBottom: 3,
+        border: slected ? '1px solid rgb(162, 32, 65)' : '1px solid #dddddd',
+        borderRadius: 3,
+        display: 'flex',
+    };
+}
+
 export default function Labels (props) {
     const [keyword, setKeyword] = useState('');
 
+    const data = props.source;
+    const callback = props.callback;
+
     const change = (e) => setKeyword(e.target.value);
 
-    const labels_filterd = filtering(keyword, props.source.list);
+    const click = (e) => {
+        const data_id = e.target.getAttribute('data_id');
+        const new_data = {...data};
+
+        const new_labels = [];
+        let exist = false;
+        for (const label_id of new_data.labels) {
+            if (label_id===data_id)
+                exist = true;
+            else
+                new_labels.push(label_id);
+        }
+
+        if (!exist)
+            new_labels.push(data_id);
+
+        new_data.labels = new_labels;
+
+        callback(new_data);
+    };
+
+    const labels_filterd = filtering(keyword, props.labels.list);
+    const selected_labels = data.labels;
 
     return (
         <div style={style}>
@@ -78,7 +109,9 @@ export default function Labels (props) {
             {labels_filterd.map(d=>{
                 return (
                     <div key={d.id}
-                         style={style.list.item}>
+                         style={itemStyle(d, selected_labels)}
+                         data_id={d.id}
+                         onClick={click}>
                       {marker(d)}
                       {d.name}
                     </div>

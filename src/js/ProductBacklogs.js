@@ -2,9 +2,11 @@ import moment from 'moment';
 
 import * as query from './GraphQL.js';
 
-export default class ProductBacklogs {
+import SoghChild from './SoghChild.js';
+
+export default class ProductBacklogs extends SoghChild {
     constructor (token) {
-        this._sogh = null;
+        super();
 
         this._projects = [];
 
@@ -21,9 +23,6 @@ export default class ProductBacklogs {
     }
     apiV4 () {
         return this._sogh.api.v4;
-    }
-    viewer () {
-        return this._sogh._viewer;
     }
     getProjectsByRepository (repository, cb) {
         if (!this.apiV4()._token || !repository)

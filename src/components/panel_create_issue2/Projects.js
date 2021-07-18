@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import Project from '../../lib/js/Project.js';
+import Project from '../../js/Project.js';
 
 const PROJECT = new Project();
 
@@ -23,15 +23,6 @@ const style = {
             border: '1px solid #ddd',
             padding: 3,
         },
-        item: {
-            padding: '4px 6px',
-            fontSize: 14,
-            background: '#eee',
-            marginBottom: 3,
-            border: '1px solid #dddddd',
-            borderRadius: 3,
-            display: 'flex',
-        },
     },
 };
 
@@ -45,7 +36,7 @@ function marker (d) {
     };
 
     return (
-        <div style={style}/>
+        <div style={style} data_id={d.id} />
     );
 }
 
@@ -61,12 +52,52 @@ function filtering (keyword, list) {
     });
 }
 
+function itemStyle (project, selected_projects) {
+    const slected = selected_projects.find(d=>d===project.id);
+
+    return {
+        padding: '4px 6px',
+        fontSize: 14,
+        color: slected ? 'rgb(162, 32, 65)' : '#333',
+        background: '#fff',
+        marginBottom: 3,
+        border: slected ? '1px solid rgb(162, 32, 65)' : '1px solid #dddddd',
+        borderRadius: 3,
+        display: 'flex',
+    };
+}
+
 export default function Projects (props) {
     const [keyword, setKeyword] = useState('');
 
+    const data = props.source;
+    const callback = props.callback;
+
     const change = (e) => setKeyword(e.target.value);
 
-    const projects_filterd = filtering(keyword, props.source.list);
+    const click = (e) => {
+        const data_id = e.target.getAttribute('data_id');
+        const new_data = {...data};
+
+        const new_projects = [];
+        let exist = false;
+        for (const project_id of new_data.projects) {
+            if (project_id===data_id)
+                exist = true;
+            else
+                new_projects.push(project_id);
+        }
+
+        if (!exist)
+            new_projects.push(data_id);
+
+        new_data.projects = new_projects;
+
+        callback(new_data);
+    };
+
+    const projects_filterd = filtering(keyword, props.projects.list);
+    const selected_projects = data.projects;
 
     return (
         <div style={style}>
@@ -83,7 +114,9 @@ export default function Projects (props) {
             {projects_filterd.map(d=>{
                 return (
                     <div key={d.id}
-                         style={style.list.item}>
+                         style={itemStyle(d, selected_projects)}
+                         data_id={d.id}
+                         onClick={click}>
                       {marker(d)}
                       {d.name}
                     </div>

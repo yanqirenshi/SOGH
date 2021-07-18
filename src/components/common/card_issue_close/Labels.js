@@ -1,6 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
+
+import Label from '../../../js/Label.js';
 
 export default function Labels (props) {
+    const [label] = useState(new Label());
+
     const labels = props.issue.labels.nodes;
 
     if (labels.length===0)
@@ -12,7 +16,7 @@ export default function Labels (props) {
             marginLeft: 3,
             marginRight: 3,
             marginBottom: 3,
-            color: props.sogh.labelColor('#' + d.color),
+            color: label.color('#' + d.color),
             background: '#' + d.color,
             padding: '1px 4px',
             borderRadius: 3,

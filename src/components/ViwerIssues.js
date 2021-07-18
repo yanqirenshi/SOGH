@@ -11,19 +11,19 @@ export default function ViwerIssues (props) {
     const [updated_at, setUpdatedAt] = useState(null);
 
     const sogh = props.sogh;
-
     const repository = props.repository;
+    const listener = props.listener;
 
     useEffect(() => {
-        if (!props.sogh) return;
+        if (!sogh) return;
 
         const gtd = sogh.gtd();
 
-        if (props.listener)
-            gtd.addListeners(props.listener);
+        if (listener)
+            gtd.addListeners(listener);
 
         setGtd(gtd);
-    }, [props.sogh]);
+    }, [sogh]);
 
     useEffect(() => {
             setFetchedAt(new Date());
@@ -32,7 +32,7 @@ export default function ViwerIssues (props) {
     useEffect(() => {
         if (gtd && gtd.isCanFetchData())
             gtd.getIssuesOpenByRepository(repository, gtd.viewer(), (issues) => {
-                gtd._filter = gtd.issues2filterContents(gtd._filter, issues);
+                gtd._filter = gtd.issues2filter(gtd._filter, issues);
                 setUpdatedAt(new Date());
             });
     }, [fetched_at]);
@@ -65,7 +65,7 @@ export default function ViwerIssues (props) {
           {gtd && <Controller updated_at={updated_at}
                               filter={gtd._filter}
                               callbaks={callbaks}
-                              sogh={props.sogh} />}
+                              sogh={sogh} />}
 
           {gtd && <Contents gtd={gtd}
                             issues={gtd._pool.list}

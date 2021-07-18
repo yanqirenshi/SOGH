@@ -105,7 +105,7 @@ export default class Filter {
 
         return this._filter.others;
     }
-    //
+    // issues filter
     issues2filter (issues) {
         const assignees = { ht: {}, list: [] };
         const statuses = { ht: {}, list: [] };
@@ -253,5 +253,43 @@ export default class Filter {
 
             return list;
         }, []);
+    }
+    // issues filter
+    issues2filter4Gtd (old_filter, issues) {
+        const projects = {};
+        const milestones = {};
+
+        const active = (type, milestone) => {
+            const old = old_filter[type].ht[milestone.id];
+            return old ? old.active : true;
+        };
+
+        for (const issue of issues) {
+            const milestone = issue.milestone;
+            if (milestone && !milestones[milestone.id]) {
+                milestones[milestone.id] = milestone;
+                milestones[milestone.id].active = active('milestones', milestone);
+            }
+
+            const cards = issue.projectCards.nodes;
+            if (cards.length>0)
+                for (const card of cards) {
+                    if (!card.column)
+                        continue;
+
+                    const project = card.column.project;
+
+                    if (!projects[project.id]) {
+                        projects[project.id] = project;
+                        projects[project.id].active = active('projects', project);
+                    }
+                }
+        }
+
+        return {
+            projects:   { ht: projects,   list: Object.values(projects) },
+            milestones: { ht: milestones, list: Object.values(milestones) },
+            contents: old_filter.contents,
+        };
     }
 }

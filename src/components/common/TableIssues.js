@@ -1,7 +1,9 @@
 import React from 'react';
-import { Link } from "react-router-dom";
 import moment from 'moment';
 import {LinkBlank} from './Links.js';
+
+import SprintBacklogName from './table_issues/SprintBacklogName.js';
+import Labels from './Labels.js';
 
 function dt (v) {
     if (!v) return '';
@@ -19,39 +21,8 @@ const style = {
     },
 };
 
-function color (hexcolor) {
-    var r = parseInt( hexcolor.substr( 1, 2 ), 16 ) ;
-    var g = parseInt( hexcolor.substr( 3, 2 ), 16 ) ;
-    var b = parseInt( hexcolor.substr( 5, 2 ), 16 ) ;
-
-    return ( ( ( (r * 299) + (g * 587) + (b * 114) ) / 1000 ) < 128 ) ? "white" : "black" ;
-};
-
-function labelStyle (d) {
-    const background = '#' + d.color;
-    return {
-        color: color(background),
-        background: background,
-        whiteSpace: 'nowrap',
-        padding: ' 2px 4px',
-        borderRadius: 5,
-        display: 'inline-block',
-        marginRight: '.25em',
-        marginBottom: '.25em',
-        fontSize: 12,
-    };
-}
-
 function diff (plan, result) {
     return plan - result;
-}
-
-function prjColumn (issue) {
-    return issue.projectCards.nodes.map(d=>{
-        return <p key={d.column.id}>
-                 {d.column.name}
-               </p>;
-    });
 }
 
 function due (v) {
@@ -66,68 +37,36 @@ function due (v) {
     return m.format('MM-DD ddd');
 }
 
-function prjNum (issue) {
-    const project = issue.project;
-
-    if (!project.id)
-        return '';
-
-    return (
-        <LinkBlank href={project.url}>
-          {project.number}
-        </LinkBlank>
-    );
-}
-
-function prjName (issue, productbacklog_url_prefix) {
-    const style = {
-        normal: {
-            color: 'inherit',
-            textDecoration: 'underline',
-            textUnderlineOffset: 2,
-            textDecorationColor: '#ddd',
-            textDecorationStyle: 'dotted',
-        },
-    };
-
-    return (
-        <Link style={style.normal}
-              to={productbacklog_url_prefix + issue.project.id}>
-          {issue.project.name || ''}
-        </Link>
-    );
-}
-
 function prjPri (sogh, issue) {
     return sogh.priorityLabel(issue.project.priority);
 }
 
 function makeTrs (issue, sogh, productbacklog_url_prefix) {
+    const point_result = issue.point.results ? issue.point.results.total : issue.point.result;
+
     return (
         <tr key={issue.id}>
           <td style={sogh.headerColor(issue.project)}>
             {prjPri(sogh, issue)}
-          </td>
-          <td>{prjNum(issue)}</td>
-          <td>{prjName(issue, productbacklog_url_prefix)}</td>
-          <td style={style.nowrap}>
-            {prjColumn(issue)}
           </td>
           <td style={style.right}>
             <LinkBlank href={issue.url}>
               {issue.number}
             </LinkBlank>
           </td>
-          <td>{issue.title}</td>
-          <td>{issue.labels.nodes.map(l => {
-              const label_style = labelStyle(l);
-              return <p key={l.id}
-                               style={label_style}>
-                               <LinkBlank href={l.url}>
-                                 {l.name}
-                               </LinkBlank>
-                             </p>;
-          })}</td>
+          <td>
+            <SprintBacklogName issue={issue}
+                               productbacklog_url_prefix={productbacklog_url_prefix}/>
+          </td>
+          <td>
+            <Labels issue={issue}/>
+          </td>
+          <td style={style.nowrap}>
+            {issue.owner}
+          </td>
+          <td style={style.nowrap}>
+            {due(issue.due_date)}
+          </td>
           <td style={style.nowrap}>
             {issue.assignees.nodes.map(a => {
                 return (
@@ -137,13 +76,15 @@ function makeTrs (issue, sogh, productbacklog_url_prefix) {
                 );
             })}
           </td>
-          <td style={style.nowrap}>
-            {due(issue.due_date)}
+          <td>
+            {issue.date_next_action}
           </td>
           <td style={style.right}>{issue.point.plan}</td>
-          <td style={style.right}>{issue.point.result}</td>
           <td style={style.right}>
-            {diff(issue.point.plan, issue.point.result)}
+            {point_result}
+          </td>
+          <td style={style.right}>
+            {diff(issue.point.plan, point_result)}
           </td>
           {/* <td style={style.nowrap}>{dt(issue.createdAt)}</td> */}
           <td style={style.nowrap}>{dt(issue.updatedAt)}</td>
@@ -162,8 +103,9 @@ export default function TableIssues (props) {
                style={{fontSize:14}}>
           <thead>
             <tr>
-              <th colSpan="4">Product Backlog</th>
-              <th colSpan="5">Sprint Backlog</th>
+              <th colSpan="4">Sprint Backlog</th>
+              <th colSpan="2">Management</th>
+              <th colSpan="2">Work</th>
               <th colSpan="3">Point</th>
               {/* <th>Create</th> */}
               <th>Update</th>
@@ -171,14 +113,13 @@ export default function TableIssues (props) {
             </tr>
             <tr>
               <th>優</th>
-              <th>Num</th>
-              <th>Name</th>
-              <th>Col</th>
-              <th rowSpan="2">#</th>
-              <th rowSpan="2">Title</th>
-              <th rowSpan="2">Labels</th>
-              <th rowSpan="2">Assignees</th>
-              <th rowSpan="2">Due Date</th>
+              <th>#</th>
+              <th>Title</th>
+              <th style={style.nowrap}>Labels</th>
+              <th style={style.nowrap}>Owner</th>
+              <th style={style.nowrap}>Due</th>
+              <th style={style.nowrap}>Assignees</th>
+              <th style={style.nowrap}>Next</th>
               <th>Plan</th>
               <th>Result</th>
               <th>Diff</th>

@@ -4,7 +4,18 @@ import Cards from './Cards.js';
 import Table from './Table.js';
 import Controller from './Controller.js';
 
-import style from '../scrum_projects/Style.js';
+const style = {
+    root: {
+        display:'flex',
+        flexDirection: 'column',
+        width:'100%',
+        height:'100%',
+    },
+    controller: {
+        paddingLeft: 88,
+        paddingRight: 88,
+    },
+};
 
 export default function Contents (props) {
     const [updated_at, setUpdatedAt] = useState(null);
