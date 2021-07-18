@@ -54,9 +54,9 @@ export default function Summary (props) {
                 </thead>
 
                 <tbody>
-                  {data.map(d=>{
+                  {data.map((d,i)=>{
                       return (
-                          <tr key={d.date}>
+                          <tr key={i}>
                             <td style={style.td_key}>
                               {dt(type, d)}
                             </td>

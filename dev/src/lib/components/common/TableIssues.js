@@ -56,7 +56,7 @@ function makeTrs (issue, sogh, productbacklog_url_prefix) {
           </td>
           <td>
             <SprintBacklogName issue={issue}
-                               productbacklogf_url_prefix={productbacklog_url_prefix}/>
+                               productbacklog_url_prefix={productbacklog_url_prefix}/>
           </td>
           <td>
             <Labels issue={issue}/>
