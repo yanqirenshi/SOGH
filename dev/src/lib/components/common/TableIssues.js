@@ -34,7 +34,7 @@ function due (v) {
     if (!m.isValid())
         return '';
 
-    return m.format('MM-DD ddd');
+    return m.format('MM-DD');
 }
 
 function prjPri (sogh, issue) {
@@ -76,8 +76,8 @@ function makeTrs (issue, sogh, productbacklog_url_prefix) {
                 );
             })}
           </td>
-          <td>
-            {issue.date_next_action}
+          <td style={style.nowrap}>
+            {due(issue.date_next_action)}
           </td>
           <td style={style.right}>{issue.point.plan}</td>
           <td style={style.right}>

@@ -72,8 +72,8 @@ function makeTrs (issue) {
                           </span>;
                })}
              </td>
-             <td>
-               {dt(issue.date_next_action)}
+             <td style={style.nowrap}>
+               {due(issue.date_next_action)}
              </td>
              <td style={style.right}>{issue.point.plan}</td>
              <td style={style.right}>

@@ -9,10 +9,11 @@ function dt (type, v) {
         return v.key.name;
 
     if (type==='duedates') {
-        const m = moment(v);
+        const date = v.key;
+        const m = moment(date);
 
         if (!m.isValid())
-            return `??? (${v})`;
+            return `??? (${date})`;
 
         return m.format('MM-DD ddd');
     }
