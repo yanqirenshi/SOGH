@@ -34,6 +34,20 @@ function itemStyle (label, selected_assignees) {
     };
 }
 
+function split (selected, list) {
+    if (selected.length===0)
+        return { selected: [], un_selected: list };
+
+    return list.reduce((out, d)=> {
+        if (selected.find(id=>id===d.id))
+            out.selected.push(d);
+        else
+            out.un_selected.push(d);
+
+        return out;
+    }, { selected: [], un_selected: [] });
+};
+
 export default function Assignees (props) {
     const [keyword, setKeyword] = useState('');
 
@@ -66,6 +80,10 @@ export default function Assignees (props) {
     const assignees_filterd = filtering(keyword, props.assignees.list);
     const selected_assignees = data.assignees;
 
+    const x = split(selected_assignees, assignees_filterd);
+
+    const list = [].concat(x.selected).concat(x.un_selected);
+
     return (
         <div style={style}>
           <input className="input is-small"
@@ -75,7 +93,7 @@ export default function Assignees (props) {
                  value={keyword}
                  onChange={change} />
 
-          {assignees_filterd.map(d=>{
+          {list.map(d=>{
               return (
                   <div key={d.id}
                        style={itemStyle(d, selected_assignees)}

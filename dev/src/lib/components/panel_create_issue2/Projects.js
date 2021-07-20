@@ -30,6 +30,7 @@ function marker (d) {
     const color = PROJECT.colorByPriority(d.priority);
     const style = {
         width: 6,
+        minWidth: 6,
         background : color.background,
         marginRight: 6,
         borderRadius: 2,
@@ -67,6 +68,20 @@ function itemStyle (project, selected_projects) {
     };
 }
 
+function split (selected, list) {
+    if (selected.length===0)
+        return { selected: [], un_selected: list };
+
+    return list.reduce((out, d)=> {
+        if (selected.find(id=>id===d.id))
+            out.selected.push(d);
+        else
+            out.un_selected.push(d);
+
+        return out;
+    }, { selected: [], un_selected: [] });
+};
+
 export default function Projects (props) {
     const [keyword, setKeyword] = useState('');
 
@@ -99,8 +114,24 @@ export default function Projects (props) {
     const projects_filterd = filtering(keyword, props.projects.list);
     const selected_projects = data.projects;
 
+    const x = split(selected_projects, projects_filterd);
+
     return (
         <div style={style}>
+          <div>
+            {x.selected.map(d=>{
+                return (
+                    <div key={d.id}
+                         style={itemStyle(d, selected_projects)}
+                         data_id={d.id}
+                         onClick={click}>
+                      {marker(d)}
+                      {d.name}
+                    </div>
+                );
+            })}
+          </div>
+
           <div style={style.search}>
             <input className="input is-small"
                    type="text"
@@ -111,7 +142,7 @@ export default function Projects (props) {
 
           <div style={style.list}>
             <div style={style.list.container}>
-            {projects_filterd.map(d=>{
+            {x.un_selected.map(d=>{
                 return (
                     <div key={d.id}
                          style={itemStyle(d, selected_projects)}
