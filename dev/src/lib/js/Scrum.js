@@ -33,6 +33,8 @@ export default class Scrum extends SoghChild {
             issues_filterd: null,
             duedates: {ht:[],list:[]},
             duedates_filterd: {ht:[],list:[]},
+            duedates_filterd: {ht:[],list:[]},
+            next_action_dates_filterd: {ht:[],list:[]},
             close_duedates: {},
         };
     }
@@ -168,7 +170,7 @@ export default class Scrum extends SoghChild {
 
         return null;
     }
-    issues2dueDates (issues) {
+    issues2dates (type, issues) {
         const ht = {};
         const list = [];
 
@@ -185,7 +187,7 @@ export default class Scrum extends SoghChild {
         };
 
         for (const issue of issues) {
-            const key = dd(issue.closedAt || issue.due_date);
+            const key = dd(issue.closedAt || issue[type]);
 
             if (!ht[key])
                 ht[key] = [];
@@ -238,12 +240,16 @@ export default class Scrum extends SoghChild {
         const data = this._timeline;
         const filter = data.filter;
 
-        data.duedates = this.issues2dueDates(issues);
+        data.duedates = this.issues2dates('due_date', issues);
+        data.next_action_dates = this.issues2dates('date_next_action', issues);
 
         data.issues_filterd = filter.apply(issues);
 
         data.duedates_filterd
-            = this.issues2dueDates(data.issues_filterd);
+            = this.issues2dates('due_date', data.issues_filterd);
+
+        data.next_action_dates_filterd
+            = this.issues2dates('date_next_action', data.issues_filterd);
     }
     makeFilterdProjects (issues) {
         const data = this._projects;
