@@ -2,14 +2,15 @@ import React from 'react';
 import moment from 'moment';
 
 function dt (type, v) {
-    if (v==='null')
-        return '未設定';
-
     if (type==='projects')
         return v.key.name;
 
     if (type==='duedates') {
         const date = v.key;
+
+        if (date==='null')
+            return '未設定';
+
         const m = moment(date);
 
         if (!m.isValid())

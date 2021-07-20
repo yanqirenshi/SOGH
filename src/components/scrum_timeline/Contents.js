@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import ButtonRefresh       from '../common/ButtonRefresh.js';
 import ProductAndMilestone from '../common/ProductAndMilestone.js';
@@ -18,6 +18,8 @@ const style = {
 };
 
 export default function Contents (props) {
+    const [mode, setMode] = useState('0');
+
     const scrum = props.scrum;
 
     const repository = props.repository;
@@ -27,6 +29,10 @@ export default function Contents (props) {
     const milestone = base.milestone;
     const milestones = base.milestones;
     const timeline = scrum._timeline;
+
+    const change = (e) => setMode(e.target.getAttribute('code'));
+
+    const dates = mode==='0' ? timeline.next_action_dates_filterd : timeline.duedates_filterd;
 
     return (
         <div style={style.root}>
@@ -49,20 +55,34 @@ export default function Contents (props) {
           </div>
 
           <div>
-            <OperatorOpenClose callbacks={callbacks.duedate} />
+            <div style={{display: 'flex'}}>
+              <OperatorOpenClose callbacks={callbacks.duedate} />
+
+              <div className="control" style={{marginLeft:22}}>
+                <label className="radio">
+                  <input type="radio" checked={mode==='0'}code="0" onChange={change} />
+                  Next Action Date
+                </label>
+                <label className="radio">
+                  <input type="radio" checked={mode==='1'} code="1" onChange={change} />
+                  Due Date
+                </label>
+              </div>
+
+            </div>
 
             <div style={{display:'flex'}}>
               <div>
-                <Summary type="duedates"
-                         source={scrum.summaryDuedates(timeline.duedates_filterd)}/>
+                 <Summary type="duedates"
+                          source={scrum.summaryDuedates(dates)}/>
               </div>
 
               <div style={{flexGrow:1}}>
-                <DueDates duedates={timeline.duedates_filterd}
-                          close_duedates={timeline.close_duedates}
-                          callbacks={props.callbacks}
-                          sogh={scrum._sogh}
-                          productbacklog_url_prefix={props.productbacklog_url_prefix} />
+                 <DueDates duedates={dates}
+                           close_duedates={timeline.close_duedates}
+                           callbacks={props.callbacks}
+                           sogh={scrum._sogh}
+                           productbacklog_url_prefix={props.productbacklog_url_prefix} />
               </div>
             </div>
           </div>

@@ -53,7 +53,7 @@ function makeTrs (issue) {
                </LinkBlank>
              </td>
              <td>
-               <p style={{fontSize: 12}}>{prjColumn(issue)}</p>
+               <div style={{fontSize: 12}}>{prjColumn(issue)}</div>
                <p>{issue.title}</p>
              </td>
              <td>
