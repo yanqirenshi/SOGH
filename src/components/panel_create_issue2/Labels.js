@@ -25,6 +25,7 @@ const style = {
 function marker (d) {
     const style = {
         width: 6,
+        minWidth: 6,
         background : '#' + d.color,
         marginRight: 6,
         borderRadius: 2,
@@ -62,6 +63,20 @@ function itemStyle (label, selected_labels) {
     };
 }
 
+function split (selected, list) {
+    if (selected.length===0)
+        return { selected: [], un_selected: list };
+
+    return list.reduce((out, d)=> {
+        if (selected.find(id=>id===d.id))
+            out.selected.push(d);
+        else
+            out.un_selected.push(d);
+
+        return out;
+    }, { selected: [], un_selected: [] });
+};
+
 export default function Labels (props) {
     const [keyword, setKeyword] = useState('');
 
@@ -94,8 +109,24 @@ export default function Labels (props) {
     const labels_filterd = filtering(keyword, props.labels.list);
     const selected_labels = data.labels;
 
+    const x = split(selected_labels, labels_filterd);
+
     return (
         <div style={style}>
+          <div>
+            {x.selected.map(d=>{
+                return (
+                    <div key={d.id}
+                         style={itemStyle(d, selected_labels)}
+                         data_id={d.id}
+                         onClick={click}>
+                      {marker(d)}
+                      {d.name}
+                    </div>
+                );
+            })}
+          </div>
+
           <div style={style.search}>
             <input className="input is-small"
                    type="text"
@@ -106,7 +137,7 @@ export default function Labels (props) {
 
           <div style={style.list}>
             <div style={style.list.container}>
-            {labels_filterd.map(d=>{
+            {x.un_selected.map(d=>{
                 return (
                     <div key={d.id}
                          style={itemStyle(d, selected_labels)}

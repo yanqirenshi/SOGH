@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import moment from 'moment';
 
 const style = {
     display: 'flex',
@@ -6,6 +7,34 @@ const style = {
     overflow: 'auto',
     paddingTop: 3,
 };
+
+function marker (today, d) {
+    const style = {
+        width: 6,
+        minWidth: 6,
+        height: '100%',
+        background : 'rgb(162, 32, 65)',
+        marginRight: 6,
+        borderRadius: 2,
+    };
+
+    const ret = /(\d+-\d+-\d+)\s+〜\s+(\d+-\d+-\d+)/.exec(d.title);
+
+    if (!ret)
+        return null;
+
+    const from = moment(ret[1]);
+    const to   = moment(ret[2]);
+
+    if (!from.isValid() || !to.isValid())
+        return null;
+
+
+    if (today.isSameOrAfter(from) && today.isSameOrBefore(to.add(1,'d')))
+        return <div style={style} />;
+
+    return null;
+}
 
 function filtering (keyword, list) {
     if (keyword.trim()==='')
@@ -32,8 +61,23 @@ function itemStyle (mailestone, selected_milestone) {
         marginBottom: 3,
         padding: '3px 6px',
         fontSize: 14,
+        display: 'flex',
     };
 }
+
+function split (selected, list) {
+    if (selected.length===0)
+        return { selected: [], un_selected: list };
+
+    return list.reduce((out, d)=> {
+        if (selected.find(id=>id===d.id))
+            out.selected.push(d);
+        else
+            out.un_selected.push(d);
+
+        return out;
+    }, { selected: [], un_selected: [] });
+};
 
 export default function Milestones (props) {
     const [keyword, setKeyword] = useState('');
@@ -42,9 +86,6 @@ export default function Milestones (props) {
     const callback = props.callback;
 
     const change = (e) => setKeyword(e.target.value);
-
-    const milestones_filterd = filtering(keyword, props.milestones.list);
-    const selected_milestone = data.milestone;
 
     const click = (e) => {
         const data_id = e.target.getAttribute('data_id');
@@ -58,6 +99,15 @@ export default function Milestones (props) {
         callback(new_data);
     };
 
+    const today = moment().startOf('day');
+
+    const milestones_filterd = filtering(keyword, props.milestones.list);
+    const selected_milestone = data.milestone;
+
+    const x = split([selected_milestone], milestones_filterd);
+
+    const list = [].concat(x.selected).concat(x.un_selected);
+
     return (
         <div style={style}>
           <input className="input is-small"
@@ -67,12 +117,13 @@ export default function Milestones (props) {
                  value={keyword}
                  onChange={change} />
 
-          {milestones_filterd.map(d=>{
+          {list.map(d=>{
               return (
                   <div key={d.id}
                        style={itemStyle(d, selected_milestone)}
                        data_id={d.id}
                        onClick={click}>
+                    {marker(today, d)}
                     {d.title}
                   </div>
               );
