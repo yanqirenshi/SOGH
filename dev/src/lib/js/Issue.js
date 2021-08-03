@@ -56,7 +56,7 @@ export default class Issue extends GraphQLNode {
         return next_action ? next_action[1] : null;;
     }
     getOwnerFromBody (body) {
-        const owner = /.*\$[O|o]wner:\s+(\S+).*/.exec(body);
+        const owner = /.*\$[O|o]wner:*\s+(\S+).*/.exec(body);
         return owner ? owner[1] : null;
     }
     addAnotetionValue (issue) {
