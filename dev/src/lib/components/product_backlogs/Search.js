@@ -50,7 +50,7 @@ export default function Search (props) {
 
         return '???';
     };
-
+    console.log(props.filter.keyword);
     return (
         <div style={style}>
 
@@ -63,7 +63,8 @@ export default function Search (props) {
               <input className="input is-small"
                      type="text"
                      placeholder="Search Project Name"
-                     onKeyUp={changeKeyword} />
+                     value={props.filter.keyword || ''}
+                     onChange={changeKeyword} />
 
               <button className="button is-small"
                       onClick={clearKeyword}>
