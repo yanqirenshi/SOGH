@@ -15,6 +15,7 @@ import project_by_id from './graphql/project_by_id.js';
 import repository from './graphql/repository.js';
 import viwer from './graphql/viwer.js';
 import create_issue from './graphql/create_issue.js';
+import update_issue_body from './graphql/update_issue_body.js';
 
 export {
     issues_by_milestone,
@@ -32,4 +33,5 @@ export {
     repository,
     viwer,
     create_issue,
+    update_issue_body,
 }
