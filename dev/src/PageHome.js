@@ -8,6 +8,7 @@ import * as SOGH from './lib/index.js';
 import Tabs from './components/Tabs.js';
 import TabCreateIssue from './components/TabCreateIssue.js';
 import IssueDescription from './components/IssueDescription.js';
+import TabPanelIssue from './components/TabPanelIssue.js';
 
 function isActive (a,b) {
     if (a.code===b)
@@ -18,7 +19,7 @@ function isActive (a,b) {
 
 function PageHome (props) {
     const [tabs] = useState([
-        { code: 'id',  label: 'Issue Description' },
+        { code: 'pi',  label: 'Panel Issue' },
         { code: 'ci',  label: 'Create Issue' },
         { code: 'vis', label: 'Issues' },
         { code: 'sct', label: 'Scrum (Timeline)' },
@@ -26,6 +27,7 @@ function PageHome (props) {
         { code: 'sp',  label: 'Sprint planning' },
         { code: 'pb',  label: 'Product backlog' },
         { code: 'rp',  label: 'Reports' },
+        { code: 'id',  label: 'Issue Description' },
     ]);
 
     const sogh = props.sogh;
@@ -54,9 +56,7 @@ function PageHome (props) {
 
 
           <div style={isActive(tabs[0], selected)}>
-            {sogh && <IssueDescription sogh={sogh}
-                                        repository={repository}
-                                        listener={listener} />}
+            {sogh && <TabPanelIssue repository={repository} sogh={sogh} />}
           </div>
 
           <div style={isActive(tabs[1], selected)}>
@@ -93,6 +93,12 @@ function PageHome (props) {
           <div style={isActive(tabs[7], selected)}>
             <SOGH.Reports sogh={sogh}
                           repository={repository} />
+          </div>
+
+          <div style={isActive(tabs[8], selected)}>
+            {sogh && <IssueDescription sogh={sogh}
+                                       repository={repository}
+                                       listener={listener} />}
           </div>
         </div>
     );
