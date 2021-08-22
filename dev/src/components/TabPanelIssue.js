@@ -14,7 +14,7 @@ const style = {
     }
 };
 
-export default function TabCreateIssueNew (props) {
+export default function TabPanelIssue (props) {
     const [issues, setIssues] = useState([]);
 
     const sogh = props.sogh;
@@ -29,7 +29,7 @@ export default function TabCreateIssueNew (props) {
     return (
         <div style={style}>
           <div style={style.container}>
-            {issues.map(issue => <TabPanelIssueCard issue={issue} sogh={sogh}/>)}
+            {issues.map(issue => <TabPanelIssueCard key={issue.id} issue={issue} sogh={sogh}/>)}
           </div>
         </div>
     );

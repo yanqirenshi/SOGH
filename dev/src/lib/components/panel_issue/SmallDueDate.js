@@ -5,7 +5,7 @@ const style = {
     marginTop:8
 };
 
-export default function DueDate (props) {
+export default function SmallDueDate (props) {
     const issue = props.issue;
     const due_date = issue.due_date;
 

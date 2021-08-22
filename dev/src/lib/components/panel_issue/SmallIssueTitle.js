@@ -7,7 +7,7 @@ const style = {
     fontWeight:'bold',
 };
 
-export default function IssueTitle (props) {
+export default function SmallIssueTitle (props) {
     const issue = props.issue;
 
     return (

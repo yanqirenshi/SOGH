@@ -46,7 +46,7 @@ export default function LargeProject (props) {
                 </div>
             )}
             <button className="button is-small"
-                    style={style.button}>
+                    style={style.button} disabled>
               Change
             </button>
           </Field>

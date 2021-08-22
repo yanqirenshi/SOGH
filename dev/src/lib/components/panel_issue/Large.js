@@ -1,22 +1,21 @@
 import React from 'react';
 
-import Labels from './Labels.js';
-import NextActionDate from './NextActionDate.js';
+import Labels          from './Labels.js';
+import NextActionDate  from './NextActionDate.js';
 import LargeIssueTitle from './LargeIssueTitle.js';
-import LargeProject from './LargeProject.js';
-import LargeDueDate from './LargeDueDate.js';
-import LargeMilestone from './LargeMilestone.js';
-import LargePlans from './LargePlans.js';
-import LargeResults from './LargeResults.js';
+import LargeProject    from './LargeProject.js';
+import LargeDueDate    from './LargeDueDate.js';
+import LargeMilestone  from './LargeMilestone.js';
+import LargePlans      from './LargePlans.js';
+import LargeResults    from './LargeResults.js';
 
-export default function PanelIssueLarge (props) {
+export default function Large (props) {
     const issue = props.issue;
+    const callback = props.callback;
 
     const milestone = issue.milestone;
 
     const active = props.sogh.active();
-
-    const dummy = (v) => { console.log(v); };
 
     return (
         <div>
@@ -37,11 +36,11 @@ export default function PanelIssueLarge (props) {
 
           <div style={{display:'flex', marginTop:11, paddingLeft:11, paddingRight:11}}>
             <div>
-              <LargeDueDate issue={issue} callback={dummy} />
+              <LargeDueDate issue={issue} callback={callback} />
             </div>
 
             <div style={{marginLeft:22}}>
-              <NextActionDate issue={issue} callback={dummy} />
+              <NextActionDate issue={issue} callback={callback} />
             </div>
           </div>
 

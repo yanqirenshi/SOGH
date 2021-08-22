@@ -28,7 +28,7 @@ export default function LargeMilestone (props) {
             </p>
 
             <button className="button is-small"
-                    style={style.button}>
+                    style={style.button} disabled>
               Change
             </button>
           </Field>

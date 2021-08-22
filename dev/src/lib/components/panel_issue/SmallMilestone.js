@@ -7,7 +7,7 @@ const style = {
     marginTop:8
 };
 
-export default function Milestone (props) {
+export default function SmallMilestone (props) {
     const issue = props.issue;
 
     const milestone = issue.milestone;

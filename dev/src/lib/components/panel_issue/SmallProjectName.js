@@ -16,7 +16,7 @@ const style = {
     marginTop:8
 };
 
-export default function ProjectName (props) {
+export default function SmallProjectName (props) {
     const issue = props.issue;
 
     const column = getProjectColumn(issue);

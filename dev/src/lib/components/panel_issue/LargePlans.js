@@ -10,7 +10,9 @@ export default function LargePlans (props) {
 
     return (
         <div className="field">
-          <label className="label">Plan</label>
+          <label className="label" style={{marginBottom:0}}>
+            Plan
+          </label>
           <div className="control" style={{display:'flex'}}>
             <div style={style}>
               <div>

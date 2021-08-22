@@ -1,10 +1,10 @@
 import React from 'react';
 
-import IssueTitle from './IssueTitle.js';
-import Labels from './Labels.js';
-import DueDate from './DueDate.js';
-import ProjectName from './ProjectName.js';
-import Milestone from './Milestone.js';
+import Labels           from './Labels.js';
+import SmallIssueTitle  from './SmallIssueTitle.js';
+import SmallDueDate     from './SmallDueDate.js';
+import SmallProjectName from './SmallProjectName.js';
+import SmallMilestone   from './SmallMilestone.js';
 
 function getProjectColumn (issue) {
     const project_card = issue.projectCards.nodes[0];
@@ -15,7 +15,7 @@ function getProjectColumn (issue) {
     return project_card.column;
 }
 
-export default function PanelIssueSmall (props) {
+export default function Small (props) {
     const issue = props.issue;
 
     const milestone = issue.milestone;
@@ -24,17 +24,17 @@ export default function PanelIssueSmall (props) {
 
     return (
         <div style={{wordBreak: 'break-all', padding: 11}}>
-          <IssueTitle issue={issue} />
+          <SmallIssueTitle issue={issue} />
           <Labels issue={issue} />
-          <DueDate issue={issue} />
-          <ProjectName issue={issue} />
+          <SmallDueDate issue={issue} />
+          <SmallProjectName issue={issue} />
 
           {!column &&
            <div style={{fontSize:12, marginTop:8, color: '#f00'}}>
              <p>Project なし</p>
            </div>}
 
-          {milestone && <Milestone issue={issue}/>}
+          {milestone && <SmallMilestone issue={issue}/>}
         </div>
     );
 }

@@ -7,6 +7,56 @@ export default class Issue extends GraphQLNode {
 
         this._data = data;
     }
+    //
+    body (v) {
+        if (arguments.length===0)
+            return this._core.body;
+
+        this._core.body = v || '';
+
+        return this._core.body;
+    }
+    dueDate (v) {
+        const body = this.body();
+
+        if (arguments.length===0 || this.dueDate()===v)
+            return this.getDueDateFromBody(body);
+
+        const replacer = () => '$Date.Due ' + (v ? v : 'yyyy-mm-dd');
+
+        if (body.match(/.*[@|$]Date\.Due:*\s+.*/)) {
+            const newString = body.replace(/.*[@|$]Date\.Due:*\s+(\S+).*/, replacer);
+
+            this.body(newString);
+        } else if (body.match(/.*[@|$]Due\.Date:*\s+.*/)) {
+            const newString = body.replace(/.*[@|$]Due\.Date:*\s+(\S+).*/, replacer);
+
+            this.body(newString);
+        } else {
+            this.body(body + '\n$Date.Due ' + (v ? v : 'yyyy-mm-dd'));
+        }
+
+        return this.getDueDateFromBody(body);
+    }
+    nextActionDate (v) {
+        const body = this.body();
+
+        if (arguments.length===0 || this.dueDate()===v)
+            return this.getNextActionFromBody(body);
+
+        const replacer = () => '$Date.Next ' + (v ? v : 'yyyy-mm-dd');
+
+        if (body.match(/.*[@|$]Date\.Next:*\s+.*/)) {
+            const newString = body.replace(/.*[@|$]Date\.Next:*\s+(\S+).*/, replacer);
+
+            this.body(newString);
+        } else {
+            this.body(body + '\n$Date.Next ' + (v ? v : 'yyyy-mm-dd'));
+        }
+
+        return this.getNextActionFromBody(body);
+    }
+    //
     getPointResultsFromBody (body) {
         const rs = /\$Point.[R|r]esult:*\s+(\S+)\s+(\d+-\d+-\d+)\s+(\d+)/g;
         const regex = new RegExp(rs);
