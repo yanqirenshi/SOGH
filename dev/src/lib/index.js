@@ -6,7 +6,6 @@ import ProductBacklogs from './components/ProductBacklogs.js';
 import ProductBacklog from './components/ProductBacklog.js';
 import Reports from './components/Reports.js';
 import PanelCreateIssue from './components/PanelCreateIssue.js';
-import PanelCreateIssue2 from './components/PanelCreateIssue2.js';
 
 import ControllerIssues from './components/common/ControllerIssues.js';
 import CardIssue from './components/common/CardIssue.js';
@@ -27,7 +26,6 @@ export {
     SprintPlanning,
     Reports,
     PanelCreateIssue,
-    PanelCreateIssue2,
     //
     ControllerIssues,
     CardIssue,

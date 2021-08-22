@@ -1,33 +1,33 @@
 import React, { useState, useEffect } from 'react';
 
-import Issue from '../lib/js/Issue.js';
-import PanelCreateIssue from '../lib/components/PanelCreateIssue.js';
+import {Issue, PanelCreateIssue} from '../lib/index.js';
 
-
-const ISSUE = new Issue();
 const style = {
-    display: 'flex',
+    width: '100%',
+    height: '100%',
+    display:'flex',
     flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingTop: 14,
-    controller: {
-        marginTop:11,
+    box: {
+        width: 1200,
+        height: 750,
         display: 'flex',
-        width: 888,
-        paddingLeft: 5,
-        paddingRight: 5,
-        justifyContent: 'space-between',
+        flexDirection: 'column'
     },
 };
 
-export default function TabCreateIssue (props) {
-    const [data, setData] = useState(null);
+export default function TabCreateIssueNew (props) {
+    const [data, setData] = useState(new Issue().makeIssueData());
+    const [issue] = useState(new Issue());
+
+    const root = {
+        height:770, width: '100%',
+        display: 'flex', justifyContent: 'center', alignItems: 'center',
+    };
 
     const sogh = props.sogh;
 
     useEffect(() => {
-        const new_data = ISSUE.makeIssueData();
+        const new_data = {...data};
 
         new_data.repository = sogh.activeRepository();
         new_data.description = description_template;
@@ -35,33 +35,34 @@ export default function TabCreateIssue (props) {
         setData(new_data);
     }, [sogh.activeRepository()]);
 
-    const changeData = (data) => setData(data);
-
-    const clickCreate = () => {
-        sogh.createIssue(ISSUE.issueData2requestData(data), (ret) => {
+    const changed = (d) => setData(d);
+    const create = () => {
+        sogh.createIssue(issue.issueData2requestData(data), (ret) => {
             console.log(ret.errors ? 'error' : 'success');
         });
     };
 
     return (
-        <>
-          {data &&
-           <div style={style}>
-             <PanelCreateIssue data={data}
-                               sogh={sogh}
-                               callback={changeData}/>
+        <div style={root}>
+          <div className="box" style={style.box}>
+            <div style={{flexGrow:1}}>
+              <PanelCreateIssue source={data}
+                                sogh={sogh}
+                                callback={changed} />
+            </div>
 
-             <div style={style.controller}>
-               <button className="button is-warning">
-                 Cancel
-               </button>
+            <div style={{display: 'flex', padding: 8}}>
+              <button className="button is-warning is-small">
+                Cancel
+              </button>
 
-               <button className="button is-danger" onClick={clickCreate}>
-                 Create
-               </button>
-             </div>
-           </div>}
-        </>
+              <button className="button is-danger is-small"
+                      onClick={create}>
+                Create
+              </button>
+            </div>
+          </div>
+        </div>
     );
 }
 
@@ -69,19 +70,13 @@ const description_template = `## 課題内容
 
 XXX
 - a
-- b
-- c
 
 ## 目的/背景
 
 YYYY
 
 1. d
-2. e
-3. f
 
 ---
-- @Point.Plan: n
-- @Point.Result: n
-- @Due.Date: yyyy-mm-dd
-`;
+- $Point.Plan n 人1
+- $Point.Result 人1 yyyy-mm-dd n`;

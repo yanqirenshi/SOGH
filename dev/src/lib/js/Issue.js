@@ -1,6 +1,4 @@
-// import Column from './Column.js';
-// import Label  from './Label.js';
-
+import moment from 'moment';
 import GraphQLNode from './GraphQLNode.js';
 
 export default class Issue extends GraphQLNode {
@@ -77,7 +75,30 @@ export default class Issue extends GraphQLNode {
             milestone: null,
             labels: [],
             assignees: [],
+            owner: '',
+            due_date: moment().add(3, 'd').format('YYYY-MM-DD'),
+            next_action_date: moment().add(1, 'd').format('YYYY-MM-DD'),
         };
+    }
+    issueData2requestDataDescription (data) {
+        const description = data.description;
+
+        const pos = description.indexOf('---\n- $');
+
+        const owner = (v) => (!v || v.length===0) ? '???' : v;
+        const date = (v) => (!v || v.length===0) ? 'yyyy-mm-dd' : v;
+
+        const x = '\n'
+              + `$Owner ${owner(data.owner)}\n`
+              + `$Date.Due ${date(data.due_date)}\n`
+              + `$Date.Next ${date(data.next_action_date)}\n`;
+
+        if (pos===-1)
+            return description + x;
+
+        return description.slice(0, pos+3)
+            + x
+            + description.slice(pos+3);
     }
     issueData2requestData (data) {
         const id = (d) => {
@@ -92,7 +113,7 @@ export default class Issue extends GraphQLNode {
         return {
             repositoryId: data.repository.id,
             title:        data.title,
-            body:         data.description,
+            body:         this.issueData2requestDataDescription(data),
             projectIds:   ids(data.projects),
             milestoneId:  data.milestone ? id(data.milestone) : null,
             labelIds:     ids(data.labels),
