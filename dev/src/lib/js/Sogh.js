@@ -8,7 +8,7 @@ import ProductBacklogs from './ProductBacklogs.js';
 import ProductBacklog from './ProductBacklog.js';
 import Pool from './Pool.js';
 
-import Issue from './Issue.js';
+import {Issue} from './models/index.js';
 
 const POOL = new Pool();
 

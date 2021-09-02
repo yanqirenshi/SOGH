@@ -1,9 +1,38 @@
 import moment from 'moment';
-import GraphQLNode from './GraphQLNode.js';
+
+import GraphQLNode from '../GraphQLNode.js';
+
+// id
+// url
+// title
+// createdAt
+// closedAt
+// updatedAt
+// number
+// body
+// bodyHTML
+// state
+// projectCard	model
+// milestone	model
+// assignees	model
+// labels	model
 
 export default class Issue extends GraphQLNode {
     constructor (data) {
         super(data);
+
+        this.regex = {
+            point: {
+                plan:    /.*[@|$][P|p]oint\.[P|p]lan:*\s+(\d+).*/,
+                result:  /.*[@|$][P|p]oint\.[R|r]esult:*\s+(\d+).*/,
+                plans:   /\$[P|p]oint.[P|p]lan:*\s+(\S+)\s+(\d+-\d+-\d+)\s+(\d+)/g,
+                results: /\$Point.[R|r]esult:*\s+(\S+)\s+(\d+-\d+-\d+)\s+(\d+)/g,
+            },
+            date_due:    /.*[@|$]Date\.Due:*\s+(\d+-\d+-\d+).*/,
+            due_date:    /.*[@|$]Due\.Date:*\s+(\d+-\d+-\d+).*/,
+            next_action: /.*[@|$]Date\.Next:*\s+(\d+-\d+-\d+).*/,
+            owner:       /.*\$[O|o]wner:*\s+(\S+).*/,
+        };
 
         this._data = data;
     }
@@ -77,9 +106,29 @@ export default class Issue extends GraphQLNode {
             return ht;
         }, { total: 0, details: [] });
     }
+    getPointPlansFromBody (body) {
+        const rs = /\$[P|p]oint.[P|p]lan:*\s+(\S+)\s+(\d+-\d+-\d+)\s+(\d+)/g;
+        const regex = new RegExp(rs);
+
+        const result = [...body.matchAll(regex)];
+
+        if (result.length===0)
+            return null;
+
+        return result.reduce((ht, d)=>{
+            const parson = d[1];
+            const date = d[2];
+            const point = d[3] *1;
+
+            ht.total += point;
+            ht.details.push({parson: parson, date: date, point: point});
+
+            return ht;
+        }, { total: 0, details: [] });
+    }
     getPointFromBody (body) {
-        const plan = /.*[@|$]Point\.Plan:*\s+(\d+).*/.exec(body);
-        const result = /.*[@|$]Point\.Result:*\s+(\d+).*/.exec(body);
+        const plan = /.*[@|$][P|p]oint\.[P|p]lan:*\s+(\d+).*/.exec(body);
+        const result = /.*[@|$][P|p]oint\.[R|r]esult:*\s+(\d+).*/.exec(body);
         const results = this.getPointResultsFromBody(body);
 
         return {

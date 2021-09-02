@@ -1,3 +1,11 @@
+// id
+// name
+// url
+// color
+// description
+// createdAt
+// updatedAt
+
 export default class Label {
     color (hexcolor) {
         var r = parseInt( hexcolor.substr( 1, 2 ), 16 ) ;
