@@ -1,13 +1,14 @@
-import ViwerIssues      from './components/ViwerIssues.js';
-import ScrumTimeline    from './components/ScrumTimeline.js';
-import ScrumProjects    from './components/ScrumProjects.js';
-import SprintPlanning   from './components/SprintPlanning.js';
-import ProductBacklogs  from './components/ProductBacklogs.js';
-import ProductBacklog   from './components/ProductBacklog.js';
-import Reports          from './components/Reports.js';
-import PanelCreateIssue from './components/PanelCreateIssue.js';
-import ControllerIssues from './components/common/ControllerIssues.js';
 import CardIssue        from './components/common/CardIssue.js';
+import ControllerIssues from './components/common/ControllerIssues.js';
+import PanelCreateIssue from './components/PanelCreateIssue.js';
+import PanelIssue       from './components/PanelIssue.js';
+import ProductBacklog   from './components/ProductBacklog.js';
+import ProductBacklogs  from './components/ProductBacklogs.js';
+import Reports          from './components/Reports.js';
+import ScrumProjects    from './components/ScrumProjects.js';
+import ScrumTimeline    from './components/ScrumTimeline.js';
+import SprintPlanning   from './components/SprintPlanning.js';
+import ViwerIssues      from './components/ViwerIssues.js';
 
 import Filter from './js/Filter.js';
 import Sogh from './js/Sogh.js';
@@ -25,6 +26,7 @@ export {
     SprintPlanning,
     Reports,
     PanelCreateIssue,
+    PanelIssue,
     //
     ControllerIssues,
     CardIssue,
