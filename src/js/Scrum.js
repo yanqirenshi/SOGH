@@ -33,7 +33,6 @@ export default class Scrum extends SoghChild {
             issues_filterd: null,
             duedates: {ht:[],list:[]},
             duedates_filterd: {ht:[],list:[]},
-            duedates_filterd: {ht:[],list:[]},
             next_action_dates_filterd: {ht:[],list:[]},
             close_duedates: {},
         };

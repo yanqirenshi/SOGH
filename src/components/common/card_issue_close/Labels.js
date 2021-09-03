@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import Label from '../../../js/Label.js';
+import {Label} from '../../../js/models/index.js';
 
 export default function Labels (props) {
     const [label] = useState(new Label());

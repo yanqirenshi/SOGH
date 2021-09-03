@@ -50,7 +50,7 @@ export default function Search (props) {
 
         return '???';
     };
-    console.log(props.filter.keyword);
+
     return (
         <div style={style}>
 

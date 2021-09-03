@@ -1,7 +1,19 @@
 // import Column from './Column.js';
 // import Label  from './Label.js';
 
-import GraphQLNode from './GraphQLNode.js';
+import GraphQLNode from '../GraphQLNode.js';
+
+// id
+// number
+// name
+// body
+// url
+// state
+// closed
+// progress
+// createdAt
+// updatedAt
+// closedAt
 
 export default class Project extends GraphQLNode {
     constructor (data) {

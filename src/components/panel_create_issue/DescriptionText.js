@@ -11,6 +11,8 @@ const style = {
         width: '100%',
         height: '100%',
         input: {
+            border: 'none',
+            background: '#f8fbf8',
             fontSize: 14,
             width: '100%',
             height: '100%',
@@ -30,7 +32,7 @@ const style = {
 };
 
 export default function Description (props) {
-    const data = props.source;
+    const data = props.data;
     const callback = props.callback;
 
     const change = (e) => {
@@ -45,7 +47,7 @@ export default function Description (props) {
     return (
         <div style={style}>
           <div style={style.left}>
-            <textarea className="textarea"
+            <textarea className="textarea has-fixed-size"
                       style={style.left.input}
                       placeholder="Description"
                       value={data.description}

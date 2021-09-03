@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import Project from '../../js/Project.js';
+import {Project} from '../../js/models/index.js';
 
 const PROJECT = new Project();
 
