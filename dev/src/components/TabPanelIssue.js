@@ -26,10 +26,22 @@ export default function TabPanelIssue (props) {
         sogh.getIssuesByRepository(repo, (issues) => setIssues(issues));
     }, [sogh, repo]);
 
+    const callback = (action, data) => {
+        console.log([action]);
+        console.log([data.id(), data.body()]);
+    };
+
     return (
         <div style={style}>
           <div style={style.container}>
-            {issues.map(issue => <TabPanelIssueCard key={issue.id} issue={issue} sogh={sogh}/>)}
+            {issues.map(issue => {
+                return (
+                    <TabPanelIssueCard key={issue.id}
+                                       issue={issue}
+                                       sogh={sogh}
+                                       callback={callback} />
+                );
+            })}
           </div>
         </div>
     );

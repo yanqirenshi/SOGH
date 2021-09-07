@@ -17,6 +17,7 @@ export default function TabPanelIssueCard (props) {
 
     const sogh = props.sogh;
     const issue = props.issue;
+    const callback = props.callback;
 
     const click = () => setOpen(!open);
 
@@ -33,7 +34,8 @@ export default function TabPanelIssueCard (props) {
             <PanelIssue issue={issue}
                         sogh={sogh}
                         size={open ? 'l' : 's'}
-                        w={open ? 500 : 200} />
+                        w={open ? 500 : 200}
+                        callback={callback} />
           </div>
         </nav>
     );
