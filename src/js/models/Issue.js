@@ -37,13 +37,18 @@ export default class Issue extends GraphQLNode {
         this._data = data;
     }
     //
+    core () {
+        return this._core;
+    }
     body (v) {
+        const core = this.core();
+
         if (arguments.length===0)
-            return this._core.body;
+            return core.body;
 
-        this._core.body = v || '';
+        core.body = v || '';
 
-        return this._core.body;
+        return core.body;
     }
     dueDate (v) {
         const body = this.body();
@@ -65,6 +70,8 @@ export default class Issue extends GraphQLNode {
             this.body(body + '\n$Date.Due ' + (v ? v : 'yyyy-mm-dd'));
         }
 
+        this.addAnotetionValue(this.core());
+
         return this.getDueDateFromBody(body);
     }
     nextActionDate (v) {
@@ -82,6 +89,8 @@ export default class Issue extends GraphQLNode {
         } else {
             this.body(body + '\n$Date.Next ' + (v ? v : 'yyyy-mm-dd'));
         }
+
+        this.addAnotetionValue(this.core());
 
         return this.getNextActionFromBody(body);
     }
@@ -157,10 +166,12 @@ export default class Issue extends GraphQLNode {
         return owner ? owner[1] : null;
     }
     addAnotetionValue (issue) {
-        issue.point = this.getPointFromBody(issue.body);
-        issue.due_date = this.getDueDateFromBody(issue.body);
-        issue.date_next_action = this.getNextActionFromBody(issue.body);
-        issue.owner = this.getOwnerFromBody(issue.body);
+        const body = issue.body;
+
+        issue.point = this.getPointFromBody(body);
+        issue.due_date = this.getDueDateFromBody(body);
+        issue.date_next_action = this.getNextActionFromBody(body);
+        issue.owner = this.getOwnerFromBody(body);
 
         return issue;
     }

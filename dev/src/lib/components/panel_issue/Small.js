@@ -1,6 +1,7 @@
 import React from 'react';
 
 import Labels           from './Labels.js';
+import NextActionDate  from './NextActionDate.js';
 import SmallIssueTitle  from './SmallIssueTitle.js';
 import SmallDueDate     from './SmallDueDate.js';
 import SmallProjectName from './SmallProjectName.js';
@@ -17,6 +18,7 @@ function getProjectColumn (issue) {
 
 export default function Small (props) {
     const issue = props.issue;
+    const callback = props.callback;
 
     const milestone = issue.milestone;
 
@@ -35,6 +37,10 @@ export default function Small (props) {
            </div>}
 
           {milestone && <SmallMilestone issue={issue}/>}
+
+          <div style={{marginTop:8}}>
+            <NextActionDate type="s" issue={issue} callback={callback} />
+          </div>
         </div>
     );
 }
