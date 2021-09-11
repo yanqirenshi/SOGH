@@ -45,7 +45,7 @@ function PageHome (props) {
 
     useEffect(() => {
         if (!sogh) return;
-        // sogh.getIssuesOpenByLabel(repository, '会議', (x)=> x);
+        sogh.getIssuesOpenByLabel(repository, '会議', (x)=> console.log(x));
     }, [sogh]);
 
     return (

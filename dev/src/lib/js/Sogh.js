@@ -8,8 +8,6 @@ import ProductBacklogs from './ProductBacklogs.js';
 import ProductBacklog from './ProductBacklog.js';
 import Pool from './Pool.js';
 
-import {Issue} from './models/index.js';
-
 const POOL = new Pool();
 
 export default class Sogh extends Loader {
@@ -38,10 +36,6 @@ export default class Sogh extends Loader {
                 labels: {ht:{}, list:[]},
                 assignees: {ht:{}, list:[]},
             }
-        };
-
-        this.tools ={
-            issue: new Issue(),
         };
     }
     // Active Data

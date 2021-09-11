@@ -21,6 +21,13 @@ export default class Issue extends GraphQLNode {
     constructor (data) {
         super(data);
 
+        this._owner = null;
+        this._date_next_action = null;
+        this._due_date = null;
+        this._point = { plan: null, result: null, results: null };
+
+        this.addAnotetionValueNew(data);
+
         this.regex = {
             point: {
                 plan:    /.*[@|$][P|p]oint\.[P|p]lan:*\s+(\d+).*/,
@@ -36,9 +43,47 @@ export default class Issue extends GraphQLNode {
 
         this._data = data;
     }
-    //
-    core () {
-        return this._core;
+    number () {
+        return this._core.number || null;
+    }
+    title () {
+        return this._core.title || null;
+    }
+    url () {
+        return this._core.url || null;
+    }
+    body () {
+        return this._core.body || null;
+    }
+    closedAt () {
+        return this._core.closedAt || null;
+    }
+    milestone () {
+        return this._core.milestone || null;
+    }
+    projectCards () {
+        if (!this._core.projectCards)
+            return [];
+
+        return this._core.projectCards.nodes;
+    }
+    assignees () {
+        if (!this._core.assignees)
+            return [];
+
+        return this._core.assignees.nodes;
+    }
+    labels () {
+        if (!this._core.labels)
+            return [];
+
+        return this._core.assignees.nodes;
+    }
+    owner () {
+        return this._owner || null;
+    }
+    point () {
+        return this._point || null;
     }
     body (v) {
         const core = this.core();
@@ -50,6 +95,7 @@ export default class Issue extends GraphQLNode {
 
         return core.body;
     }
+    // due_date: "2021-08-31"
     dueDate (v) {
         const body = this.body();
 
@@ -74,6 +120,7 @@ export default class Issue extends GraphQLNode {
 
         return this.getDueDateFromBody(body);
     }
+    // date_next_action: "2021-08-24"
     nextActionDate (v) {
         const body = this.body();
 
@@ -172,6 +219,17 @@ export default class Issue extends GraphQLNode {
         issue.due_date = this.getDueDateFromBody(body);
         issue.date_next_action = this.getNextActionFromBody(body);
         issue.owner = this.getOwnerFromBody(body);
+
+        return issue;
+    }
+    addAnotetionValueNew (issue) {
+        console.log(issue);
+        const body = issue.body;
+
+        this._point = this.getPointFromBody(body);
+        this._due_date = this.getDueDateFromBody(body);
+        this._date_next_action = this.getNextActionFromBody(body);
+        this._owner = this.getOwnerFromBody(body);
 
         return issue;
     }
