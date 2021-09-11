@@ -1,9 +1,5 @@
 import React, { useState } from 'react';
 
-import {Project} from '../../js/models/index.js';
-
-const PROJECT = new Project();
-
 const style = {
     width: '100%',
     height: '100%',
@@ -27,7 +23,19 @@ const style = {
 };
 
 function marker (d) {
-    const color = PROJECT.colorByPriority(d.priority);
+    const colorByPriority = (v) => {
+        const m = {
+            c: { background: '#e83929', color: '#fff' },
+            h: { background: '#fcc800', color: '#333' },
+            n: { background: '#89c3eb', color: '#333' },
+            l: { background: '#dcdddd', color: '#333' },
+            '?': { background: '#ffffff', color: '#333' },
+        };
+        return m[v];
+    };
+
+
+    const color = colorByPriority(d.priority);
     const style = {
         width: 6,
         minWidth: 6,

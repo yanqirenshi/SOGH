@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 // import Column from './Column.js';
 // import Label  from './Label.js';
 
@@ -19,7 +21,14 @@ export default class Project extends GraphQLNode {
     constructor (data) {
         super(data);
 
-        this._data = data;
+        this._type = null;
+        this._priority = null;
+        this._assignee = null;
+
+        this._plan = null;
+        this._result = null;
+
+        this.addAnotetionValue(data);
 
         // const priority = [
         //     { code: 'c', label: '急' },
@@ -36,6 +45,99 @@ export default class Project extends GraphQLNode {
         //     { code: 'クラッシュ', order: 5 },
         //     { code: '改善',       order: 6 },
         // ];
+    }
+    number () {
+        return this._core.number || null;
+    }
+    name () {
+        return this._core.name || null;
+    }
+    url () {
+        return this._core.url || null;
+    }
+    state () {
+        return this._core.state || null;
+    }
+    closedAt () {
+        return this._core.closedAt || null;
+    }
+    closed () {
+        return this._core.closed || null;
+    }
+    body () {
+        return this._core.body || null;
+    }
+    progress () {
+        return this._core.progress || null;
+    }
+    type () {
+        return this._type || null;
+    }
+    priority () {
+        return this._priority || null;
+    }
+    assignee () {
+        return this._assignee || null;
+    }
+    plan () {
+        return this._plan || null;
+    }
+    result () {
+        return this._result || null;
+    }
+    addAnotetionValue (project) {
+        const priority = (p) => {
+            const ret = /.*@Priority:\s+([c|h|n|l]).*/.exec(p.body);
+
+            // Critical :  最高の優先度のユーザー・ジョブ。
+            // High : 高い優先度のユーザー・ジョブ。
+            // Normal : 通常の優先度のユーザー・ジョブ。
+            // Low : 低い優先度のユーザー・ジョブ。
+
+            if (!ret)
+                return 'l';
+
+            return ret[1];
+        };
+
+        const assignee = (p) => {
+            const ret = /.*@assignee:\s+(\S+).*/.exec(p.body);
+
+            return ret ? ret[1] : null;
+        };
+
+        const schedulePlan = (p) => {
+            const ret = /.*@Plan:(\s+\d+-\d+-\d+),\s+(\d+-\d+-\d+).*/.exec(p.body);
+
+            if (!ret)
+                return { start: null, end: null };
+
+            return { start: moment(ret[1]), end: moment(ret[2]) };
+        };
+
+        const scheduleResult = (p) => {
+            const ret = /.*@Result:(\s+\d+-\d+-\d+),\s+(\d+-\d+-\d+).*/.exec(p.body);
+
+            if (!ret)
+                return { start: null, end: null };
+
+            return { start: moment(ret[1]), end: moment(ret[2]) };
+        };
+
+        const type = (p) => {
+            const ret = /.*@Type:\s+(\S+).*/.exec(p.body);
+
+            return ret ? ret[1] : null;
+        };
+
+        this._type = type(project);
+        this._priority = priority(project);
+        this._assignee = assignee(project);
+
+        this._plan = schedulePlan(project);
+        this._result = scheduleResult(project);
+
+        return project;
     }
     colorByPriority (v) {
         const m = {

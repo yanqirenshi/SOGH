@@ -18,24 +18,26 @@ function App(props) {
     const [name]  = useState(process.env.REACT_APP_GITHUB_REPOSITORY_NAME || null);
     const [updated_at, setUpdatedAt] = useState(null);
 
+    const sogh = props.sogh;
+
     useEffect(() => props.connectGithub(token), [token]);
 
     useEffect(() => {
-        if (!props.sogh) return;
+        if (!sogh) return;
 
-        props.sogh.fetchRepository(owner, name, (success) => {
-            const repo = props.sogh.getRepository(owner, name);
-            props.sogh.activeRepository(repo);
+        sogh.fetchRepository(owner, name, (success) => {
+            const repo = sogh.getRepository(owner, name);
+            sogh.activeRepository(repo);
             setUpdatedAt(new Date());
         });
-    }, [props.sogh]);
+    }, [sogh]);
 
     const connectGithub = (token) => props.connectGithub(token);
 
     return (
         <>
           <span>{!!updated_at}</span>
-          {!(token || props.sogh) && <SignIn callback={connectGithub}/>}
+          {!(token || sogh) && <SignIn callback={connectGithub}/>}
 
           <Router>
             <Switch>

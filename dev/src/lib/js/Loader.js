@@ -1,15 +1,10 @@
 import moment from 'moment';
 
+import * as model from './models/index.js';
+
 import * as query from './GraphQL.js';
 import GithubApiV3 from './GithubApiV3.js';
 import GithubApiV4 from './GithubApiV4.js';
-
-function owner (repo) {
-    if ("string" === (typeof repo.owner))
-        return repo.owner;
-
-    return repo.owner.login;
-}
 
 export default class Loader {
     constructor (token) {
@@ -33,7 +28,8 @@ export default class Loader {
 
             this._token = token;
 
-            this._viewer = data.viewer;
+            this._viewer = new model.Viewer(data.viewer);
+
             this.api.v3 = new GithubApiV3(token);
             this.api.v4 = api;
 
@@ -440,8 +436,8 @@ export default class Loader {
         const api = this.api.v4;
 
         const base_query = query.milestone_by_reposigory
-              .replace('@owner', owner(repository))
-              .replace('@name',  repository.name);
+              .replace('@owner', repository.owner().login)
+              .replace('@name',  repository.name());
 
         let milestones = [];
         const getter = (endCursor) => {
@@ -451,7 +447,7 @@ export default class Loader {
                 const data = results.data.repository.milestones;
                 const page_info = data.pageInfo;
 
-                milestones = milestones.concat(data.nodes);
+                milestones = milestones.concat(data.nodes.map(d=>new model.Milestone(d)));
 
                 if (page_info.hasNextPage) {
                     getter(page_info.endCursor);
@@ -470,8 +466,8 @@ export default class Loader {
         const api = this.api.v4;
 
         const base_query = query.projects_by_repository
-              .replace('@owner', owner(repository))
-              .replace('@name', repository.name);
+              .replace('@owner', repository.owner().login)
+              .replace('@name', repository.name());
 
         let projects = [];
         const getter = (endCursor) => {
@@ -481,7 +477,7 @@ export default class Loader {
                 const data = results.data.repository.projects;
                 const page_info = data.pageInfo;
 
-                projects = projects.concat(data.nodes);
+                projects = projects.concat(data.nodes.map(d=>new model.Project(d)));
 
                 if (page_info.hasNextPage) {
                     getter(page_info.endCursor);
@@ -500,8 +496,8 @@ export default class Loader {
         const api = this.api.v4;
 
         const base_query = query.assignees_by_repository
-              .replace('@owner', owner(repository))
-              .replace('@name', repository.name);
+              .replace('@owner', repository.owner().login)
+              .replace('@name', repository.name());
 
         let assignees = [];
         const getter = (endCursor) => {
@@ -511,12 +507,12 @@ export default class Loader {
                 const data = results.data.repository.assignableUsers;
                 const page_info = data.pageInfo;
 
-                assignees = assignees.concat(data.nodes);
+                assignees = assignees.concat(data.nodes.map(d=>new model.Assignee(d)));
 
                 if (page_info.hasNextPage) {
                     getter(page_info.endCursor);
                 } else {
-                    cb(assignees.map(this.addAnotetionValue4Project));
+                    cb(assignees);
                 }
             });
         };
@@ -530,8 +526,8 @@ export default class Loader {
         const api = this.api.v4;
 
         const base_query = query.labels_by_repository
-              .replace('@owner', owner(repository))
-              .replace('@name', repository.name);
+              .replace('@owner', repository.owner().login)
+              .replace('@name', repository.name());
 
         let labels = [];
         const getter = (endCursor) => {
@@ -541,12 +537,12 @@ export default class Loader {
                 const data = results.data.repository.labels;
                 const page_info = data.pageInfo;
 
-                labels = labels.concat(data.nodes);
+                labels = labels.concat(data.nodes.map(d=>new model.Label(d)));
 
                 if (page_info.hasNextPage) {
                     getter(page_info.endCursor);
                 } else {
-                    cb(labels.map(this.addAnotetionValue4Project));
+                    cb(labels);
                 }
             });
         };
@@ -630,7 +626,7 @@ export default class Loader {
                 repos[owner] = {};
 
             repos[owner][name] = {
-                data: success ? data : null,
+                data:  success ? new model.Repository(data) : null,
                 valid: success,
                 error: success ? null : data,
             };
