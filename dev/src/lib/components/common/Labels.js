@@ -29,7 +29,8 @@ export default function Labels (props) {
 
     const labels = [];
     let tmp = [];
-    for (const label of issue.labels.nodes) {
+
+    for (const label of issue.labels()) {
         tmp.push(label);
         if (tmp.length===2) {
             labels.push(tmp);

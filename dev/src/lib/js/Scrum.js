@@ -136,8 +136,8 @@ export default class Scrum extends SoghChild {
     targetMilestones (milestones) {
         const now = moment().startOf('date');
 
-        const filter = m => {
-            const ret = /(\d+-\d+-\d+)\s*〜\s*(\d+-\d+-\d+)/.exec(m.title);
+        const filter = milestone => {
+            const ret = /(\d+-\d+-\d+)\s*〜\s*(\d+-\d+-\d+)/.exec(milestone.title());
 
             if (!ret) return false;
 
@@ -147,7 +147,7 @@ export default class Scrum extends SoghChild {
             if (!from.isValid() || !to.isValid())
                 return false;
 
-            m.term = {
+            milestone.term = {
                 from: from,
                 to: to,
             };
@@ -186,7 +186,7 @@ export default class Scrum extends SoghChild {
         };
 
         for (const issue of issues) {
-            const key = dd(issue.closedAt || issue[type]);
+            const key = dd(issue.closedAt() || issue[type]);
 
             if (!ht[key])
                 ht[key] = [];
@@ -214,14 +214,14 @@ export default class Scrum extends SoghChild {
         };
 
         for (const issue of issues) {
-            if (issue.projectCards.nodes.length===0) {
+            if (issue.projectCards().length===0) {
                 const project = empyProject();
 
                 POOL.addPool(project, pool);
 
                 pool.ht[project.id].issues.push(issue);
             } else {
-                const column = issue.projectCards.nodes[0].column;
+                const column = issue.projectCards()[0].column;
 
                 if (!column) continue;
 
@@ -295,11 +295,17 @@ export default class Scrum extends SoghChild {
             if (!milestone)
                 return this._data.milestones[0];
 
-            return this._data.milestones.find(d=>d.id===milestone.id) || this._data.milestones[0];
+            return this._data.milestones.find(d=>d.id()===milestone.id()) || this._data.milestones[0];
         };
 
         this._sogh.getMilestonesByRepository(repository, (milestones) => {
             this._data.milestones = this.targetMilestones(milestones);
+
+            if (this._data.milestones.length===0) {
+                this._data.milestone = null;
+                this._data.issues = [];
+                cb();
+            }
 
             this._data.milestone = getTargetMilestone(this._data.milestone ,this._data.milestones);
 
@@ -402,7 +408,7 @@ export default class Scrum extends SoghChild {
         if (cb) cb();
     }
     summaryIssueInRecord (record, issue) {
-        const point = issue.point;
+        const point = issue.points();
 
         record.plan += (point.plan || 0);
 

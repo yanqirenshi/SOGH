@@ -30,6 +30,8 @@ export default class Project extends GraphQLNode {
 
         this.addAnotetionValue(data);
 
+        this._issues = [];
+
         // const priority = [
         //     { code: 'c', label: '急' },
         //     { code: 'h', label: '高' },
@@ -84,6 +86,9 @@ export default class Project extends GraphQLNode {
     }
     result () {
         return this._result || null;
+    }
+    issues () {
+        return this._issues;
     }
     addAnotetionValue (project) {
         const priority = (p) => {

@@ -1,5 +1,3 @@
-import moment from 'moment';
-
 import * as model from './models/index.js';
 
 import * as query from './GraphQL.js';
@@ -393,11 +391,10 @@ export default class Loader {
 
                 milestones = milestones.concat(data.nodes.map(d=>new model.Milestone(d)));
 
-                if (page_info.hasNextPage) {
+                if (page_info.hasNextPage)
                     getter(page_info.endCursor);
-                } else {
+                else
                     cb(milestones);
-                }
             });
         };
 

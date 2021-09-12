@@ -50,9 +50,6 @@ export default class Issue extends GraphQLNode {
     url () {
         return this._core.url || null;
     }
-    body () {
-        return this._core.body || null;
-    }
     closedAt () {
         return this._core.closedAt || null;
     }
@@ -75,7 +72,7 @@ export default class Issue extends GraphQLNode {
         if (!this._core.labels)
             return [];
 
-        return this._core.assignees.nodes;
+        return this._core.labels.nodes;
     }
     owner () {
         return this._owner || null;
@@ -87,7 +84,7 @@ export default class Issue extends GraphQLNode {
         const core = this.core();
 
         if (arguments.length===0)
-            return core.body;
+            return core.body || null;
 
         core.body = v || '';
 
@@ -295,5 +292,18 @@ export default class Issue extends GraphQLNode {
             return null;
 
         return cards[0] ? cards[0].column : null;
+    }
+    getFirstColumnProject () {
+        const column = this.getColumnFirst();
+
+        if (!column)
+            return null;
+
+        return column.project;
+    }
+    getFirstColumnProjectID () {
+        const project = this.getFirstColumnProject();
+
+        return project ? project.id : null;
     }
 }

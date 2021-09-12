@@ -2,6 +2,8 @@ import moment from 'moment';
 
 import Loader from './Loader.js';
 
+import * as model from './models/index.js';
+
 import Gtd from './Gtd.js';
 import Scrum from './Scrum.js';
 import ProductBacklogs from './ProductBacklogs.js';
@@ -247,12 +249,12 @@ export default class Sogh extends Loader {
             return n;
         };
 
-        const sorted_projects = projects.sort((a,b)=> v(a.type) - v(b.type));
+        const sorted_projects = projects.sort((a,b)=> v(a.type()) - v(b.type()));
 
         const x = { c: [], h: [], n: [], l: [], '?': [] };
 
         for (const project of sorted_projects) {
-            const p = project.priority || '?';
+            const p = project.priority() || '?';
 
             x[p].push(project);
         }
@@ -263,8 +265,9 @@ export default class Sogh extends Loader {
         const projects = {};
 
         for (const issue of issues) {
-            const card = issue.projectCards.nodes;
-            const project_id = card.length===0 ? null : card[0].column.project.id;
+            const card = issue.projectCards();
+
+            const project_id = issue.getFirstColumnProjectID();
 
             if (!projects[project_id]) {
                 if (project_id) {
@@ -273,19 +276,20 @@ export default class Sogh extends Loader {
                 } else {
                     projects[project_id] =  {id: null, issues: [] };
                 }
-                projects[project_id] = this.addAnotetionValue4Project(projects[project_id]);
+
+                projects[project_id] = new model.Project(projects[project_id]);
             }
 
             const project = projects[project_id];
 
             issue.project = project;
 
-            project.issues.push(issue);
+            project.issues().push(issue);
         }
 
         const x = this.sortProjectsByPriority(Object.values(projects));
 
-        return x.reduce((list,d) => list.concat(d.issues), []);
+        return x.reduce((list,d) => list.concat(d.issues()), []);
     }
     /////
     ///// summary issue

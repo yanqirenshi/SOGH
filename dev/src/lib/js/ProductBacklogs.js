@@ -1,7 +1,5 @@
 import moment from 'moment';
 
-import * as query from './GraphQL.js';
-
 import SoghChild from './SoghChild.js';
 
 export default class ProductBacklogs extends SoghChild {
@@ -24,36 +22,6 @@ export default class ProductBacklogs extends SoghChild {
     apiV4 () {
         return this._sogh.api.v4;
     }
-    // getProjectsByRepository (repository, cb) {
-    //     if (!this.apiV4()._token || !repository)
-    //         cb([]);
-
-    //     const api = this.apiV4();
-
-    //     const base_query = query.projects_by_repository
-    //           .replace('@owner', repository.owner)
-    //           .replace('@name', repository.name);
-
-    //     let projects = [];
-    //     const getter = (endCursor) => {
-    //         let query = this._sogh.ensureEndCursor(base_query, endCursor);
-
-    //         api.fetch(query, (results) => {
-    //             const data = results.data.repository.projects;
-    //             const page_info = data.pageInfo;
-
-    //             projects = projects.concat(data.nodes);
-
-    //             if (page_info.hasNextPage) {
-    //                 getter(page_info.endCursor);
-    //             } else {
-    //                 cb(projects.map(this._sogh.addAnotetionValue4Project));
-    //             }
-    //         });
-    //     };
-
-    //     getter();
-    // }
     sortProjectsByPriority (projects) {
         const splitByState = (projects) => {
             const x = { c: [], h: [], n: [], l: [], '?': [], closed: [] };

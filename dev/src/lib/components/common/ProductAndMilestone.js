@@ -9,7 +9,7 @@ export default function ProductAndMilestone (props) {
 
     const changed  = (e) => {
         const id = e.target.value;
-        const milestone = props.milestones.find(m=>m.id===id);
+        const milestone = props.milestones.find(m=>m.id()===id);
 
         props.callbacks.milestone.change(milestone);
     };
@@ -28,8 +28,8 @@ export default function ProductAndMilestone (props) {
                <select onChange={changed}>
                  {milestones.map(m => {
                      return (
-                         <option key={m.id} value={m.id}>
-                           {m.title}
+                         <option key={m.id()} value={m.id()}>
+                           {m.title()}
                          </option>
                      );
                  })}
@@ -38,10 +38,9 @@ export default function ProductAndMilestone (props) {
 
              {milestone &&
               <div style={{display: 'flex', alignItems: 'center', marginLeft: 11, fontSize:24}}>
-                <LinkBlankGithub href={milestone.url} />
+                <LinkBlankGithub href={milestone.url()} />
               </div>}
            </div>}
-
         </div>
     );
 }

@@ -67,10 +67,10 @@ function PageHome (props) {
           {/*                     listener={listener}/> */}
           {/* </div> */}
 
-          {/* <div style={isActive(tabs[3], selected)}> */}
-          {/*   <SOGH.ScrumTimeline sogh={sogh} */}
-          {/*                       repository={repository} /> */}
-          {/* </div> */}
+          <div style={isActive(tabs[3], selected)}>
+            <SOGH.ScrumTimeline sogh={sogh}
+                                repository={repository} />
+          </div>
 
           {/* <div style={isActive(tabs[4], selected)}> */}
           {/*   <SOGH.ScrumProjects sogh={sogh} */}

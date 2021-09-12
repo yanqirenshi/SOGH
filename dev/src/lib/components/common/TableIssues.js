@@ -42,16 +42,17 @@ function prjPri (sogh, issue) {
 }
 
 function makeTrs (issue, sogh, productbacklog_url_prefix) {
-    const point_result = issue.point.results ? issue.point.results.total : issue.point.result;
+    const point = issue.points();
+    const point_result = point.results ? point.results.total : point.result;
 
     return (
-        <tr key={issue.id}>
+        <tr key={issue.id()}>
           <td style={sogh.headerColor(issue.project)}>
             {prjPri(sogh, issue)}
           </td>
           <td style={style.right}>
-            <LinkBlank href={issue.url}>
-              {issue.number}
+            <LinkBlank href={issue.url()}>
+              {issue.number()}
             </LinkBlank>
           </td>
           <td>
@@ -62,33 +63,33 @@ function makeTrs (issue, sogh, productbacklog_url_prefix) {
             <Labels issue={issue}/>
           </td>
           <td style={style.nowrap}>
-            {issue.owner}
+            {issue.owner()}
           </td>
           <td style={style.nowrap}>
-            {due(issue.due_date)}
+            {due(issue.dueDate())}
           </td>
           <td style={style.nowrap}>
-            {issue.assignees.nodes.map(a => {
+            {issue.assignees().map(a => {
                 return (
-                    <p key={issue.id+'.'+a.id}>
+                    <p key={issue.id()+'.'+a.id}>
                       {a.name || a.login}
                     </p>
                 );
             })}
           </td>
           <td style={style.nowrap}>
-            {due(issue.date_next_action)}
+            {due(issue.nextActionDate())}
           </td>
-          <td style={style.right}>{issue.point.plan}</td>
+          <td style={style.right}>{point.plan}</td>
           <td style={style.right}>
             {point_result}
           </td>
           <td style={style.right}>
-            {diff(issue.point.plan, point_result)}
+            {diff(point.plan, point_result)}
           </td>
-          {/* <td style={style.nowrap}>{dt(issue.createdAt)}</td> */}
-          <td style={style.nowrap}>{dt(issue.updatedAt)}</td>
-          <td style={style.nowrap}>{dt(issue.closedAt)}</td>
+          {/* <td style={style.nowrap}>{dt(issue.createdAt())}</td> */}
+          <td style={style.nowrap}>{dt(issue.updatedAt())}</td>
+          <td style={style.nowrap}>{dt(issue.closedAt())}</td>
         </tr>
     );
 }

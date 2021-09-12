@@ -1,7 +1,7 @@
 import React from 'react';
 
 function sumRecord (record, issue) {
-    const point = issue.point;
+    const point = issue.points();
 
     record.points.plan += point.plan || 0;
 
