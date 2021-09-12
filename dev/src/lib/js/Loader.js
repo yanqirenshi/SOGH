@@ -109,8 +109,8 @@ export default class Loader {
         const api = this.api.v4;
 
         const base_query = query.issues_by_repository
-              .replace('@owner', repository.owner)
-              .replace('@name', repository.name);
+              .replace('@owner', repository.owner().login)
+              .replace('@name', repository.name());
 
         let issues = [];
         const getter = (endCursor) => {
@@ -143,8 +143,8 @@ export default class Loader {
         const api = this.api.v4;
 
         const base_query = query.issues_open_by_repository
-              .replace('@owner', repository.owner)
-              .replace('@name', repository.name);
+              .replace('@owner', repository.owner().login)
+              .replace('@name', repository.name());
 
         const isViewer = (issue) => {
             return issue.assignees.nodes.find(d=>d.id===viewer.id);
@@ -183,8 +183,8 @@ export default class Loader {
         const api = this.api.v4;
 
         const base_query = query.issues_open_by_label
-              .replace('@owner', repository.owner)
-              .replace('@name', repository.name)
+              .replace('@owner', repository.owner().login)
+              .replace('@name', repository.name())
               .replace('@label_name', label_name);
 
         let issues = [];
@@ -221,8 +221,8 @@ export default class Loader {
         const api = this.api.v4;
 
         const base_query = query.issues_by_report_label
-              .replace('@owner', repository.owner)
-              .replace('@name', repository.name);
+              .replace('@owner', repository.owner().login)
+              .replace('@name', repository.name());
 
         let issues = [];
         const getter = (endCursor) => {
@@ -257,8 +257,8 @@ export default class Loader {
 
         const base_query = query.issues_by_repository
               .replace('issues(after: "", first: 100)', 'issues(after: "", first: 100, states: OPEN)')
-              .replace('@owner', repository.owner)
-              .replace('@name', repository.name);
+              .replace('@owner', repository.owner().login)
+              .replace('@name', repository.name());
 
         let issues = [];
         const getter = (endCursor) => {

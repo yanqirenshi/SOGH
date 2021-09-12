@@ -17,36 +17,35 @@ function isActive (a,b) {
     return {display:'none'};
 };
 
-function PageHome (props) {
-    const [tabs] = useState([
-        { code: 'pi',  label: 'Panel Issue' },
-        { code: 'ci',  label: 'Create Issue' },
-        { code: 'vis', label: 'Issues' },
-        { code: 'sct', label: 'Scrum (Timeline)' },
-        { code: 'ds',  label: 'Scrum (Projects)' },
-        { code: 'sp',  label: 'Sprint planning' },
-        { code: 'pb',  label: 'Product backlog' },
-        { code: 'rp',  label: 'Reports' },
-        { code: 'id',  label: 'Issue Description' },
-    ]);
+const tabs = [
+    { code: 'pi',  label: 'Panel Issue' },
+    { code: 'ci',  label: 'Create Issue' },
+    { code: 'vis', label: 'Issues' },
+    { code: 'sct', label: 'Scrum (Timeline)' },
+    { code: 'ds',  label: 'Scrum (Projects)' },
+    { code: 'sp',  label: 'Sprint planning' },
+    { code: 'pb',  label: 'Product backlog' },
+    { code: 'rp',  label: 'Reports' },
+    { code: 'id',  label: 'Issue Description' },
+];
 
-    const sogh = props.sogh;
+function PageHome (props) {
+    const [core, setCore] = useState(null);
 
     const pathname = window.location.pathname;
     const params = new URLSearchParams(window.location.search);
     const selected = params.get('tab') || tabs[0].code;
 
-    const repository = {
-        owner: process.env.REACT_APP_GITHUB_REPOSITORY_OWNER,
-        name:  process.env.REACT_APP_GITHUB_REPOSITORY_NAME,
-    };
+    const sogh = props.sogh;
 
     const listener = () => console.log('finish get issues by gtd');
 
+    const repository = (sogh && sogh.activeRepository()) ?  sogh.activeRepository() : null;
+
     useEffect(() => {
-        if (!sogh) return;
-        sogh.getIssuesOpenByLabel(repository, '会議', (x)=> console.log(x));
-    }, [sogh]);
+        if (!repository) return;
+        sogh.getIssuesOpenByLabel(repository, '会議', (x)=> x);
+    }, [repository]);
 
     return (
         <div>
@@ -54,9 +53,9 @@ function PageHome (props) {
             <Tabs tabs={tabs} selected={selected} pathname={pathname} />
           </div>
 
-          {/* <div style={isActive(tabs[0], selected)}> */}
-          {/*   {sogh && <TabPanelIssue repository={repository} sogh={sogh} />} */}
-          {/* </div> */}
+          <div style={isActive(tabs[0], selected)}>
+            {sogh && <TabPanelIssue repository={repository} sogh={sogh} />}
+          </div>
 
           {/* <div style={isActive(tabs[1], selected)}> */}
           {/*   {sogh && <TabCreateIssue sogh={sogh} />} */}
@@ -83,11 +82,11 @@ function PageHome (props) {
           {/*                        repository={repository} /> */}
           {/* </div> */}
 
-          {/* <div style={isActive(tabs[6], selected)}> */}
-          {/*   <SOGH.ProductBacklogs sogh={sogh} */}
-          {/*                         repository={repository} */}
-          {/*                         productbacklog_url_prefix="/product-backlogs/" /> */}
-          {/* </div> */}
+          <div style={isActive(tabs[6], selected)}>
+            <SOGH.ProductBacklogs sogh={sogh}
+                                  repository={repository}
+                                  productbacklog_url_prefix="/product-backlogs/" />
+          </div>
 
           {/* <div style={isActive(tabs[7], selected)}> */}
           {/*   <SOGH.Reports sogh={sogh} */}

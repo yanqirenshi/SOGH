@@ -16,7 +16,7 @@ const style = {
 export default function LargeMilestone (props) {
     const issue = props.issue;
 
-    const milestone = issue.milestone;
+    const milestone = issue.milestone();
 
     return (
         <div>

@@ -30,7 +30,7 @@ const style = {
 export default function Labels (props) {
     const issue = props.issue;
 
-    const labels = issue.labels.nodes;
+    const labels = issue.labels();
 
     if (labels.length===0)
         return null;

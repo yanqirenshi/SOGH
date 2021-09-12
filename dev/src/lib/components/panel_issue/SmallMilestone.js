@@ -10,7 +10,7 @@ const style = {
 export default function SmallMilestone (props) {
     const issue = props.issue;
 
-    const milestone = issue.milestone;
+    const milestone = issue.milestone();
 
     return (
         <div style={style}>

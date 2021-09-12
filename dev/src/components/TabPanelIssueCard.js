@@ -21,7 +21,7 @@ export default function TabPanelIssueCard (props) {
     const click = () => setOpen(!open);
 
     return (
-        <nav className="panel" key={issue.id} style={style}>
+        <nav className="panel" key={issue.id()} style={style}>
           <div className="panel-heading"
                style={style.head}>
             <p style={{flexGrow:1}}>

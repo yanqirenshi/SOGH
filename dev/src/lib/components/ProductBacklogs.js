@@ -19,19 +19,20 @@ export default function ProductBacklogs (props) {
     }, [sogh]);
 
     useEffect(() => {
-        if (!core) return;
+        if (!repository) return;
 
-        core.getProjectsByRepository(repository, (projects) => {
+        sogh.getProjectsByRepository(repository, (projects) => {
             setProjects(projects);
         });
 
-    }, [core]);
+    }, [repository]);
 
     const callbacks = {
         refresh: () => {
             setProjects([]);
 
-            core.getProjectsByRepository(repository, (projects) => {
+            sogh.getProjectsByRepository(repository, (projects) => {
+                console.log(projects);
                 setProjects(projects);
             });
         },

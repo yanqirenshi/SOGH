@@ -24,7 +24,7 @@ export default class Issue extends GraphQLNode {
         this._owner = null;
         this._date_next_action = null;
         this._due_date = null;
-        this._point = { plan: null, result: null, results: null };
+        this._points = { plan: null, result: null, results: null };
 
         this.addAnotetionValueNew(data);
 
@@ -40,8 +40,6 @@ export default class Issue extends GraphQLNode {
             next_action: /.*[@|$]Date\.Next:*\s+(\d+-\d+-\d+).*/,
             owner:       /.*\$[O|o]wner:*\s+(\S+).*/,
         };
-
-        this._data = data;
     }
     number () {
         return this._core.number || null;
@@ -82,8 +80,8 @@ export default class Issue extends GraphQLNode {
     owner () {
         return this._owner || null;
     }
-    point () {
-        return this._point || null;
+    points () {
+        return this._points || null;
     }
     body (v) {
         const core = this.core();
@@ -213,7 +211,7 @@ export default class Issue extends GraphQLNode {
         return owner ? owner[1] : null;
     }
     addAnotetionValue (issue) {
-        const body = issue.body;
+        const body = issue.body();
 
         issue.point = this.getPointFromBody(body);
         issue.due_date = this.getDueDateFromBody(body);
@@ -223,10 +221,9 @@ export default class Issue extends GraphQLNode {
         return issue;
     }
     addAnotetionValueNew (issue) {
-        console.log(issue);
         const body = issue.body;
 
-        this._point = this.getPointFromBody(body);
+        this._points = this.getPointFromBody(body);
         this._due_date = this.getDueDateFromBody(body);
         this._date_next_action = this.getNextActionFromBody(body);
         this._owner = this.getOwnerFromBody(body);
@@ -287,5 +284,16 @@ export default class Issue extends GraphQLNode {
             labelIds:     ids(data.labels),
             assigneeIds:  ids(data.assignees),
         };
+    }
+    /** ****************************************************************
+     *
+     * **************************************************************** */
+    getColumnFirst () {
+        const cards = this.projectCards();
+
+        if (!cards)
+            return null;
+
+        return cards[0] ? cards[0].column : null;
     }
 }

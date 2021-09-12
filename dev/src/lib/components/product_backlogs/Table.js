@@ -34,7 +34,7 @@ const style = {
 }
 
 function priority (project) {
-    if (project.state==="CLOSED")
+    if (project.state()==="CLOSED")
         return '--';
 
     const m = {
@@ -43,12 +43,14 @@ function priority (project) {
         n: '普',
         l: '低',
     };
-    const lable = m[project.priority];
+
+    const priority = project.priority();
+    const lable = m[priority];
 
     if (!lable)
         return '??';
 
-    return lable + ` (${project.priority})`;
+    return lable + ` (${priority})`;
 }
 
 function theadContents () {
@@ -103,77 +105,84 @@ export default function Table (props) {
             <tbody>
               {projects.map(d => {
                   const s = sogh.headerColor(d);
-
                   const font = { c: 17, h: 16, n: 15, l: 14};
 
-                  return <tr key={d.id}
-                             style={{fontSize:14}}
-                             className={selected===d.id ? 'is-selected ' : null}
-                             project_id={d.id}
-                             onClick={clickRow}>
-                           <td style={{...style.code, ...s}}>
-                             {priority(d)}
-                           </td>
+                  const id = d.id();
+                  const progress = d.progress();
+                  const plan = d.plan();
+                  const result = d.result();
 
-                           <td>
-                             <ANewTab to={d.url}>
-                               {d.number}
-                             </ANewTab>
-                           </td>
 
-                           <td style={style.code}>
-                             {d.type}
-                           </td>
+                  return (
+                      <tr key={id}
+                          style={{fontSize:14}}
+                          className={selected===id ? 'is-selected ' : null}
+                          project_id={id}
+                          onClick={clickRow}>
+                        <td style={{...style.code, ...s}}>
+                          {priority(d)}
+                        </td>
 
-                           <td style={{fontSize:font[d.priority] || 14}}>
-                             <Link to={props.productbacklog_url_prefix + d.id}>
-                               {d.title}
-                             </Link>
-                           </td>
+                        <td>
+                          <ANewTab to={d.url()}>
+                            {d.number()}
+                          </ANewTab>
+                        </td>
 
-                           <td>{d.state}</td>
+                        <td style={style.code}>
+                          {d.type()}
+                        </td>
 
-                           <td>{d.assignee}</td>
+                        <td style={{fontSize:font[d.priority] || 14}}>
+                          <Link to={props.productbacklog_url_prefix + d.id}>
+                            {d.name()}
+                          </Link>
+                        </td>
 
-                           <td style={style.plan} title={dt(d.plan.start,1)}>{dt(d.plan.start)}</td>
-                           <td style={style.plan} title={dt(d.plan.end,1)}>{dt(d.plan.end)}</td>
-                           <td style={style.plan} title={dt(d.result.start,1)}>{dt(d.result.start)}</td>
-                           <td style={style.plan} title={dt(d.result.end,1)}>{dt(d.result.end)}</td>
+                        <td>{d.state()}</td>
 
-                           <td style={style.num}>
-                             {d.progress.todoCount}
-                           </td>
+                        <td>{d.assignee()}</td>
 
-                           {!d.progress.enabled &&
-                            <td colSpan="5" style={{fontSize:12}}>
-                              Disable track progress or Empty
-                            </td>}
+                        <td style={style.plan} title={dt(plan.start,1)}>{dt(plan.start)}</td>
+                        <td style={style.plan} title={dt(plan.end,1)}>{dt(plan.end)}</td>
+                        <td style={style.plan} title={dt(result.start,1)}>{dt(result.start)}</td>
+                        <td style={style.plan} title={dt(result.end,1)}>{dt(result.end)}</td>
 
-                           {d.progress.enabled &&
-                            <td style={style.num}>
-                              {Math.floor(d.progress.todoPercentage)}%
-                            </td>}
+                        <td style={style.num}>
+                          {progress.todoCount}
+                        </td>
 
-                           {d.progress.enabled &&
-                            <td style={style.num}>
-                              {d.progress.inProgressCount}
-                            </td>}
+                        {!progress.enabled &&
+                         <td colSpan="5" style={{fontSize:12}}>
+                           Disable track progress or Empty
+                         </td>}
 
-                           {d.progress.enabled &&
-                            <td style={style.num}>
-                              {Math.floor(d.progress.inProgressPercentage)}%
-                            </td>}
+                        {progress.enabled &&
+                         <td style={style.num}>
+                           {Math.floor(progress.todoPercentage)}%
+                         </td>}
 
-                           {d.progress.enabled &&
-                            <td style={style.num}>
-                              {d.progress.doneCount}
-                            </td>}
+                        {progress.enabled &&
+                         <td style={style.num}>
+                           {progress.inProgressCount}
+                         </td>}
 
-                           {d.progress.enabled &&
-                            <td style={style.num}>
-                              {Math.floor(d.progress.donePercentage)}%
-                            </td>}
-                         </tr>;
+                        {progress.enabled &&
+                         <td style={style.num}>
+                           {Math.floor(progress.inProgressPercentage)}%
+                         </td>}
+
+                        {progress.enabled &&
+                         <td style={style.num}>
+                           {progress.doneCount}
+                         </td>}
+
+                        {progress.enabled &&
+                         <td style={style.num}>
+                           {Math.floor(progress.donePercentage)}%
+                         </td>}
+                      </tr>
+                  );
               })}
             </tbody>
           </table>

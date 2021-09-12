@@ -36,7 +36,7 @@ export default function TabPanelIssue (props) {
           <div style={style.container}>
             {issues.map(issue => {
                 return (
-                    <TabPanelIssueCard key={issue.id}
+                    <TabPanelIssueCard key={issue.id()}
                                        issue={issue}
                                        sogh={sogh}
                                        callback={callback} />
