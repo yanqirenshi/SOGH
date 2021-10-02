@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useEffect} from 'react';
 import { connect } from 'react-redux';
 
 import 'react-bulma-components/dist/react-bulma-components.min.css';
@@ -6,8 +6,8 @@ import 'react-bulma-components/dist/react-bulma-components.min.css';
 import * as SOGH from './lib/index.js';
 
 import Tabs from './components/Tabs.js';
-import TabCreateIssue from './components/TabCreateIssue.js';
-import IssueDescription from './components/IssueDescription.js';
+// import TabCreateIssue from './components/TabCreateIssue.js';
+// import IssueDescription from './components/IssueDescription.js';
 import TabPanelIssue from './components/TabPanelIssue.js';
 
 function isActive (a,b) {
@@ -30,15 +30,13 @@ const tabs = [
 ];
 
 function PageHome (props) {
-    const [core, setCore] = useState(null);
-
     const pathname = window.location.pathname;
     const params = new URLSearchParams(window.location.search);
     const selected = params.get('tab') || tabs[0].code;
 
     const sogh = props.sogh;
 
-    const listener = () => console.log('finish get issues by gtd');
+    // const listener = () => console.log('finish get issues by gtd');
 
     const repository = (sogh && sogh.activeRepository()) ?  sogh.activeRepository() : null;
 
@@ -72,10 +70,10 @@ function PageHome (props) {
                                 repository={repository} />
           </div>
 
-          {/* <div style={isActive(tabs[4], selected)}> */}
-          {/*   <SOGH.ScrumProjects sogh={sogh} */}
-          {/*                       repository={repository} /> */}
-          {/* </div> */}
+          <div style={isActive(tabs[4], selected)}>
+            <SOGH.ScrumProjects sogh={sogh}
+                                repository={repository} />
+          </div>
 
           {/* <div style={isActive(tabs[5], selected)}> */}
           {/*   <SOGH.SprintPlanning sogh={sogh} */}

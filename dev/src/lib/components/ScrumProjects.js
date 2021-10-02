@@ -15,7 +15,7 @@ export default function ScrumProjects (props) {
     const invokeUpdate = () => setUpdatedAt(new Date());
     const refresh = () => scrum.fetch(repository, () => invokeUpdate());
 
-    useEffect(() => sogh && setScrum(sogh.scrum()), [sogh]);
+    useEffect(() => sogh && setScrum(sogh.scrum()), [repository]);
 
     useEffect(() => {
         if (!scrum) return;

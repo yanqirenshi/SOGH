@@ -3,7 +3,9 @@ import moment from 'moment';
 import SoghChild from './SoghChild.js';
 
 import Filter from './Filter.js';
-import Pool from './Pool.js';
+import Pool from './Pool2.js';
+
+import {Project} from './models/index.js';
 
 const POOL = new Pool();
 
@@ -208,28 +210,28 @@ export default class Scrum extends SoghChild {
                 name: null,
                 updatedAt: null,
                 url: null,
-                issues: [],
+                // issues: [],
                 priority: 'l',
             };
         };
 
         for (const issue of issues) {
             if (issue.projectCards().length===0) {
-                const project = empyProject();
+                const project = new Project(empyProject());
 
                 POOL.addPool(project, pool);
 
-                pool.ht[project.id].issues.push(issue);
+                project.issues().push(issue);
             } else {
                 const column = issue.projectCards()[0].column;
 
                 if (!column) continue;
 
-                const project = this.addAnotetionValue4Project(column.project);
+                const project = new Project(column.project);
 
                 POOL.addPool(project, pool);
 
-                pool.ht[project.id].issues.push(issue);
+                project.issues().push(issue);
             }
         }
 
@@ -258,8 +260,7 @@ export default class Scrum extends SoghChild {
 
         data.issues_filterd = filter.apply(issues);
 
-        data.projects_filterd
-            = this.issues2projects(data.issues_filterd);
+        data.projects_filterd = this.issues2projects(data.issues_filterd);
     }
     fetchIssues (milestone, cb) {
         this._fetch.start = new Date();
@@ -298,6 +299,7 @@ export default class Scrum extends SoghChild {
             return this._data.milestones.find(d=>d.id()===milestone.id()) || this._data.milestones[0];
         };
 
+        // リポジトリのマイルストーンを全て取得する。
         this._sogh.getMilestonesByRepository(repository, (milestones) => {
             this._data.milestones = this.targetMilestones(milestones);
 
@@ -309,6 +311,7 @@ export default class Scrum extends SoghChild {
 
             this._data.milestone = getTargetMilestone(this._data.milestone ,this._data.milestones);
 
+            // マイルストーンのイシューを全て取得する。
             this._sogh.getIssuesByMilestone(this._data.milestone, (issues) => {
 
                 this._data.issues = issues;
@@ -430,7 +433,7 @@ export default class Scrum extends SoghChild {
     }
     summaryProjects (projects) {
         return projects.map(project=>{
-            const issues = project.issues;
+            const issues = project.issues();
             const record = { key: project, plan: 0, result: 0 };
 
             return issues.reduce(this.summaryIssueInRecord, record);

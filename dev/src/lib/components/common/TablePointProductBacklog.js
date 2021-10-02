@@ -46,6 +46,7 @@ export default function TablePointProductBacklog (props) {
         points: { plan: 0, result: 0 },
         issues: { open: 0, close: 0 },
     };
+
     const data = issues.reduce(sumRecord, record);
 
     return (

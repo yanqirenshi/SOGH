@@ -80,6 +80,18 @@ export default class Issue extends GraphQLNode {
     points () {
         return this._points || null;
     }
+    pointResultTotal () {
+        const points = this.points();
+
+        if (!points.results)
+            return points.result;
+
+        return points.results.total;
+    }
+    pointPlansTotal () {
+        const points = this.points();
+        return points.plan;
+    }
     body (v) {
         const core = this.core();
 

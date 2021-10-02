@@ -38,6 +38,7 @@ export default function Contents (props) {
     const milestones = base.milestones;
 
     const data = scrum._projects;
+
     const projects_filterd = data.projects_filterd;
     const filter = data.filter;
 
