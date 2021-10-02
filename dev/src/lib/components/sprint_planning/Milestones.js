@@ -46,6 +46,7 @@ export default function Milestones (props) {
 
           {milestones.map(m => {
               const milestone_id = m.id();
+
               return (
                   <div key={milestone_id}
                        className="panel-block"

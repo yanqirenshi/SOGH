@@ -46,10 +46,11 @@ export default function Contents (props) {
     }, [sogh]);
 
     useEffect(() => {
-        const m_sorted = milestones.sort((a,b)=>a.dueOn<b.dueOn?-1:1);
+        const sorter = (a,b)=> a.dueOn() < b.dueOn() ? -1 : 1;
+        const m_sorted = milestones.sort(sorter);
 
         const now = moment();
-        const trg = m_sorted.find(m => moment(m.dueOn).isAfter(now));
+        const trg = m_sorted.find(m => moment(m.dueOn()).isAfter(now));
 
         if (trg)
             setMilestone(trg);
