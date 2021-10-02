@@ -26,7 +26,8 @@ export default class Issue extends GraphQLNode {
         this._due_date = null;
         this._points = { plan: null, result: null, results: null };
 
-        this.addAnotetionValueNew(data);
+        if (arguments.length===1)
+            this.addAnotetionValueNew(data);
 
         this.regex = {
             point: {

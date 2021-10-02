@@ -16,7 +16,7 @@ function App(props) {
     const [token] = useState(process.env.REACT_APP_GITHUB_PARSONAL_TOKEN || null);
     const [owner] = useState(process.env.REACT_APP_GITHUB_REPOSITORY_OWNER || null);
     const [name]  = useState(process.env.REACT_APP_GITHUB_REPOSITORY_NAME || null);
-    const [updated_at, setUpdatedAt] = useState(null);
+    const [repository, setRepository] = useState(null);
 
     const sogh = props.sogh;
 
@@ -28,7 +28,7 @@ function App(props) {
         sogh.fetchRepository(owner, name, (success) => {
             const repo = sogh.getRepository(owner, name);
             sogh.activeRepository(repo);
-            setUpdatedAt(new Date());
+            setRepository(repo);
         });
     }, [sogh]);
 
@@ -36,12 +36,14 @@ function App(props) {
 
     return (
         <>
-          <span>{!!updated_at}</span>
           {!(token || sogh) && <SignIn callback={connectGithub}/>}
 
           <Router>
             <Switch>
-              <Route exact path='/' component={PageHome}/>
+              {/* <Route exact path='/' component={PageHome}/> */}
+              <Route exact path='/'>
+                <PageHome sogh={sogh} repository={repository}/>
+              </Route>
               <Route exact path='/product-backlogs/:id' component={PageProductBacklog} />
             </Switch>
           </Router>

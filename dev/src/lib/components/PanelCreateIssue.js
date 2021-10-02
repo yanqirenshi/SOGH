@@ -66,7 +66,6 @@ export default function PanelCreateIssue (props) {
 
     return (
         <div style={style}>
-
           <div style={style.head}>
             <input className="input is-small"
                    type="text"

@@ -18,7 +18,7 @@ function marker (today, d) {
         borderRadius: 2,
     };
 
-    const ret = /(\d+-\d+-\d+)\s+〜\s+(\d+-\d+-\d+)/.exec(d.title);
+    const ret = /(\d+-\d+-\d+)\s+〜\s+(\d+-\d+-\d+)/.exec(d.title());
 
     if (!ret)
         return null;
@@ -50,7 +50,7 @@ function filtering (keyword, list) {
 
 
 function itemStyle (mailestone, selected_milestone) {
-    const slected = selected_milestone && selected_milestone===mailestone.id;
+    const slected = selected_milestone && selected_milestone===mailestone.id();
 
     return {
         color: slected ? 'rgb(162, 32, 65)' : '#333',
@@ -70,7 +70,7 @@ function split (selected, list) {
         return { selected: [], un_selected: list };
 
     return list.reduce((out, d)=> {
-        if (selected.find(id=>id===d.id))
+        if (selected.find(id=>id===d.id()))
             out.selected.push(d);
         else
             out.un_selected.push(d);
@@ -117,14 +117,15 @@ export default function Milestones (props) {
                  value={keyword}
                  onChange={change} />
 
-          {list.map(d=>{
+          {list.map(milestone=>{
+              const milestone_id = milestone.id();
               return (
-                  <div key={d.id}
-                       style={itemStyle(d, selected_milestone)}
-                       data_id={d.id}
+                  <div key={milestone_id}
+                       style={itemStyle(milestone, selected_milestone)}
+                       data_id={milestone_id}
                        onClick={click}>
-                    {marker(today, d)}
-                    {d.title}
+                    {marker(today, milestone)}
+                    {milestone.title()}
                   </div>
               );
           })}

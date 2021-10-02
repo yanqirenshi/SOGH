@@ -1,12 +1,13 @@
 import React, {useEffect} from 'react';
 import { connect } from 'react-redux';
+import { useLocation } from "react-router-dom";
 
 import 'react-bulma-components/dist/react-bulma-components.min.css';
 
 import * as SOGH from './lib/index.js';
 
 import Tabs from './components/Tabs.js';
-// import TabCreateIssue from './components/TabCreateIssue.js';
+import TabCreateIssue from './components/TabCreateIssue.js';
 // import IssueDescription from './components/IssueDescription.js';
 import TabPanelIssue from './components/TabPanelIssue.js';
 
@@ -16,6 +17,12 @@ function isActive (a,b) {
 
     return {display:'none'};
 };
+
+function selectedTab (location, tabs) {
+    const pathname = location.pathname;
+    const params = new URLSearchParams(location.search);
+    return params.get('tab') || tabs[0].code;
+}
 
 const tabs = [
     { code: 'pi',  label: 'Panel Issue' },
@@ -30,34 +37,32 @@ const tabs = [
 ];
 
 function PageHome (props) {
-    const pathname = window.location.pathname;
-    const params = new URLSearchParams(window.location.search);
-    const selected = params.get('tab') || tabs[0].code;
-
     const sogh = props.sogh;
+    const repository = props.repository;
 
-    // const listener = () => console.log('finish get issues by gtd');
-
-    const repository = (sogh && sogh.activeRepository()) ?  sogh.activeRepository() : null;
+    const location = useLocation();
+    const selected = selectedTab(location, tabs);
 
     useEffect(() => {
         if (!repository) return;
         sogh.getIssuesOpenByLabel(repository, '会議', (x)=> x);
     }, [repository]);
 
+    if (!repository) return null;
+
     return (
         <div>
           <div style={{paddingTop:11}}>
-            <Tabs tabs={tabs} selected={selected} pathname={pathname} />
+            <Tabs tabs={tabs} selected={selected} pathname={location.pathname} />
           </div>
 
           <div style={isActive(tabs[0], selected)}>
             {sogh && <TabPanelIssue repository={repository} sogh={sogh} />}
           </div>
 
-          {/* <div style={isActive(tabs[1], selected)}> */}
-          {/*   {sogh && <TabCreateIssue sogh={sogh} />} */}
-          {/* </div> */}
+          <div style={isActive(tabs[1], selected)}>
+            {sogh && <TabCreateIssue sogh={sogh} />}
+          </div>
 
           {/* <div style={isActive(tabs[2], selected)}> */}
           {/*   <SOGH.ViwerIssues sogh={sogh} */}
@@ -66,23 +71,19 @@ function PageHome (props) {
           {/* </div> */}
 
           <div style={isActive(tabs[3], selected)}>
-            <SOGH.ScrumTimeline sogh={sogh}
-                                repository={repository} />
+            <SOGH.ScrumTimeline sogh={sogh} repository={repository} />
           </div>
 
           <div style={isActive(tabs[4], selected)}>
-            <SOGH.ScrumProjects sogh={sogh}
-                                repository={repository} />
+            <SOGH.ScrumProjects sogh={sogh} repository={repository} />
           </div>
 
           <div style={isActive(tabs[5], selected)}>
-            <SOGH.SprintPlanning sogh={sogh}
-                                 repository={repository} />
+            <SOGH.SprintPlanning sogh={sogh} repository={repository} />
           </div>
 
           <div style={isActive(tabs[6], selected)}>
-            <SOGH.ProductBacklogs sogh={sogh}
-                                  repository={repository}
+            <SOGH.ProductBacklogs sogh={sogh} repository={repository}
                                   productbacklog_url_prefix="/product-backlogs/" />
           </div>
 
@@ -102,9 +103,7 @@ function PageHome (props) {
 
 export default connect(
     (state) => {
-        return {
-            sogh: state.sogh,
-        };
+        return {};
     },
     (dispatch) => ({}),
 )(PageHome);

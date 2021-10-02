@@ -22,20 +22,20 @@ const style = {
     },
 };
 
-function marker (d) {
+function marker (project) {
     const colorByPriority = (v) => {
         const m = {
-            c: { background: '#e83929', color: '#fff' },
-            h: { background: '#fcc800', color: '#333' },
-            n: { background: '#89c3eb', color: '#333' },
-            l: { background: '#dcdddd', color: '#333' },
+            'c': { background: '#e83929', color: '#fff' },
+            'h': { background: '#fcc800', color: '#333' },
+            'n': { background: '#89c3eb', color: '#333' },
+            'l': { background: '#dcdddd', color: '#333' },
             '?': { background: '#ffffff', color: '#333' },
         };
         return m[v];
     };
 
+    const color = colorByPriority(project.priority());
 
-    const color = colorByPriority(d.priority);
     const style = {
         width: 6,
         minWidth: 6,
@@ -45,7 +45,7 @@ function marker (d) {
     };
 
     return (
-        <div style={style} data_id={d.id} />
+        <div style={style} data_id={project.id()} />
     );
 }
 
@@ -62,7 +62,7 @@ function filtering (keyword, list) {
 }
 
 function itemStyle (project, selected_projects) {
-    const slected = selected_projects.find(d=>d===project.id);
+    const slected = selected_projects.find(d=>d===project.id());
 
     return {
         padding: '4px 6px',
@@ -81,7 +81,7 @@ function split (selected, list) {
         return { selected: [], un_selected: list };
 
     return list.reduce((out, d)=> {
-        if (selected.find(id=>id===d.id))
+        if (selected.find(id=>id===d.id()))
             out.selected.push(d);
         else
             out.un_selected.push(d);
@@ -127,14 +127,16 @@ export default function Projects (props) {
     return (
         <div style={style}>
           <div>
-            {x.selected.map(d=>{
+            {x.selected.map(project=>{
+                const project_id = project.id();
+
                 return (
-                    <div key={d.id}
-                         style={itemStyle(d, selected_projects)}
-                         data_id={d.id}
+                    <div key={project_id}
+                         style={itemStyle(project, selected_projects)}
+                         data_id={project_id}
                          onClick={click}>
-                      {marker(d)}
-                      {d.name}
+                      {marker(project)}
+                      {project.name()}
                     </div>
                 );
             })}
@@ -150,14 +152,16 @@ export default function Projects (props) {
 
           <div style={style.list}>
             <div style={style.list.container}>
-            {x.un_selected.map(d=>{
+            {x.un_selected.map(project=>{
+                const project_id = project.id();
+
                 return (
-                    <div key={d.id}
-                         style={itemStyle(d, selected_projects)}
-                         data_id={d.id}
+                    <div key={project_id}
+                         style={itemStyle(project, selected_projects)}
+                         data_id={project_id}
                          onClick={click}>
-                      {marker(d)}
-                      {d.name}
+                      {marker(project)}
+                      {project.name()}
                     </div>
                 );
             })}
