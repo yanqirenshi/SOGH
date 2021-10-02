@@ -6,7 +6,7 @@ function isSelected (milestone, selected_milestone) {
     if (!selected_milestone)
         return null;
 
-    if (milestone.id!==selected_milestone.id)
+    if (milestone.id()!==selected_milestone.id())
         return null;
 
     return {fontWeight:'bold'};
@@ -28,7 +28,7 @@ export default function Milestones (props) {
 
         const id = trg(e.target).getAttribute('milestone_id');
 
-        props.callbacks.clickMilestone(milestones.find(d=>d.id===id));
+        props.callbacks.clickMilestone(milestones.find(milestone=>milestone.id()===id));
     };
 
     return (
@@ -44,28 +44,31 @@ export default function Milestones (props) {
             </button>
           </div>
 
-          {milestones.map(d => {
-              return <div key={d.id}
-                          className="panel-block"
-                          style={isSelected(d, milestone)}
-                          milestone_id={d.id}
-                          onClick={clickMilestone} >
-                       <div>
-                         <p>
-                           {d.title.replace('【スプリント】','')}
-                         </p>
-                         <p>
-                           <span style={{marginRight:11}}>
-                             納期: {moment(d.dueOn).format('YYYY-MM-DD')}
-                           </span>
-                           (
-                           <ANewTab to={d.url}>
-                             {d.number}
-                           </ANewTab>
-                           )
-                         </p>
-                       </div>
-                     </div>;
+          {milestones.map(m => {
+              const milestone_id = m.id();
+              return (
+                  <div key={milestone_id}
+                       className="panel-block"
+                       style={isSelected(m, milestone)}
+                       milestone_id={milestone_id}
+                       onClick={clickMilestone} >
+                    <div>
+                      <p>
+                        {m.title().replace('【スプリント】','')}
+                      </p>
+                      <p>
+                        <span style={{marginRight:11}}>
+                          納期: {moment(m.dueOn()).format('YYYY-MM-DD')}
+                        </span>
+                        (
+                        <ANewTab to={m.url()}>
+                          {m.number()}
+                        </ANewTab>
+                        )
+                      </p>
+                    </div>
+                  </div>
+              );
           })}
         </nav>
     );

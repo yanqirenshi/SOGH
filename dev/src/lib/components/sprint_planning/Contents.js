@@ -22,6 +22,7 @@ export default function Contents (props) {
     const [closeProjects, setCloseProjects] = useState({});
 
     const sogh = props.sogh;
+    const repository = props.repository;
 
     const changeMilestone = (m) => {
         setIssues([]);
@@ -35,15 +36,13 @@ export default function Contents (props) {
         const cb = (ret_issues) => setIssues(ret_issues);
 
         if (!m)
-            sogh.getIssuesByRepository(props.repository, cb);
+            sogh.getIssuesByRepository(repository, cb);
         else
             sogh.getIssuesByMilestone(m, cb);
     };
 
     useEffect(() => {
-        sogh.getMilestonesByRepository(props.repository, (milestones) => {
-            setMilestones(milestones);
-        });
+        sogh.getMilestonesByRepository(repository, (milestones) => setMilestones(milestones));
     }, [sogh]);
 
     useEffect(() => {

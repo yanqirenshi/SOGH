@@ -75,10 +75,10 @@ function PageHome (props) {
                                 repository={repository} />
           </div>
 
-          {/* <div style={isActive(tabs[5], selected)}> */}
-          {/*   <SOGH.SprintPlanning sogh={sogh} */}
-          {/*                        repository={repository} /> */}
-          {/* </div> */}
+          <div style={isActive(tabs[5], selected)}>
+            <SOGH.SprintPlanning sogh={sogh}
+                                 repository={repository} />
+          </div>
 
           <div style={isActive(tabs[6], selected)}>
             <SOGH.ProductBacklogs sogh={sogh}

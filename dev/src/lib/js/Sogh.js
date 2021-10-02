@@ -9,8 +9,11 @@ import Scrum from './Scrum.js';
 import ProductBacklogs from './ProductBacklogs.js';
 import ProductBacklog from './ProductBacklog.js';
 import Pool from './Pool.js';
+import Pool2 from './Pool2.js';
+import {Project} from './models/index.js';
 
 const POOL = new Pool();
+const POOL2 = new Pool2();
 
 export default class Sogh extends Loader {
     constructor (token, options) {
@@ -84,27 +87,28 @@ export default class Sogh extends Loader {
                 name: null,
                 updatedAt: null,
                 url: null,
-                issues: [],
+                // issues: [],
                 priority: 'l',
             };
         };
 
         for (const issue of issues) {
-            if (issue.projectCards.nodes.length===0) {
-                const project = empyProject();
+            if (issue.projectCards().length===0) {
+                const project = new Project(empyProject());
 
-                POOL.addPool(project, pool);
+                POOL2.addPool(project, pool);
 
-                pool.ht[project.id].issues.push(issue);
+                project.issues().push(issue);
             } else {
-                if (!issue.projectCards.nodes[0].column)
-                    continue;
+                const column = issue.projectCards()[0].column;
 
-                const project = this.addAnotetionValue4Project(issue.projectCards.nodes[0].column.project);
+                if (!column) continue;
 
-                POOL.addPool(project, pool);
+                const project = new Project(column.project);
 
-                pool.ht[project.id].issues.push(issue);
+                POOL2.addPool(project, pool);
+
+                project.issues().push(issue);
             }
         }
 
@@ -295,13 +299,18 @@ export default class Sogh extends Loader {
     ///// summary issue
     /////
     summaryIssue (out, issue, project) {
+        const point_plan   = issue.pointPlansTotal();
+        const point_result = issue.pointResultTotal();
+
         /// gross
-        out.gross.points.plan   += issue.point.plan || 0;
-        out.gross.points.result += issue.point.result || 0;
+        out.gross.points.plan   += point_plan;
+        out.gross.points.result += point_result;
 
         // priority
-        out.gross.priority[project.priority].plan += issue.point.plan;
-        out.gross.priority[project.priority].result += issue.point.result;
+        const priority = project.priority();
+
+        out.gross.priority[priority].plan   += point_plan;
+        out.gross.priority[priority].result += point_result;
 
         // assignee
         const sumAssignee = (assignee, issue, count, out) => {
@@ -314,11 +323,11 @@ export default class Sogh extends Loader {
 
             const data = out[assignee.id];
 
-            if (issue.point.plan)
-                data.points.plan += issue.point.plan / count;
+            if (point_plan)
+                data.points.plan += point_plan / count;
 
-            if (issue.point.result)
-                data.points.result += issue.point.result / count;
+            if (point_result)
+                data.points.result += point_result / count;
 
             if (issue.closedAt)
                 data.issues.close += 1;
@@ -326,11 +335,9 @@ export default class Sogh extends Loader {
                 data.issues.open += 1;
         };
 
-        for (const assignee of issue.assignees.nodes)
-            sumAssignee(assignee,
-                        issue,
-                        issue.assignees.nodes.length,
-                        out.assignees);
+        const assignees = issue.assignees();
+        for (const assignee of assignees)
+            sumAssignee(assignee, issue, assignees.length, out.assignees);
 
         if (issue.closedAt)
             out.gross.issues.close += 1;
@@ -340,7 +347,7 @@ export default class Sogh extends Loader {
         return out;
     }
     summaryIssues (out, project) {
-        const issues = project.issues;
+        const issues = project.issues();
 
         return issues.reduce((out, issue)=>{
             this.summaryIssue(out, issue, project);

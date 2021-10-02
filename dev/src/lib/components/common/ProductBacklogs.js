@@ -11,13 +11,16 @@ const style = {
 function buildSprintBacklogs (sogh, props, projects) {
     const close_projects = props.close_projects;
 
-    return projects.map(d => {
-        return <ProductBacklog key={d.id}
-                               project={d}
-                               close={close_projects[d.id] || false}
-                               sogh={sogh}
-                               callbacks={props.callbacks}
-                               productbacklog_url_prefix={props.productbacklog_url_prefix} />;
+    return projects.map(project => {
+        const project_id = project.id();
+        return (
+            <ProductBacklog key={project_id}
+                            project={project}
+                            close={close_projects[project_id] || false}
+                            sogh={sogh}
+                            callbacks={props.callbacks}
+                            productbacklog_url_prefix={props.productbacklog_url_prefix} />
+        );
     });
 }
 
