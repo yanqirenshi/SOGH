@@ -10,8 +10,7 @@ export default function SprintPlanning (props) {
     const sogh = props.sogh;
 
     useEffect(() => {
-        if (!props.repository) return;
-        setRepository(props.repository);
+        if (props.repository) setRepository(props.repository);
     }, [props.repository]);
 
     return (

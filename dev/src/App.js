@@ -25,7 +25,7 @@ function App(props) {
     useEffect(() => {
         if (!sogh) return;
 
-        sogh.fetchRepository(owner, name, (success) => {
+        sogh.fetchRepositories(owner, name, (success) => {
             const repo = sogh.getRepository(owner, name);
             sogh.activeRepository(repo);
             setRepository(repo);

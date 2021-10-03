@@ -13,39 +13,32 @@ export default function ScrumTimeline (props) {
     const productbacklog_url_prefix = props.productbacklog_url_prefix;
 
     const invokeUpdate = () => setUpdatedAt(new Date());
-    const refresh = () => scrum.fetch(repository, () => invokeUpdate());
+    const refresh = () => scrum.fetch(repository, ()=> invokeUpdate());
 
     useEffect(() => sogh && setScrum(sogh.scrum()), [repository]);
 
     useEffect(() => {
-        if (!scrum) return;
-
-        scrum.addListeners(() => invokeUpdate());
-
-        if (scrum.isNeverFetched())
-            refresh();
+        if (scrum) refresh();
     }, [scrum]);
 
     const changeFilter = (type, id) => {
-        scrum.changeFilter('timeline', type, id, () => invokeUpdate());
+        scrum.changeFilter('timeline', type, id, ()=> invokeUpdate());
     };
 
     const callbacks = {
         refresh: () => refresh(),
         filter: {
-            click: (type, id) => changeFilter(type, id),
+            click: (type, id)=> changeFilter(type, id),
             keyword: {
-                change: (val) => changeFilter('keyword', val),
+                change: (val)=> changeFilter('keyword', val),
             },
         },
         milestone: {
-            change: (milestone) => {
-                scrum.fetchIssues(milestone, () => setUpdatedAt(new Date()));
-            }
+            change: (milestone)=> scrum.fetchIssues(milestone, ()=> invokeUpdate()),
         },
         duedate: {
-            close: (v) => scrum.changeCloseDueDates('close', v, invokeUpdate),
-            open:  (v) => scrum.changeCloseDueDates('open',  v, invokeUpdate),
+            close: (v)=> scrum.changeCloseDueDates('close', v, invokeUpdate),
+            open:  (v)=> scrum.changeCloseDueDates('open',  v, invokeUpdate),
         },
     };
 

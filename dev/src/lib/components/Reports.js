@@ -10,7 +10,7 @@ export default function Reports (props) {
 
     return (
         <>
-          {sogh  && <Contents sogh={sogh} repository={repository} />}
+          {sogh  && repository && <Contents sogh={sogh} repository={repository} />}
           {!sogh && <NotSignIn />}
         </>
     );

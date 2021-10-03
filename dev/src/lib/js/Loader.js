@@ -550,7 +550,7 @@ export default class Loader {
 
         getter();
     }
-    fetchRepository (owner, name, cb) {
+    fetchRepositories (owner, name, cb) {
         if (!this.api.v4._token || !owner || !name)
             cb(null);
 

@@ -24,16 +24,16 @@ export default function Contents (props) {
     const sogh = props.sogh;
     const repository = props.repository;
 
-    const changeMilestone = (m) => {
+    const changeMilestone = (m)=> {
         setIssues([]);
         setMilestone(m);
     };
 
-    const fetchIssues = (m) => {
+    const fetchIssues = (m)=> {
         if (m===undefined)
             return;
 
-        const cb = (ret_issues) => setIssues(ret_issues);
+        const cb = (ret_issues)=> setIssues(ret_issues);
 
         if (!m)
             sogh.getIssuesByRepository(repository, cb);
@@ -41,11 +41,12 @@ export default function Contents (props) {
             sogh.getIssuesByMilestone(m, cb);
     };
 
-    useEffect(() => {
-        sogh.getMilestonesByRepository(repository, (milestones) => setMilestones(milestones));
-    }, [sogh]);
+    useEffect(()=> {
+        if (repository)
+            sogh.getMilestonesByRepository(repository, (milestones)=> setMilestones(milestones));
+    }, [repository]);
 
-    useEffect(() => {
+    useEffect(()=> {
         const sorter = (a,b)=> a.dueOn() < b.dueOn() ? -1 : 1;
         const m_sorted = milestones.sort(sorter);
 
@@ -56,34 +57,34 @@ export default function Contents (props) {
             setMilestone(trg);
     }, [milestones]);
 
-    useEffect(() => fetchIssues(milestone), [milestone]);
+    useEffect(()=> fetchIssues(milestone), [milestone]);
 
-    useEffect(() => {
+    useEffect(()=> {
         const filterd_issue = filter.apply(issues);
         setProjects(sogh.issues2projects(filterd_issue));
     }, [issues, sogh, changed]);
 
-    const changeFilter = (type, id) => {
+    const changeFilter = (type, id)=> {
         filter.change(type, id);
         setChanged(new Date());
     };
 
     const callbacks = {
-        refresh: () => fetchIssues(milestone),
+        refresh: ()=> fetchIssues(milestone),
         filter: {
-            click: (type, id) => changeFilter(type, id),
+            click: (type, id)=> changeFilter(type, id),
             keyword: {
-                change: (val) => changeFilter('keyword', val),
+                change: (val)=> changeFilter('keyword', val),
             },
         },
-        clickMilestone: (m) => changeMilestone(m),
-        clearMilestone: () => changeMilestone(null),
-        clickOpenAllProductBacklogs: () => setCloseProjects({}),
-        clickCloseAllProductBacklogs: () => setCloseProjects(projects.list.reduce((ht,project)=>{
+        clickMilestone: (m)=> changeMilestone(m),
+        clearMilestone: ()=> changeMilestone(null),
+        clickOpenAllProductBacklogs: ()=> setCloseProjects({}),
+        clickCloseAllProductBacklogs: ()=> setCloseProjects(projects.list.reduce((ht,project)=>{
             ht[project.id()] = true;
             return ht;
         },{})),
-        clickOpenProductBacklog: (id) => {
+        clickOpenProductBacklog: (id)=> {
             const ht = {...closeProjects};
 
             if (ht[id])
@@ -91,7 +92,7 @@ export default function Contents (props) {
 
             setCloseProjects(ht);
         },
-        clickCloseProductBacklog: (id) => {
+        clickCloseProductBacklog: (id)=> {
             const ht = {...closeProjects};
 
             ht[id] = true;
@@ -99,14 +100,14 @@ export default function Contents (props) {
             setCloseProjects(ht);
         },
         projects: {
-            close: (project_id) => {
+            close: (project_id)=> {
                 const ht = {...closeProjects};
 
                 ht[project_id] = true;
 
                 setCloseProjects(ht);
             },
-            open: (project_id) => {
+            open: (project_id)=> {
                 const ht = {...closeProjects};
 
                 if (ht[project_id])

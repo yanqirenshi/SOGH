@@ -12,39 +12,34 @@ export default function ScrumProjects (props) {
     const repository = props.repository;
     const productbacklog_url_prefix = props.productbacklog_url_prefix;
 
-    const invokeUpdate = () => setUpdatedAt(new Date());
-    const refresh = () => scrum.fetch(repository, () => invokeUpdate());
+    const invokeUpdate = ()=> setUpdatedAt(new Date());
+    const refresh = ()=> scrum.fetch(repository, ()=> invokeUpdate());
 
-    useEffect(() => sogh && setScrum(sogh.scrum()), [repository]);
+    useEffect(()=> sogh && setScrum(sogh.scrum()), [repository]);
 
-    useEffect(() => {
-        if (!scrum) return;
-
-        scrum.addListeners(() => invokeUpdate());
-
-        if (scrum.isNeverFetched())
-            refresh();
+    useEffect(()=> {
+        if (scrum) refresh();
     }, [scrum]);
 
     const callbacks = {
-        refresh: () => refresh(),
+        refresh: ()=> refresh(),
         filter: {
-            click: (type, id) => scrum.changeFilter('projects', type, id, invokeUpdate),
+            click: (type, id)=> scrum.changeFilter('projects', type, id, invokeUpdate),
             keyword: {
-                change: (val) => scrum.changeFilter('projects', 'keyword', val, invokeUpdate),
+                change: (val)=> scrum.changeFilter('projects', 'keyword', val, invokeUpdate),
             },
         },
         projects: {
-            close: (v) => scrum.changeCloseProjects('close', v, invokeUpdate),
-            open:  (v) => scrum.changeCloseProjects('open',  v, invokeUpdate),
+            close: (v)=> scrum.changeCloseProjects('close', v, invokeUpdate),
+            open:  (v)=> scrum.changeCloseProjects('open',  v, invokeUpdate),
         },
         list_pb: {
-            cleaAll:  () => scrum.setFilterProjects('all-hide', invokeUpdate),
-            checkAll: () => scrum.setFilterProjects('all-view', invokeUpdate),
+            cleaAll:  ()=> scrum.setFilterProjects('all-hide', invokeUpdate),
+            checkAll: ()=> scrum.setFilterProjects('all-view', invokeUpdate),
         },
         milestone: {
-            change: (milestone) => {
-                scrum.fetchIssues(milestone, () => setUpdatedAt(new Date()));
+            change: (milestone)=> {
+                scrum.fetchIssues(milestone, ()=> invokeUpdate());
             }
         },
     };
