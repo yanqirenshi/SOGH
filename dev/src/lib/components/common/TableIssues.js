@@ -38,16 +38,17 @@ function due (v) {
 }
 
 function prjPri (sogh, issue) {
-    return sogh.priorityLabel(issue.project.priority);
+    return sogh.priorityLabel(issue.project.priority());
 }
 
 function makeTrs (issue, sogh, productbacklog_url_prefix) {
     const point = issue.points();
     const point_result = point.results ? point.results.total : point.result;
+    const project = issue.project;
 
     return (
         <tr key={issue.id()}>
-          <td style={sogh.headerColor(issue.project)}>
+          <td style={project.colorByPriority()}>
             {prjPri(sogh, issue)}
           </td>
           <td style={style.right}>

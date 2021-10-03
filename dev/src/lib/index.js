@@ -8,7 +8,6 @@ import Reports          from './components/Reports.js';
 import ScrumProjects    from './components/ScrumProjects.js';
 import ScrumTimeline    from './components/ScrumTimeline.js';
 import SprintPlanning   from './components/SprintPlanning.js';
-import ViwerIssues      from './components/ViwerIssues.js';
 
 import Filter from './js/Filter.js';
 import Sogh from './js/Sogh.js';
@@ -18,7 +17,6 @@ import Issue from './js/models/Issue.js';
 export default Sogh;
 
 export {
-    ViwerIssues,
     ProductBacklogs,
     ProductBacklog,
     ScrumTimeline,

@@ -144,14 +144,20 @@ export default class Project extends GraphQLNode {
 
         return project;
     }
-    colorByPriority (v) {
-        const m = {
-            c: { background: '#e83929', color: '#fff' },
-            h: { background: '#fcc800', color: '#333' },
-            n: { background: '#89c3eb', color: '#333' },
-            l: { background: '#dcdddd', color: '#333' },
+    colorByPriority () {
+        if (this.closed())
+            return { background: 'none', color: '#333' };
+
+        const priority = this.priority();
+
+        const palette = {
+            'c': { background: '#e83929', color: '#fff' },
+            'h': { background: '#fcc800', color: '#333' },
+            'n': { background: '#89c3eb', color: '#333' },
+            'l': { background: '#dcdddd', color: '#333' },
             '?': { background: '#ffffff', color: '#333' },
         };
-        return m[v];
+
+        return palette[priority];
     }
 }

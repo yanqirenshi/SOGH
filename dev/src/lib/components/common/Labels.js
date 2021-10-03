@@ -24,31 +24,42 @@ function labelStyle (d) {
     };
 }
 
-export default function Labels (props) {
-    const issue = props.issue;
+function makeLabelsList (issue) {
+    const out = [];
 
-    const labels = [];
     let tmp = [];
-
     for (const label of issue.labels()) {
         tmp.push(label);
+
         if (tmp.length===2) {
-            labels.push(tmp);
+            out.push(tmp);
             tmp = [];
         }
     }
 
+    if (tmp.length!==0)
+        out.push(tmp);
+
+    return out;
+}
+
+export default function Labels (props) {
+    const issue = props.issue;
+
+    // ラベルは一行二つ表示にする。
+    const labels_list = makeLabelsList(issue);
+
     return (
-        labels.map((l,i) => {
+        labels_list.map((labels,i) => {
             return (
                 <div key={i}>
-                  {l.map(d => {
-                      const label_style = labelStyle(d);
+                  {labels.map(label => {
+                      const label_style = labelStyle(label);
                       return (
-                          <p key={d.id}
+                          <p key={label.id}
                              style={label_style}>
-                            <LinkBlank href={d.url}>
-                              {d.name}
+                            <LinkBlank href={label.url}>
+                              {label.name}
                             </LinkBlank>
                           </p>
                       );

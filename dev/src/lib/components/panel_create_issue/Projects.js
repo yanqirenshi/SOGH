@@ -23,18 +23,7 @@ const style = {
 };
 
 function marker (project) {
-    const colorByPriority = (v) => {
-        const m = {
-            'c': { background: '#e83929', color: '#fff' },
-            'h': { background: '#fcc800', color: '#333' },
-            'n': { background: '#89c3eb', color: '#333' },
-            'l': { background: '#dcdddd', color: '#333' },
-            '?': { background: '#ffffff', color: '#333' },
-        };
-        return m[v];
-    };
-
-    const color = colorByPriority(project.priority());
+    const color = project.colorByPriority();
 
     const style = {
         width: 6,

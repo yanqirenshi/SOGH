@@ -86,17 +86,17 @@ export default class ProductBacklogs extends SoghChild {
         const types = {};
         const assignees = {};
 
-        const x = (project, attr, ht) => {
-            const key = project[attr];
-
-            if (!ht[key]) ht[key]  = 1;
-            else          ht[key] += 1;
+        const x = (key, ht) => {
+            if (!ht[key])
+                ht[key]  = 1;
+            else
+                ht[key] += 1;
         };
 
         for (const project of projects) {
-            x(project, 'priority', priorities);
-            x(project, 'type', types);
-            x(project, 'assignee', assignees);
+            x(project.priority(), priorities);
+            x(project.type(), types);
+            x(project.assignee(), assignees);
         }
 
         const out = {
@@ -138,25 +138,27 @@ export default class ProductBacklogs extends SoghChild {
         const assignees = filter.assignees;
         const closing = filter.closing;
 
-        return this.sortProjectsByPriority(projects.filter(d => {
-            if (keyword && !d.name.toUpperCase().includes(keyword))
+        return this.sortProjectsByPriority(projects.filter(project => {
+            if (keyword && !project.name().toUpperCase().includes(keyword))
                 return false;
 
-            if (priorities['priorities'+d.priority])
+            if (priorities['priorities'+project.priority()])
                 return false;
 
-            if (types['types'+d.type])
+            if (types['types'+project.type()])
                 return false;
 
-            if (assignees['assignees'+d.assignee])
+            if (assignees['assignees'+project.assignee()])
                 return false;
 
-            if (closing)
-                if (!(d.progress.doneCount > 1 &&
-                      d.progress.inProgressCount === 0 &&
-                      d.progress.todoCount <= 1)
-                    && !d.result.end)
+            if (closing) {
+                const progress = project.progress();
+                if (!(progress.doneCount > 1 &&
+                      progress.inProgressCount === 0 &&
+                      progress.todoCount <= 1)
+                    && !project.result().end)
                     return false;
+            }
 
             return true;
         }));

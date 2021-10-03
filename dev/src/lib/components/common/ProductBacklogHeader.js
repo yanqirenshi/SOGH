@@ -8,8 +8,6 @@ import {
 import ANewTab from './ANewTab.js';
 
 export default function ProductBacklogHeader (props) {
-    const sogh = props.sogh;
-
     const project = props.project;
     const project_id = project.id();
     const project_name = project.name();
@@ -18,7 +16,10 @@ export default function ProductBacklogHeader (props) {
     const clickClose = () => props.callbacks.projects.close(project_id);
     const clickOpen = () => props.callbacks.projects.open(project_id);
 
-    const style_header = {...sogh.headerColor(project), ...{fontSize:14, display: 'flex'}};
+    const style_header = {
+        ...project.colorByPriority(),
+        ...{fontSize:14, display: 'flex'}
+    };
     const pb_to = props.productbacklog_url_prefix + project_id;
 
     return (

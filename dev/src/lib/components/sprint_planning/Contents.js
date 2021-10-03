@@ -79,8 +79,8 @@ export default function Contents (props) {
         clickMilestone: (m) => changeMilestone(m),
         clearMilestone: () => changeMilestone(null),
         clickOpenAllProductBacklogs: () => setCloseProjects({}),
-        clickCloseAllProductBacklogs: () => setCloseProjects(projects.list.reduce((ht,d)=>{
-            ht[d.id] = true;
+        clickCloseAllProductBacklogs: () => setCloseProjects(projects.list.reduce((ht,project)=>{
+            ht[project.id()] = true;
             return ht;
         },{})),
         clickOpenProductBacklog: (id) => {
@@ -97,6 +97,23 @@ export default function Contents (props) {
             ht[id] = true;
 
             setCloseProjects(ht);
+        },
+        projects: {
+            close: (project_id) => {
+                const ht = {...closeProjects};
+
+                ht[project_id] = true;
+
+                setCloseProjects(ht);
+            },
+            open: (project_id) => {
+                const ht = {...closeProjects};
+
+                if (ht[project_id])
+                    delete ht[project_id];
+
+                setCloseProjects(ht);
+            },
         },
     };
 

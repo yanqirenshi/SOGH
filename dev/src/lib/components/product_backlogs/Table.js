@@ -82,7 +82,6 @@ function theadContents () {
 export default function Table (props) {
     const [selected, setSelected] = useState(null);
 
-    const sogh = props.sogh;
     const projects = props.projects;
 
     const clickRow = (e) => {
@@ -103,15 +102,14 @@ export default function Table (props) {
             <thead>{theadContents()}</thead>
 
             <tbody>
-              {projects.map(d => {
-                  const s = sogh.headerColor(d);
+              {projects.map(project => {
+                  const stype_priority = project.colorByPriority();
                   const font = { c: 17, h: 16, n: 15, l: 14};
 
-                  const id = d.id();
-                  const progress = d.progress();
-                  const plan = d.plan();
-                  const result = d.result();
-
+                  const id = project.id();
+                  const progress = project.progress();
+                  const plan = project.plan();
+                  const result = project.result();
 
                   return (
                       <tr key={id}
@@ -119,29 +117,29 @@ export default function Table (props) {
                           className={selected===id ? 'is-selected ' : null}
                           project_id={id}
                           onClick={clickRow}>
-                        <td style={{...style.code, ...s}}>
-                          {priority(d)}
+                        <td style={{...style.code, ...stype_priority}}>
+                          {priority(project)}
                         </td>
 
                         <td>
-                          <ANewTab to={d.url()}>
-                            {d.number()}
+                          <ANewTab to={project.url()}>
+                            {project.number()}
                           </ANewTab>
                         </td>
 
                         <td style={style.code}>
-                          {d.type()}
+                          {project.type()}
                         </td>
 
-                        <td style={{fontSize:font[d.priority] || 14}}>
-                          <Link to={props.productbacklog_url_prefix + d.id}>
-                            {d.name()}
+                        <td style={{fontSize:font[project.priority] || 14}}>
+                          <Link to={props.productbacklog_url_prefix + project.id}>
+                            {project.name()}
                           </Link>
                         </td>
 
-                        <td>{d.state()}</td>
+                        <td>{project.state()}</td>
 
-                        <td>{d.assignee()}</td>
+                        <td>{project.assignee()}</td>
 
                         <td style={style.plan} title={dt(plan.start,1)}>{dt(plan.start)}</td>
                         <td style={style.plan} title={dt(plan.end,1)}>{dt(plan.end)}</td>

@@ -17,7 +17,7 @@ export default function Header (props) {
     const project = props.project;
     const callbacks = props.callbacks;
 
-    const color = sogh.headerColor(project);
+    const color = project.colorByPriority();
     const s_root = {...s.root, ...color};
 
     return (

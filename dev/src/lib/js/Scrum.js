@@ -187,8 +187,18 @@ export default class Scrum extends SoghChild {
             return m.format('YYYY-MM-DD');
         };
 
+        const dateByType = (issue) => {
+            if ('due_date'===type)
+                return issue.dueDate();
+
+            if ('date_next_action'===type)
+                return issue.nextActionDate();
+
+            return null;
+        };
+
         for (const issue of issues) {
-            const key = dd(issue.closedAt() || issue[type]);
+            const key = dd(issue.closedAt() || dateByType(issue));
 
             if (!ht[key])
                 ht[key] = [];
@@ -239,6 +249,7 @@ export default class Scrum extends SoghChild {
     }
     makeFilterdTimeline (issues) {
         const data = this._timeline;
+
         const filter = data.filter;
 
         data.duedates = this.issues2dates('due_date', issues);
@@ -360,8 +371,8 @@ export default class Scrum extends SoghChild {
     }
     changeCloseProjects (type, v, cb) {
         if (v==='all') {
-            const all = () => this._projects.projects.list.reduce((ht,d)=> {
-                ht[d.id] = true;
+            const all = () => this._projects.projects.list.reduce((ht,issue)=> {
+                ht[issue.id()] = true;
                 return ht;
             }, {});
 
@@ -372,6 +383,7 @@ export default class Scrum extends SoghChild {
 
                 if (ht[v])
                     delete ht[v];
+
                 this._projects.close_projects = ht;
             } else if ('close'===type) {
                 const ht = {...this._projects.close_projects};
@@ -386,8 +398,8 @@ export default class Scrum extends SoghChild {
     }
     changeCloseDueDates (type, v, cb) {
         if (v==='all') {
-            const all = () => this._timeline.duedates.list.reduce((ht,d)=> {
-                ht[d.due_date] = true;
+            const all = () => this._timeline.duedates.list.reduce((ht,issue)=> {
+                ht[issue.dueDate()] = true;
                 return ht;
             }, {});
 
