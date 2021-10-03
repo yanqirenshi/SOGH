@@ -40,11 +40,15 @@ function App(props) {
 
           <Router>
             <Switch>
-              {/* <Route exact path='/' component={PageHome}/> */}
+
               <Route exact path='/'>
                 <PageHome sogh={sogh} repository={repository}/>
               </Route>
-              <Route exact path='/product-backlogs/:id' component={PageProductBacklog} />
+
+              <Route exact path='/product-backlogs/:id'>
+                <PageProductBacklog sogh={sogh} repository={repository}/>
+              </Route>
+
             </Switch>
           </Router>
         </>

@@ -48,6 +48,8 @@ function PageHome (props) {
 
     if (!repository) return null;
 
+    const pb_url_prefix = '/product-backlogs/';
+
     return (
         <div>
           <div style={{paddingTop:11}}>
@@ -63,20 +65,27 @@ function PageHome (props) {
           </div>
 
           <div style={isActive(tabs[2], selected)}>
-            <SOGH.ScrumTimeline sogh={sogh} repository={repository} />
+            <SOGH.ScrumTimeline sogh={sogh}
+                                repository={repository}
+                                productbacklog_url_prefix={pb_url_prefix} />
           </div>
 
           <div style={isActive(tabs[3], selected)}>
-            <SOGH.ScrumProjects sogh={sogh} repository={repository} />
+            <SOGH.ScrumProjects sogh={sogh}
+                                repository={repository}
+                                productbacklog_url_prefix={pb_url_prefix} />
           </div>
 
           <div style={isActive(tabs[4], selected)}>
-            <SOGH.SprintPlanning sogh={sogh} repository={repository} />
+            <SOGH.SprintPlanning sogh={sogh}
+                                 repository={repository}
+                                 productbacklog_url_prefix={pb_url_prefix} />
           </div>
 
           <div style={isActive(tabs[5], selected)}>
-            <SOGH.ProductBacklogs sogh={sogh} repository={repository}
-                                  productbacklog_url_prefix="/product-backlogs/" />
+            <SOGH.ProductBacklogs sogh={sogh}
+                                  repository={repository}
+                                  productbacklog_url_prefix={pb_url_prefix} />
           </div>
 
           <div style={isActive(tabs[6], selected)}>

@@ -83,6 +83,7 @@ export default function Table (props) {
     const [selected, setSelected] = useState(null);
 
     const projects = props.projects;
+    const productbacklog_url_prefix = props.productbacklog_url_prefix;
 
     const clickRow = (e) => {
         const getTr = (elem) => {
@@ -131,8 +132,8 @@ export default function Table (props) {
                           {project.type()}
                         </td>
 
-                        <td style={{fontSize:font[project.priority] || 14}}>
-                          <Link to={props.productbacklog_url_prefix + project.id}>
+                        <td style={{fontSize:font[project.priority()] || 14}}>
+                          <Link to={productbacklog_url_prefix + id}>
                             {project.name()}
                           </Link>
                         </td>

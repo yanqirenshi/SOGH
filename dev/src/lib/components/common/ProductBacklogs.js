@@ -8,28 +8,35 @@ const style = {
     alignItems: 'flex-start',
 };
 
-function buildSprintBacklogs (sogh, props, projects) {
-    const close_projects = props.close_projects;
-
+function buildSprintBacklogs (sogh, projects, close_projects, callbacks, productbacklog_url_prefix) {
     return projects.map(project => {
         const project_id = project.id();
+
         return (
             <ProductBacklog key={project_id}
                             project={project}
                             close={close_projects[project_id] || false}
                             sogh={sogh}
-                            callbacks={props.callbacks}
-                            productbacklog_url_prefix={props.productbacklog_url_prefix} />
+                            callbacks={callbacks}
+                            productbacklog_url_prefix={productbacklog_url_prefix} />
         );
     });
 }
 
 export default function ProductBacklogs (props) {
     const sogh = props.sogh;
+    const projects = props.projects;
+    const close_projects = props.close_projects;
+    const productbacklog_url_prefix = props.productbacklog_url_prefix;
+    const callbacks = props.callbacks;
 
     return (
         <div style={style}>
-          {buildSprintBacklogs(sogh, props, props.projects)}
+          {buildSprintBacklogs(sogh,
+                               projects,
+                               close_projects,
+                               callbacks,
+                               productbacklog_url_prefix)}
         </div>
     );
 }

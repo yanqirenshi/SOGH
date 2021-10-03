@@ -20,6 +20,7 @@ export default function ProductBacklogHeader (props) {
         ...project.colorByPriority(),
         ...{fontSize:14, display: 'flex'}
     };
+
     const pb_to = props.productbacklog_url_prefix + project_id;
 
     return (

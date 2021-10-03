@@ -214,7 +214,7 @@ export default class Filter {
         if (!filter.others().EmptyPlan)
             return true;
 
-        if (issue.point().plan===null)
+        if (issue.points().plan===null)
             return true;
 
         return false;
@@ -223,7 +223,7 @@ export default class Filter {
         if (!filter.others().DiffMinus)
             return true;
 
-        if ((issue.point().plan - issue.point().result) < 0)
+        if ((issue.points().plan - issue.points().result) < 0)
             return true;
 
         return false;

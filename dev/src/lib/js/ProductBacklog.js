@@ -69,18 +69,18 @@ export default class ProductBacklog extends SoghChild {
         return column;
     }
     getCard (project, issue) {
-        const cards = issue.projectCards.nodes;
+        const cards = issue.projectCards();
 
-        return cards.find(d=> {
-            return d.column && d.column.project.id===project.id;
+        return cards.find(card=> {
+            return card.column && card.column.project.id===project.id();
         });
     }
     makeColumns (project) {
-        return project.columns.nodes.reduce((ht,c) => {
-            const new_c = {...c};
+        return project.columns().reduce((ht,column) => {
+            const new_column = {...column};
 
-            new_c.issues = [];
-            ht[new_c.id] = new_c;
+            new_column.issues = [];
+            ht[new_column.id] = new_column;
 
             return ht;
         }, {});
@@ -113,10 +113,10 @@ export default class ProductBacklog extends SoghChild {
                 return ht;
             };
 
-            if(issue.assignees.nodes.length===0)
+            if(issue.assignees().length===0)
                 addAssgingee(assignees, { id: null, name: '@未割り当て'});
 
-            issue.assignees.nodes.reduce(addAssgingee, assignees);
+            issue.assignees().reduce(addAssgingee, assignees);
         }
 
         const sorter_m = (a,b) => a.dueOn < b.dueOn ? 1 : -1;
@@ -134,12 +134,14 @@ export default class ProductBacklog extends SoghChild {
 
         this.clearData();
 
-        this._fetching = project.columns.nodes.reduce((ht,d)=>{
+        const columns = project.columns();
+
+        this._fetching = columns.reduce((ht,d)=>{
             ht[d.id] = null;
             return ht;
         }, {});
 
-        for (const column of project.columns.nodes)
+        for (const column of columns)
             this._sogh.getIssuesByProjectColumn(column, (ret)=> {
                 this._data.issues = this._data.issues.concat(ret);
 

@@ -212,22 +212,6 @@ export default class Sogh extends Loader {
         return column * w + ((column - 1) * m);
     }
     // TODO: 廃棄予定
-    headerColor (project) {
-        console.warn('Sogh.headerColor は廃止予定です。Project.colorByPriority を利用してください。');
-        if (project.state==="CLOSED")
-            return { background: 'none', color: '#333' };
-
-        const m = {
-            'c': { background: '#e83929', color: '#fff' },
-            'h': { background: '#fcc800', color: '#333' },
-            'n': { background: '#89c3eb', color: '#333' },
-            'l': { background: '#dcdddd', color: '#333' },
-            '?': { background: '#ffffff', color: '#333' },
-        };
-
-        return m[project.priority()];
-    }
-    // TODO: 廃棄予定
     sizingButtonColors (priority) {
         console.warn('Sogh.sizingButtonColors は廃止予定です。Project.colorByPriority を利用してください。');
 

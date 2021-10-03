@@ -16,8 +16,12 @@ export default function SprintPlanning (props) {
 
     return (
         <>
-          {sogh  && repository && <Contents sogh={sogh} repository={repository} />}
           {!sogh && <NotSignIn />}
+
+          {sogh && repository &&
+           <Contents sogh={sogh}
+                     repository={repository}
+                     productbacklog_url_prefix={props.productbacklog_url_prefix}/>}
         </>
     );
 }

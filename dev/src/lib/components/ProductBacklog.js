@@ -20,7 +20,8 @@ export default function ProductBacklog (props) {
 
     return (
         <>
-          {core  && <Contents core={core} sogh={sogh}
+          {core  && <Contents core={core}
+                              sogh={sogh}
                               repository={repository}
                               project_id={project_id}
                               root_url={root_url} />}

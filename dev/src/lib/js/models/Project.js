@@ -90,6 +90,12 @@ export default class Project extends GraphQLNode {
     issues () {
         return this._issues;
     }
+    columns () {
+        if (!this._core.columns)
+            return [];
+
+        return this._core.columns.nodes;
+    }
     addAnotetionValue (project) {
         const priority = (p) => {
             const ret = /.*@Priority:\s+([c|h|n|l]).*/.exec(p.body);
