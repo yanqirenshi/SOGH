@@ -12,11 +12,8 @@ import Controller from './sprint_planning/Controller.js';
 import style from  './sprint_planning/Styles.js';
 
 export default function SprintPlanning (props) {
-    const [repository, setRepository] = useState(null);
-
     const [filter] = useState(new Filter());
     const [changed, setChanged] = useState(null);
-
     const [milestones, setMilestones] = useState([]);
     const [milestone, setMilestone] = useState(undefined);
     const [issues, setIssues] = useState([]);
@@ -24,7 +21,7 @@ export default function SprintPlanning (props) {
     const [closeProjects, setCloseProjects] = useState({});
 
     const sogh = props.sogh;
-    const in_repository = props.repository;
+    const repository = props.repository;
     const productbacklog_url_prefix = props.productbacklog_url_prefix;
 
     const changeMilestone = (m)=> {
@@ -48,10 +45,6 @@ export default function SprintPlanning (props) {
         filter.change(type, id);
         setChanged(new Date());
     };
-
-    useEffect(() => {
-        if (in_repository) setRepository(in_repository);
-    }, [in_repository]);
 
     useEffect(()=> {
         if (repository)
