@@ -125,7 +125,7 @@ export default class Issue extends GraphQLNode {
             this.body(body + '\n$Date.Due ' + (v ? v : 'yyyy-mm-dd'));
         }
 
-        this.addAnotetionValue(this.core());
+        this.addAnotetionValueNew(this.core());
 
         return this.getDueDateFromBody(body);
     }
@@ -146,7 +146,7 @@ export default class Issue extends GraphQLNode {
             this.body(body + '\n$Date.Next ' + (v ? v : 'yyyy-mm-dd'));
         }
 
-        this.addAnotetionValue(this.core());
+        this.addAnotetionValueNew(this.core());
 
         return this.getNextActionFromBody(body);
     }

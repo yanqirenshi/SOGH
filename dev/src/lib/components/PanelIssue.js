@@ -16,9 +16,8 @@ export default function PanelIssue (props) {
     const style = {
         width: props.w || 200,
     };
-
     const change = (key, val) => {
-        const i = new Issue(issue);
+        const i = issue;
 
         if (key==="due_date") {
             i.dueDate(val);

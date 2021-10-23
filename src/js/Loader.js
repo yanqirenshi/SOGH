@@ -534,8 +534,8 @@ export default class Loader {
 
         const q = query.update_issue_body
               .replace('@issue-data', this.makeGraphQLData({
-                  id: data.id,
-                  body: data.body,
+                  id: data.id(),
+                  body: data.body(),
               }));
 
         const getter = (endCursor) => {
