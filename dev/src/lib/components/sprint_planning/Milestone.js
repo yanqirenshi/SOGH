@@ -7,7 +7,11 @@ import ANewTab from '../common/ANewTab.js';
 export default function Milestone (props) {
     const sogh = props.sogh;
     const data = sogh.summaryIssuesByProjects(props.projects);
-    const milestone = props.milestone || { title: 'All', url: null };
+    const milestone = props.milestone;
+
+    const number = !milestone ? null : milestone.number();
+    const title = !milestone ? 'ALL' : milestone.title();
+    const url = !milestone ? null : milestone.url();
 
     return (
         <nav className="panel">
@@ -16,16 +20,12 @@ export default function Milestone (props) {
             Milestone:
 
             <strong style={{marginLeft:8}}>
-              {milestone.title}
+              {title}
             </strong>
 
-            {milestone.url &&
+            {url &&
              <span style={{marginLeft: 11}}>
-               (
-               <ANewTab to={milestone.url}>
-                 {milestone.number}
-               </ANewTab>
-               )
+               (<ANewTab to={url}>{number}</ANewTab>)
              </span>}
           </p>
 
@@ -42,10 +42,12 @@ export default function Milestone (props) {
                 {Object.keys(data.assignees).map(key => {
                     const d = data.assignees[key];
 
-                    return <IssueSummary key={d.assignee.id}
-                              style={{marginRight:22}}
-                              label={d.assignee.name || d.assignee.login}
-                              source={d}/>;
+                    return (
+                        <IssueSummary key={d.assignee.id}
+                                      style={{marginRight:22}}
+                                      label={d.assignee.name || d.assignee.login}
+                                      source={d}/>
+                    );
                 })}
               </div>
 

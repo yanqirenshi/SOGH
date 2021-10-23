@@ -3,7 +3,7 @@ import moment from 'moment';
 
 function dt (type, v) {
     if (type==='projects')
-        return v.key.name;
+        return v.key.name();
 
     if (type==='duedates') {
         const date = v.key;
@@ -21,6 +21,16 @@ function dt (type, v) {
 
     return v;
 };
+
+function keyLabel (type) {
+    if (type==='projects')
+        return 'Backlog';
+
+    if (type==='duedates')
+        return 'Date';
+
+    return '???';
+}
 
 export default function Summary (props) {
     const type = props.type;
@@ -48,7 +58,7 @@ export default function Summary (props) {
                      style={style.table}>
                 <thead>
                   <tr>
-                    <th>Date</th>
+                    <th>{keyLabel(type)}</th>
                     <th>Plan</th>
                     <th>Result</th>
                     <th>Total</th>

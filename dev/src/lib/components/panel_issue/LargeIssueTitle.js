@@ -15,11 +15,11 @@ export default function LargeIssueTitle (props) {
     return (
         <div style={style}>
           <p>
-            {issue.title}
+            {issue.title()}
 
             <span style={{marginLeft:11}}>(</span>
-            <ANewTab href={issue.url}>
-              {issue.number}
+            <ANewTab href={issue.url()}>
+              {issue.number()}
             </ANewTab>
             <span>)</span>
           </p>

@@ -3,7 +3,9 @@ import moment from 'moment';
 import SoghChild from './SoghChild.js';
 
 import Filter from './Filter.js';
-import Pool from './Pool.js';
+import Pool from './Pool2.js';
+
+import {Project} from './models/index.js';
 
 const POOL = new Pool();
 
@@ -136,8 +138,8 @@ export default class Scrum extends SoghChild {
     targetMilestones (milestones) {
         const now = moment().startOf('date');
 
-        const filter = m => {
-            const ret = /(\d+-\d+-\d+)\s*〜\s*(\d+-\d+-\d+)/.exec(m.title);
+        const filter = milestone => {
+            const ret = /(\d+-\d+-\d+)\s*〜\s*(\d+-\d+-\d+)/.exec(milestone.title());
 
             if (!ret) return false;
 
@@ -147,7 +149,7 @@ export default class Scrum extends SoghChild {
             if (!from.isValid() || !to.isValid())
                 return false;
 
-            m.term = {
+            milestone.term = {
                 from: from,
                 to: to,
             };
@@ -185,8 +187,18 @@ export default class Scrum extends SoghChild {
             return m.format('YYYY-MM-DD');
         };
 
+        const dateByType = (issue) => {
+            if ('due_date'===type)
+                return issue.dueDate();
+
+            if ('date_next_action'===type)
+                return issue.nextActionDate();
+
+            return null;
+        };
+
         for (const issue of issues) {
-            const key = dd(issue.closedAt || issue[type]);
+            const key = dd(issue.closedAt() || dateByType(issue));
 
             if (!ht[key])
                 ht[key] = [];
@@ -208,28 +220,28 @@ export default class Scrum extends SoghChild {
                 name: null,
                 updatedAt: null,
                 url: null,
-                issues: [],
+                // issues: [],
                 priority: 'l',
             };
         };
 
         for (const issue of issues) {
-            if (issue.projectCards.nodes.length===0) {
-                const project = empyProject();
+            if (issue.projectCards().length===0) {
+                const project = new Project(empyProject());
 
                 POOL.addPool(project, pool);
 
-                pool.ht[project.id].issues.push(issue);
+                project.issues().push(issue);
             } else {
-                const column = issue.projectCards.nodes[0].column;
+                const column = issue.projectCards()[0].column;
 
                 if (!column) continue;
 
-                const project = this.addAnotetionValue4Project(column.project);
+                const project = new Project(column.project);
 
                 POOL.addPool(project, pool);
 
-                pool.ht[project.id].issues.push(issue);
+                project.issues().push(issue);
             }
         }
 
@@ -237,6 +249,7 @@ export default class Scrum extends SoghChild {
     }
     makeFilterdTimeline (issues) {
         const data = this._timeline;
+
         const filter = data.filter;
 
         data.duedates = this.issues2dates('due_date', issues);
@@ -258,8 +271,7 @@ export default class Scrum extends SoghChild {
 
         data.issues_filterd = filter.apply(issues);
 
-        data.projects_filterd
-            = this.issues2projects(data.issues_filterd);
+        data.projects_filterd = this.issues2projects(data.issues_filterd);
     }
     fetchIssues (milestone, cb) {
         this._fetch.start = new Date();
@@ -295,14 +307,22 @@ export default class Scrum extends SoghChild {
             if (!milestone)
                 return this._data.milestones[0];
 
-            return this._data.milestones.find(d=>d.id===milestone.id) || this._data.milestones[0];
+            return this._data.milestones.find(d=>d.id()===milestone.id()) || this._data.milestones[0];
         };
 
+        // リポジトリのマイルストーンを全て取得する。
         this._sogh.getMilestonesByRepository(repository, (milestones) => {
             this._data.milestones = this.targetMilestones(milestones);
 
+            if (this._data.milestones.length===0) {
+                this._data.milestone = null;
+                this._data.issues = [];
+                cb();
+            }
+
             this._data.milestone = getTargetMilestone(this._data.milestone ,this._data.milestones);
 
+            // マイルストーンのイシューを全て取得する。
             this._sogh.getIssuesByMilestone(this._data.milestone, (issues) => {
 
                 this._data.issues = issues;
@@ -351,8 +371,8 @@ export default class Scrum extends SoghChild {
     }
     changeCloseProjects (type, v, cb) {
         if (v==='all') {
-            const all = () => this._projects.projects.list.reduce((ht,d)=> {
-                ht[d.id] = true;
+            const all = () => this._projects.projects.list.reduce((ht,issue)=> {
+                ht[issue.id()] = true;
                 return ht;
             }, {});
 
@@ -363,6 +383,7 @@ export default class Scrum extends SoghChild {
 
                 if (ht[v])
                     delete ht[v];
+
                 this._projects.close_projects = ht;
             } else if ('close'===type) {
                 const ht = {...this._projects.close_projects};
@@ -377,8 +398,8 @@ export default class Scrum extends SoghChild {
     }
     changeCloseDueDates (type, v, cb) {
         if (v==='all') {
-            const all = () => this._timeline.duedates.list.reduce((ht,d)=> {
-                ht[d.due_date] = true;
+            const all = () => this._timeline.duedates.list.reduce((ht,issue)=> {
+                ht[issue.dueDate()] = true;
                 return ht;
             }, {});
 
@@ -402,7 +423,7 @@ export default class Scrum extends SoghChild {
         if (cb) cb();
     }
     summaryIssueInRecord (record, issue) {
-        const point = issue.point;
+        const point = issue.points();
 
         record.plan += (point.plan || 0);
 
@@ -424,7 +445,7 @@ export default class Scrum extends SoghChild {
     }
     summaryProjects (projects) {
         return projects.map(project=>{
-            const issues = project.issues;
+            const issues = project.issues();
             const record = { key: project, plan: 0, result: 0 };
 
             return issues.reduce(this.summaryIssueInRecord, record);

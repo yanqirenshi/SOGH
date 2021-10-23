@@ -8,44 +8,46 @@ import {
 import ANewTab from './ANewTab.js';
 
 export default function ProductBacklogHeader (props) {
-    const sogh = props.sogh;
-
     const project = props.project;
+    const project_id = project.id();
+    const project_name = project.name();
+    const project_number = project.number();
 
-    const clickClose = () => props.callbacks.projects.close(project.id);
-    const clickOpen = () => props.callbacks.projects.open(project.id);
+    const clickClose = () => props.callbacks.projects.close(project_id);
+    const clickOpen = () => props.callbacks.projects.open(project_id);
 
-    const style_header = {...sogh.headerColor(project), ...{fontSize:14, display: 'flex'}};
-    const pb_to = props.productbacklog_url_prefix + project.id;
+    const style_header = {
+        ...project.colorByPriority(),
+        ...{fontSize:14, display: 'flex'}
+    };
+
+    const pb_to = props.productbacklog_url_prefix + project_id;
 
     return (
         <div className="panel-heading" style={style_header}>
           <div style={{flexGrow:1, display:'flex'}}>
-            {project.id
+            {project_id
              && <Link to={pb_to} style={{color: 'inherit'}}>
-                  <p>{project.name || '@Project 未割り当て'}</p>
+                  <p>{project_name || '@Project 未割り当て'}</p>
                 </Link>}
 
-            {!project.id
-             && <p>{project.name || '@Project 未割り当て'}</p>}
+            {!project_id
+             && <p>{project_name || '@Project 未割り当て'}</p>}
 
-            {project.number
+            {project_number
              && (<p style={{marginLeft:11}}>
-                   <ANewTab to={project.url}>
-                     ({project.number})
+                   <ANewTab to={project.url()}>
+                     ({project_number})
                    </ANewTab>
                  </p>)}
           </div>
 
           <div>
             {!props.close &&
-             <FontAwesomeIcon style={{}}
-                              icon={faWindowMinimize}
-                              onClick={clickClose} />}
+             <FontAwesomeIcon icon={faWindowMinimize} onClick={clickClose} />}
+
             {props.close &&
-             <FontAwesomeIcon style={{}}
-                              icon={faWindowMaximize}
-                              onClick={clickOpen} />}
+             <FontAwesomeIcon icon={faWindowMaximize} onClick={clickOpen} />}
           </div>
         </div>
     );

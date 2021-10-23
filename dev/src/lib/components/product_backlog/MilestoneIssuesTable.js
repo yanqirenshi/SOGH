@@ -4,12 +4,12 @@ import moment from 'moment';
 import Labels from '../common/Labels.js';
 
 function makeProjectColumn (d, project) {
-    const cards = d.projectCards.nodes;
+    const cards = d.projectCards();
 
     if (cards.length===0)
         return '';
 
-    const target = cards.find(d => d.column.project.id===project.id);
+    const target = cards.find(d => d.column.project.id===project.id());
 
     if (!target)
         return '';
@@ -29,42 +29,47 @@ function due (v) {
     return m.format('MM-DD ddd');
 }
 
-function makeTr (d, project) {
-    const issue = d;
-    const point_result = issue.point.results ? issue.point.results.total : issue.point.result;
+function makeTr (issue, project) {
+    const point_result = issue.pointResultTotal();
 
     return (
-        <tr key={d.id}>
-          <td style={{whiteSpace: 'nowrap'}}>{makeProjectColumn(d, project)}</td>
+        <tr key={issue.id()}>
+          <td style={{whiteSpace: 'nowrap'}}>
+            {makeProjectColumn(issue, project)}
+          </td>
           <td>
-            <a href={d.url} target="_blank" rel="noreferrer">
-              {d.number}
+            <a href={issue.url()} target="_blank" rel="noreferrer">
+              {issue.number()}
             </a>
           </td>
           <td>
-            {d.title}
+            {issue.title()}
           </td>
           <td>
             <Labels issue={issue}/>
           </td>
           <td style={{whiteSpace: 'nowrap'}}>
-            {issue.owner}
+            {issue.owner()}
           </td>
-          <td style={{whiteSpace: 'nowrap'}}>{due(d.due_date)}</td>
+          <td style={{whiteSpace: 'nowrap'}}>
+            {due(issue.dueDate())}
+          </td>
           <td>
-            {d.assignees.nodes.map(a => {
-                return <p key={d.id+'.'+a.id}>
-                         {a.name || a.login}
-                       </p>;
+            {issue.assignees().map(a => {
+                return (
+                    <p key={issue.id() + '.' + a.id}>
+                      {a.name || a.login}
+                    </p>
+                );
             })}
           </td>
           <td style={{whiteSpace: 'nowrap'}}>
-            {due(issue.date_next_action)}
+            {due(issue.nextActionDate())}
           </td>
-          <td>{d.point.plan}</td>
+          <td>{issue.pointPlansTotal()}</td>
           <td>{point_result}</td>
           <td style={{whiteSpace: 'nowrap'}}>
-            {due(d.updatedAt)}
+            {due(issue.updatedAt())}
           </td>
         </tr>
     );

@@ -16,31 +16,39 @@ function App(props) {
     const [token] = useState(process.env.REACT_APP_GITHUB_PARSONAL_TOKEN || null);
     const [owner] = useState(process.env.REACT_APP_GITHUB_REPOSITORY_OWNER || null);
     const [name]  = useState(process.env.REACT_APP_GITHUB_REPOSITORY_NAME || null);
-    const [updated_at, setUpdatedAt] = useState(null);
+    const [repository, setRepository] = useState(null);
+
+    const sogh = props.sogh;
 
     useEffect(() => props.connectGithub(token), [token]);
 
     useEffect(() => {
-        if (!props.sogh) return;
+        if (!sogh) return;
 
-        props.sogh.fetchRepository(owner, name, (success) => {
-            const repo = props.sogh.getRepository(owner, name);
-            props.sogh.activeRepository(repo);
-            setUpdatedAt(new Date());
+        sogh.fetchRepositories(owner, name, (success) => {
+            const repo = sogh.getRepository(owner, name);
+            sogh.activeRepository(repo);
+            setRepository(repo);
         });
-    }, [props.sogh]);
+    }, [sogh]);
 
     const connectGithub = (token) => props.connectGithub(token);
 
     return (
         <>
-          <span>{!!updated_at}</span>
-          {!(token || props.sogh) && <SignIn callback={connectGithub}/>}
+          {!(token || sogh) && <SignIn callback={connectGithub}/>}
 
           <Router>
             <Switch>
-              <Route exact path='/' component={PageHome}/>
-              <Route exact path='/product-backlogs/:id' component={PageProductBacklog} />
+
+              <Route exact path='/'>
+                <PageHome sogh={sogh} repository={repository}/>
+              </Route>
+
+              <Route exact path='/product-backlogs/:id'>
+                <PageProductBacklog sogh={sogh} repository={repository}/>
+              </Route>
+
             </Switch>
           </Router>
         </>

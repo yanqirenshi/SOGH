@@ -111,7 +111,8 @@ export default class Filter {
         const statuses = { ht: {}, list: [] };
 
         for (const issue of issues) {
-            const k = issue.closedAt ? 'Close' : 'Open';
+            const k = issue.closedAt() ? 'Close' : 'Open';
+
             if (!statuses.ht[k]) {
                 const d = { title: k, count: 1 };
                 statuses.ht[k] = d;
@@ -120,7 +121,7 @@ export default class Filter {
                 statuses.ht[k].count += 1;
             }
 
-            for (const a of issue.assignees.nodes) {
+            for (const a of issue.assignees()) {
                 if (!assignees.ht[a.id]) {
                     assignees.ht[a.id] = a;
                     assignees.list.push(a);
@@ -139,7 +140,7 @@ export default class Filter {
         };
     }
     checkProjects (filter, issue) {
-        const id_list = issue.projectCards.nodes.reduce((out, d) => {
+        const id_list = issue.projectCards().reduce((out, d) => {
             if (d.column)
                 out.push(d.column.project.id);
             return out;
@@ -155,7 +156,7 @@ export default class Filter {
         return id_list_filterd.length===0;
     }
     checkAssignees (filter, issue) {
-        const id_list = issue.assignees.nodes.map(d=>d.id);
+        const id_list = issue.assignees().map(d=>d.id);
 
         if (id_list.length===0)
             return true;
@@ -170,10 +171,12 @@ export default class Filter {
         return id_list_filterd.length > 0;
     }
     checkStatus (filter, issue) {
-        if (!filter.statuses().Close && issue.closedAt)
+        const closed_at = issue.closedAt();
+
+        if (!filter.statuses().Close && closed_at)
             return false;
 
-        if (!filter.statuses().Open && !issue.closedAt)
+        if (!filter.statuses().Open && !closed_at)
             return false;
 
         return true;
@@ -181,10 +184,10 @@ export default class Filter {
     checkYesterday (filter, issue) {
         const fmt = (v) => moment(v).format('YYYYMMDD');
 
-        const yesterday = fmt(moment().add('d',-1));
+        const yesterday = fmt(moment().add(-1, 'd'));
 
         if (filter.others().Yesterday)
-            return fmt(issue.updatedAt)===yesterday;
+            return fmt(issue.updatedAt())===yesterday;
 
         return true;
     }
@@ -194,7 +197,7 @@ export default class Filter {
         const today = fmt(moment());
 
         if (filter.others().today)
-            return fmt(issue.updatedAt)===today;
+            return fmt(issue.updatedAt())===today;
 
         return true;
     }
@@ -202,7 +205,7 @@ export default class Filter {
         if (!filter.others().Waiting)
             return true;
 
-        if (issue.labels.nodes.find(d=>d.name.includes('待ち')))
+        if (issue.labels().find(d=>d.name.includes('待ち')))
             return true;
 
         return false;
@@ -211,7 +214,7 @@ export default class Filter {
         if (!filter.others().EmptyPlan)
             return true;
 
-        if (issue.point.plan===null)
+        if (issue.points().plan===null)
             return true;
 
         return false;
@@ -220,7 +223,7 @@ export default class Filter {
         if (!filter.others().DiffMinus)
             return true;
 
-        if ((issue.point.plan - issue.point.result) < 0)
+        if ((issue.points().plan - issue.points().result) < 0)
             return true;
 
         return false;
@@ -233,8 +236,8 @@ export default class Filter {
 
         const keyword = val.toUpperCase();
 
-        return (issue.number + '').toUpperCase().includes(keyword) ||
-            issue.title.toUpperCase().includes(keyword);
+        return (issue.number() + '').toUpperCase().includes(keyword) ||
+            issue.title().toUpperCase().includes(keyword);
     }
     apply (issues) {
         const filter = this;
@@ -265,7 +268,8 @@ export default class Filter {
         };
 
         for (const issue of issues) {
-            const milestone = issue.milestone;
+            const milestone = issue.milestone();
+
             if (milestone && !milestones[milestone.id]) {
                 milestones[milestone.id] = milestone;
                 milestones[milestone.id].active = active('milestones', milestone);

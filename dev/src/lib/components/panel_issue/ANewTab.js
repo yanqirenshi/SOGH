@@ -1,11 +1,12 @@
 import React from 'react';
 
+const style = {
+    color: 'inherit',
+    textDecoration: 'underline dotted rgb(201, 201, 201)',
+    textUnderlineOffset: 3,
+};
+
 export default function ANewTab (props) {
-    const style = {
-        color: 'inherit',
-        textDecoration: 'underline dotted rgb(201, 201, 201)',
-        textUnderlineOffset: 3,
-    };
     return (
         <a href={props.to || props.href}
            target="_blank"

@@ -1,28 +1,19 @@
 import React from 'react';
 
 import Labels           from './Labels.js';
-import NextActionDate  from './NextActionDate.js';
+import NextActionDate   from './NextActionDate.js';
 import SmallIssueTitle  from './SmallIssueTitle.js';
 import SmallDueDate     from './SmallDueDate.js';
 import SmallProjectName from './SmallProjectName.js';
 import SmallMilestone   from './SmallMilestone.js';
 
-function getProjectColumn (issue) {
-    const project_card = issue.projectCards.nodes[0];
-
-    if (!project_card)
-        return null;
-
-    return project_card.column;
-}
-
 export default function Small (props) {
     const issue = props.issue;
     const callback = props.callback;
 
-    const milestone = issue.milestone;
+    const milestone = issue.milestone();
 
-    const column = getProjectColumn(issue);
+    const column = issue.getColumnFirst();
 
     return (
         <div style={{wordBreak: 'break-all', padding: 11}}>

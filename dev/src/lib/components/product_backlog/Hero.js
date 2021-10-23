@@ -6,23 +6,25 @@ import HeroFoot from './HeroFoot.js';
 
 import './Style.css';
 
-
 export default function Hero (props) {
     const sogh = props.sogh;
     const project = props.project;
+    const root_url = props.root_url;
+    const tabs = props.tabs;
+    const selected_tab = props.selected_tab;
 
-    const style = sogh.headerColor(project);
+    const style = project.colorByPriority();
 
     return (
         <section className="hero is-large sogh-product-backlog-hero"
                  style={{background: style.background}}>
 
-          <HeroHead root_url={props.root_url}/>
+          <HeroHead root_url={root_url}/>
 
-          <HeroBody sogh={props.sogh} project={props.project}/>
+          <HeroBody sogh={sogh} project={project}/>
 
-          <HeroFoot tabs={props.tabs}
-                    selected_tab={props.selected_tab} />
+          <HeroFoot tabs={tabs} selected_tab={selected_tab}/>
+
         </section>
     );
 }

@@ -1,15 +1,8 @@
-import moment from 'moment';
+import * as model from './models/index.js';
 
 import * as query from './GraphQL.js';
 import GithubApiV3 from './GithubApiV3.js';
 import GithubApiV4 from './GithubApiV4.js';
-
-function owner (repo) {
-    if ("string" === (typeof repo.owner))
-        return repo.owner;
-
-    return repo.owner.login;
-}
 
 export default class Loader {
     constructor (token) {
@@ -33,7 +26,8 @@ export default class Loader {
 
             this._token = token;
 
-            this._viewer = data.viewer;
+            this._viewer = new model.Viewer(data.viewer);
+
             this.api.v3 = new GithubApiV3(token);
             this.api.v4 = api;
 
@@ -75,66 +69,6 @@ export default class Loader {
 
         return '{ ' + x.filter(d=>d!==null).join(', ') + ' }';
     }
-    addAnotetionValue4Issue (issue) {
-        return this.tools.issue.addAnotetionValue(issue);
-    }
-    addAnotetionValue4Project (project) {
-        const priority = (p) => {
-            const ret = /.*@Priority:\s+([c|h|n|l]).*/.exec(p.body);
-
-            // Critical :  最高の優先度のユーザー・ジョブ。
-            // High : 高い優先度のユーザー・ジョブ。
-            // Normal : 通常の優先度のユーザー・ジョブ。
-            // Low : 低い優先度のユーザー・ジョブ。
-
-            if (!ret)
-                return 'l';
-
-            return ret[1];
-        };
-
-        const assignee = (p) => {
-            const ret = /.*@assignee:\s+(\S+).*/.exec(p.body);
-
-            return ret ? ret[1] : null;
-        };
-
-        const schedulePlan = (p) => {
-            const ret = /.*@Plan:(\s+\d+-\d+-\d+),\s+(\d+-\d+-\d+).*/.exec(p.body);
-
-            if (!ret)
-                return { start: null, end: null };
-
-            return { start: moment(ret[1]), end: moment(ret[2]) };
-        };
-
-        const scheduleResult = (p) => {
-            const ret = /.*@Result:(\s+\d+-\d+-\d+),\s+(\d+-\d+-\d+).*/.exec(p.body);
-
-            if (!ret)
-                return { start: null, end: null };
-
-            return { start: moment(ret[1]), end: moment(ret[2]) };
-        };
-
-        const type = (p) => {
-            const ret = /.*@Type:\s+(\S+).*/.exec(p.body);
-
-            return ret ? ret[1] : null;
-        };
-
-        project.title = project.name;
-        project.type = type(project);
-
-        project.plan = schedulePlan(project);
-        project.result = scheduleResult(project);
-
-        project.priority = priority(project);
-
-        project.assignee = assignee(project);
-
-        return project;
-    }
     getIssuesByMilestone (milestone, cb) {
         if (!this.api.v4._token)
             cb([]);
@@ -144,7 +78,7 @@ export default class Loader {
         const api = this.api.v4;
 
         const base_query = query.issues_by_milestone
-              .replace('@milestone-id', milestone.id);
+              .replace('@milestone-id', milestone.id());
 
         let issues = [];
         const getter = (endCursor) => {
@@ -154,8 +88,8 @@ export default class Loader {
                 const data = results.data.node.issues;
                 const page_info = data.pageInfo;
 
-                for(const d of data.nodes)
-                    issues.push(this.addAnotetionValue4Issue(d));
+                for(const issue of data.nodes)
+                    issues.push(new model.Issue(issue));
 
                 if (page_info.hasNextPage)
                     getter(page_info.endCursor);
@@ -173,8 +107,8 @@ export default class Loader {
         const api = this.api.v4;
 
         const base_query = query.issues_by_repository
-              .replace('@owner', repository.owner)
-              .replace('@name', repository.name);
+              .replace('@owner', repository.owner().login)
+              .replace('@name', repository.name());
 
         let issues = [];
         const getter = (endCursor) => {
@@ -184,8 +118,8 @@ export default class Loader {
                 const data = results.data.repository.issues;
                 const page_info = data.pageInfo;
 
-                for(const d of data.nodes)
-                    issues.push(this.addAnotetionValue4Issue(d));
+                for(const issue of data.nodes)
+                    issues.push(new model.Issue(issue));
 
                 if (page_info.hasNextPage)
                     getter(page_info.endCursor);
@@ -207,8 +141,8 @@ export default class Loader {
         const api = this.api.v4;
 
         const base_query = query.issues_open_by_repository
-              .replace('@owner', repository.owner)
-              .replace('@name', repository.name);
+              .replace('@owner', repository.owner().login)
+              .replace('@name', repository.name());
 
         const isViewer = (issue) => {
             return issue.assignees.nodes.find(d=>d.id===viewer.id);
@@ -224,7 +158,7 @@ export default class Loader {
 
                 for(const issue of data.nodes)
                     if (isViewer(issue))
-                        issues.push(this.addAnotetionValue4Issue(issue));
+                        issues.push(new model.Issue(issue));
 
                 if (page_info.hasNextPage)
                     getter(page_info.endCursor);
@@ -247,8 +181,8 @@ export default class Loader {
         const api = this.api.v4;
 
         const base_query = query.issues_open_by_label
-              .replace('@owner', repository.owner)
-              .replace('@name', repository.name)
+              .replace('@owner', repository.owner().login)
+              .replace('@name', repository.name())
               .replace('@label_name', label_name);
 
         let issues = [];
@@ -256,16 +190,20 @@ export default class Loader {
             let query = this.ensureEndCursor(base_query, endCursor);
 
             api.fetch(query, (results) => {
-                const data = results.data.repository.label.issues;
-                const page_info = data.pageInfo;
+                if (!results.data.repository.label) {
+                    cb([]);
+                } else {
+                    const data = results.data.repository.label.issues;
+                    const page_info = data.pageInfo;
 
-                for(const issue of data.nodes)
-                    issues.push(this.addAnotetionValue4Issue(issue));
+                    for(const issue of data.nodes)
+                        issues.push(new model.Issue(issue));
 
-                if (page_info.hasNextPage)
-                    getter(page_info.endCursor);
-                else
-                    cb(issues);
+                    if (page_info.hasNextPage)
+                        getter(page_info.endCursor);
+                    else
+                        cb(issues);
+                }
             });
         };
 
@@ -281,8 +219,8 @@ export default class Loader {
         const api = this.api.v4;
 
         const base_query = query.issues_by_report_label
-              .replace('@owner', repository.owner)
-              .replace('@name', repository.name);
+              .replace('@owner', repository.owner().login)
+              .replace('@name', repository.name());
 
         let issues = [];
         const getter = (endCursor) => {
@@ -297,8 +235,8 @@ export default class Loader {
                 const data = label.issues;
                 const page_info = data.pageInfo;
 
-                for(const d of data.nodes)
-                    issues.push(this.addAnotetionValue4Issue(d));
+                for(const issue of data.nodes)
+                    issues.push(new model.Issue(issue));
 
                 if (page_info.hasNextPage)
                     return getter(page_info.endCursor);
@@ -317,8 +255,8 @@ export default class Loader {
 
         const base_query = query.issues_by_repository
               .replace('issues(after: "", first: 100)', 'issues(after: "", first: 100, states: OPEN)')
-              .replace('@owner', repository.owner)
-              .replace('@name', repository.name);
+              .replace('@owner', repository.owner().login)
+              .replace('@name', repository.name());
 
         let issues = [];
         const getter = (endCursor) => {
@@ -339,7 +277,7 @@ export default class Loader {
 
                 data.nodes.reduce((list, d) => {
                     if (isTarget(d.projectCards.nodes))
-                        list.push(this.addAnotetionValue4Issue(d));
+                        list.push(new model.Issue(d));
 
                     return list;
                 }, issues);
@@ -372,8 +310,8 @@ export default class Loader {
                 const data = results.data.viewer.issues;
                 const page_info = data.pageInfo;
 
-                for(const d of data.nodes)
-                    issues.push(this.addAnotetionValue4Issue(d));
+                for(const issue of data.nodes)
+                    issues.push(new model.Issue(issue));
 
                 if (page_info.hasNextPage)
                     getter(page_info.endCursor);
@@ -417,7 +355,7 @@ export default class Loader {
                     const issue = d.node.content;
 
                     if (issue && issue.id)
-                        list.push(this.addAnotetionValue4Issue(issue));
+                        list.push(new model.Issue(issue));
 
                     return list;
                 }, issues);
@@ -440,8 +378,8 @@ export default class Loader {
         const api = this.api.v4;
 
         const base_query = query.milestone_by_reposigory
-              .replace('@owner', owner(repository))
-              .replace('@name',  repository.name);
+              .replace('@owner', repository.owner().login)
+              .replace('@name',  repository.name());
 
         let milestones = [];
         const getter = (endCursor) => {
@@ -451,103 +389,12 @@ export default class Loader {
                 const data = results.data.repository.milestones;
                 const page_info = data.pageInfo;
 
-                milestones = milestones.concat(data.nodes);
+                milestones = milestones.concat(data.nodes.map(d=>new model.Milestone(d)));
 
-                if (page_info.hasNextPage) {
+                if (page_info.hasNextPage)
                     getter(page_info.endCursor);
-                } else {
+                else
                     cb(milestones);
-                }
-            });
-        };
-
-        getter();
-    }
-    getProjectsByRepository (repository, cb) {
-        if (!this.api.v4._token || !repository)
-            cb([]);
-
-        const api = this.api.v4;
-
-        const base_query = query.projects_by_repository
-              .replace('@owner', owner(repository))
-              .replace('@name', repository.name);
-
-        let projects = [];
-        const getter = (endCursor) => {
-            let query = this.ensureEndCursor(base_query, endCursor);
-
-            api.fetch(query, (results) => {
-                const data = results.data.repository.projects;
-                const page_info = data.pageInfo;
-
-                projects = projects.concat(data.nodes);
-
-                if (page_info.hasNextPage) {
-                    getter(page_info.endCursor);
-                } else {
-                    cb(projects.map(this.addAnotetionValue4Project));
-                }
-            });
-        };
-
-        getter();
-    }
-    getAssigneesByRepository (repository, cb) {
-        if (!this.api.v4._token || !repository)
-            cb([]);
-
-        const api = this.api.v4;
-
-        const base_query = query.assignees_by_repository
-              .replace('@owner', owner(repository))
-              .replace('@name', repository.name);
-
-        let assignees = [];
-        const getter = (endCursor) => {
-            let query = this.ensureEndCursor(base_query, endCursor);
-
-            api.fetch(query, (results) => {
-                const data = results.data.repository.assignableUsers;
-                const page_info = data.pageInfo;
-
-                assignees = assignees.concat(data.nodes);
-
-                if (page_info.hasNextPage) {
-                    getter(page_info.endCursor);
-                } else {
-                    cb(assignees.map(this.addAnotetionValue4Project));
-                }
-            });
-        };
-
-        getter();
-    }
-    getLabelsByRepository (repository, cb) {
-        if (!this.api.v4._token || !repository)
-            cb([]);
-
-        const api = this.api.v4;
-
-        const base_query = query.labels_by_repository
-              .replace('@owner', owner(repository))
-              .replace('@name', repository.name);
-
-        let labels = [];
-        const getter = (endCursor) => {
-            let query = this.ensureEndCursor(base_query, endCursor);
-
-            api.fetch(query, (results) => {
-                const data = results.data.repository.labels;
-                const page_info = data.pageInfo;
-
-                labels = labels.concat(data.nodes);
-
-                if (page_info.hasNextPage) {
-                    getter(page_info.endCursor);
-                } else {
-                    cb(labels.map(this.addAnotetionValue4Project));
-                }
             });
         };
 
@@ -566,7 +413,97 @@ export default class Loader {
             let query = this.ensureEndCursor(base_query, endCursor);
 
             api.fetch(query, (results) => {
-                cb(this.addAnotetionValue4Project({...results.data.node}));
+                cb(new model.Project({...results.data.node}));
+            });
+        };
+
+        getter();
+    }
+    getProjectsByRepository (repository, cb) {
+        if (!this.api.v4._token || !repository)
+            cb([]);
+
+        const api = this.api.v4;
+
+        const base_query = query.projects_by_repository
+              .replace('@owner', repository.owner().login)
+              .replace('@name', repository.name());
+
+        let projects = [];
+        const getter = (endCursor) => {
+            let query = this.ensureEndCursor(base_query, endCursor);
+
+            api.fetch(query, (results) => {
+                const data = results.data.repository.projects;
+                const page_info = data.pageInfo;
+
+                projects = projects.concat(data.nodes);
+
+                if (page_info.hasNextPage) {
+                    getter(page_info.endCursor);
+                } else {
+                    cb(projects.map(d=>new model.Project(d)));
+                }
+            });
+        };
+
+        getter();
+    }
+    getAssigneesByRepository (repository, cb) {
+        if (!this.api.v4._token || !repository)
+            cb([]);
+
+        const api = this.api.v4;
+
+        const base_query = query.assignees_by_repository
+              .replace('@owner', repository.owner().login)
+              .replace('@name', repository.name());
+
+        let assignees = [];
+        const getter = (endCursor) => {
+            let query = this.ensureEndCursor(base_query, endCursor);
+
+            api.fetch(query, (results) => {
+                const data = results.data.repository.assignableUsers;
+                const page_info = data.pageInfo;
+
+                assignees = assignees.concat(data.nodes.map(d=>new model.Assignee(d)));
+
+                if (page_info.hasNextPage) {
+                    getter(page_info.endCursor);
+                } else {
+                    cb(assignees);
+                }
+            });
+        };
+
+        getter();
+    }
+    getLabelsByRepository (repository, cb) {
+        if (!this.api.v4._token || !repository)
+            cb([]);
+
+        const api = this.api.v4;
+
+        const base_query = query.labels_by_repository
+              .replace('@owner', repository.owner().login)
+              .replace('@name', repository.name());
+
+        let labels = [];
+        const getter = (endCursor) => {
+            let query = this.ensureEndCursor(base_query, endCursor);
+
+            api.fetch(query, (results) => {
+                const data = results.data.repository.labels;
+                const page_info = data.pageInfo;
+
+                labels = labels.concat(data.nodes.map(d=>new model.Label(d)));
+
+                if (page_info.hasNextPage) {
+                    getter(page_info.endCursor);
+                } else {
+                    cb(labels);
+                }
             });
         };
 
@@ -613,7 +550,7 @@ export default class Loader {
 
         getter();
     }
-    fetchRepository (owner, name, cb) {
+    fetchRepositories (owner, name, cb) {
         if (!this.api.v4._token || !owner || !name)
             cb(null);
 
@@ -630,7 +567,7 @@ export default class Loader {
                 repos[owner] = {};
 
             repos[owner][name] = {
-                data: success ? data : null,
+                data:  success ? new model.Repository(data) : null,
                 valid: success,
                 error: success ? null : data,
             };

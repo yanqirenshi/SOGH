@@ -21,6 +21,14 @@ export default class Issue extends GraphQLNode {
     constructor (data) {
         super(data);
 
+        this._owner = null;
+        this._date_next_action = null;
+        this._due_date = null;
+        this._points = { plan: null, result: null, results: null };
+
+        if (arguments.length===1)
+            this.addAnotetionValueNew(data);
+
         this.regex = {
             point: {
                 plan:    /.*[@|$][P|p]oint\.[P|p]lan:*\s+(\d+).*/,
@@ -33,23 +41,70 @@ export default class Issue extends GraphQLNode {
             next_action: /.*[@|$]Date\.Next:*\s+(\d+-\d+-\d+).*/,
             owner:       /.*\$[O|o]wner:*\s+(\S+).*/,
         };
-
-        this._data = data;
     }
-    //
-    core () {
-        return this._core;
+    number () {
+        return this._core.number || null;
+    }
+    title () {
+        return this._core.title || null;
+    }
+    url () {
+        return this._core.url || null;
+    }
+    closedAt () {
+        return this._core.closedAt || null;
+    }
+    milestone () {
+        return this._core.milestone || null;
+    }
+    projectCards () {
+        if (!this._core.projectCards)
+            return [];
+
+        return this._core.projectCards.nodes;
+    }
+    assignees () {
+        if (!this._core.assignees)
+            return [];
+
+        return this._core.assignees.nodes;
+    }
+    labels () {
+        if (!this._core.labels)
+            return [];
+
+        return this._core.labels.nodes;
+    }
+    owner () {
+        return this._owner || null;
+    }
+    points () {
+        return this._points || null;
+    }
+    pointPlansTotal () {
+        const points = this.points();
+
+        return points.plan || 0;
+    }
+    pointResultTotal () {
+        const points = this.points();
+
+        if (!points.results)
+            return points.result || 0;
+
+        return points.results.total;
     }
     body (v) {
         const core = this.core();
 
         if (arguments.length===0)
-            return core.body;
+            return core.body || null;
 
         core.body = v || '';
 
         return core.body;
     }
+    // due_date: "2021-08-31"
     dueDate (v) {
         const body = this.body();
 
@@ -74,6 +129,7 @@ export default class Issue extends GraphQLNode {
 
         return this.getDueDateFromBody(body);
     }
+    // date_next_action: "2021-08-24"
     nextActionDate (v) {
         const body = this.body();
 
@@ -166,12 +222,22 @@ export default class Issue extends GraphQLNode {
         return owner ? owner[1] : null;
     }
     addAnotetionValue (issue) {
-        const body = issue.body;
+        const body = issue.body();
 
         issue.point = this.getPointFromBody(body);
         issue.due_date = this.getDueDateFromBody(body);
         issue.date_next_action = this.getNextActionFromBody(body);
         issue.owner = this.getOwnerFromBody(body);
+
+        return issue;
+    }
+    addAnotetionValueNew (issue) {
+        const body = issue.body;
+
+        this._points = this.getPointFromBody(body);
+        this._due_date = this.getDueDateFromBody(body);
+        this._date_next_action = this.getNextActionFromBody(body);
+        this._owner = this.getOwnerFromBody(body);
 
         return issue;
     }
@@ -219,9 +285,8 @@ export default class Issue extends GraphQLNode {
 
         const ids = (l) => l.map(d=>id(d));
 
-
         return {
-            repositoryId: data.repository.id,
+            repositoryId: data.repository.id(),
             title:        data.title,
             body:         this.issueData2requestDataDescription(data),
             projectIds:   ids(data.projects),
@@ -229,5 +294,29 @@ export default class Issue extends GraphQLNode {
             labelIds:     ids(data.labels),
             assigneeIds:  ids(data.assignees),
         };
+    }
+    /** ****************************************************************
+     *
+     * **************************************************************** */
+    getColumnFirst () {
+        const cards = this.projectCards();
+
+        if (!cards)
+            return null;
+
+        return cards[0] ? cards[0].column : null;
+    }
+    getFirstColumnProject () {
+        const column = this.getColumnFirst();
+
+        if (!column)
+            return null;
+
+        return column.project;
+    }
+    getFirstColumnProjectID () {
+        const project = this.getFirstColumnProject();
+
+        return project ? project.id : null;
     }
 }
