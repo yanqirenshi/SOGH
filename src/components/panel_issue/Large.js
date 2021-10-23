@@ -13,7 +13,7 @@ export default function Large (props) {
     const issue = props.issue;
     const callback = props.callback;
 
-    const milestone = issue.milestone;
+    const milestone = issue.milestone();
 
     const active = props.sogh.active();
 

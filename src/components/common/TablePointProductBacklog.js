@@ -1,7 +1,7 @@
 import React from 'react';
 
 function sumRecord (record, issue) {
-    const point = issue.point;
+    const point = issue.points();
 
     record.points.plan += point.plan || 0;
 
@@ -46,6 +46,7 @@ export default function TablePointProductBacklog (props) {
         points: { plan: 0, result: 0 },
         issues: { open: 0, close: 0 },
     };
+
     const data = issues.reduce(sumRecord, record);
 
     return (

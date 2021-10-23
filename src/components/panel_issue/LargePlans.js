@@ -29,7 +29,7 @@ export default function LargePlans (props) {
                   <tbody>
                     <tr>
                       <td>Total</td>
-                      <td>{issue.point.plan}</td>
+                      <td>{issue.points().plan}</td>
                     </tr>
                   </tbody>
                 </table>

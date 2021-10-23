@@ -20,7 +20,7 @@ function filtering (keyword, list) {
 }
 
 function itemStyle (label, selected_assignees) {
-    const slected = selected_assignees.find(d=>d===label.id);
+    const slected = selected_assignees.find(d=>d===label.id());
 
     return {
         color: slected ? 'rgb(162, 32, 65)' : '#333',
@@ -39,7 +39,7 @@ function split (selected, list) {
         return { selected: [], un_selected: list };
 
     return list.reduce((out, d)=> {
-        if (selected.find(id=>id===d.id))
+        if (selected.find(id=>id===d.id()))
             out.selected.push(d);
         else
             out.un_selected.push(d);
@@ -94,12 +94,14 @@ export default function Assignees (props) {
                  onChange={change} />
 
           {list.map(d=>{
+              const assignee_id = d.id();
+
               return (
-                  <div key={d.id}
+                  <div key={assignee_id}
                        style={itemStyle(d, selected_assignees)}
-                       data_id={d.id}
+                       data_id={assignee_id}
                        onClick={click}>
-                    {d.title || d.login}
+                    {d.name() || d.login()}
                   </div>
               );
           })}

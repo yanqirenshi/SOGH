@@ -7,7 +7,7 @@ const style = {
 
 export default function SmallDueDate (props) {
     const issue = props.issue;
-    const due_date = issue.due_date;
+    const due_date = issue.dueDate();
 
     if (!due_date)
         return null;

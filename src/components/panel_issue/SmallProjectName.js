@@ -2,15 +2,6 @@ import React from 'react';
 
 import ANewTab from './ANewTab.js';
 
-function getProjectColumn (issue) {
-    const project_card = issue.projectCards.nodes[0];
-
-    if (!project_card)
-        return null;
-
-    return project_card.column;
-}
-
 const style = {
     fontSize:12,
     marginTop:8
@@ -19,7 +10,7 @@ const style = {
 export default function SmallProjectName (props) {
     const issue = props.issue;
 
-    const column = getProjectColumn(issue);
+    const column = issue.getColumnFirst();
 
     if (!column)
         return null;

@@ -1,7 +1,5 @@
 import moment from 'moment';
 
-import * as query from './GraphQL.js';
-
 import SoghChild from './SoghChild.js';
 
 export default class ProductBacklogs extends SoghChild {
@@ -24,47 +22,17 @@ export default class ProductBacklogs extends SoghChild {
     apiV4 () {
         return this._sogh.api.v4;
     }
-    getProjectsByRepository (repository, cb) {
-        if (!this.apiV4()._token || !repository)
-            cb([]);
-
-        const api = this.apiV4();
-
-        const base_query = query.projects_by_repository
-              .replace('@owner', repository.owner)
-              .replace('@name', repository.name);
-
-        let projects = [];
-        const getter = (endCursor) => {
-            let query = this._sogh.ensureEndCursor(base_query, endCursor);
-
-            api.fetch(query, (results) => {
-                const data = results.data.repository.projects;
-                const page_info = data.pageInfo;
-
-                projects = projects.concat(data.nodes);
-
-                if (page_info.hasNextPage) {
-                    getter(page_info.endCursor);
-                } else {
-                    cb(projects.map(this._sogh.addAnotetionValue4Project));
-                }
-            });
-        };
-
-        getter();
-    }
     sortProjectsByPriority (projects) {
         const splitByState = (projects) => {
             const x = { c: [], h: [], n: [], l: [], '?': [], closed: [] };
 
             for (const project of projects) {
-
                 let p;
-                if (project.state==='CLOSED')
+
+                if (project.state()==='CLOSED')
                     p = 'closed';
                 else
-                    p = project.priority || '?';
+                    p = project.priority() || '?';
 
                 x[p].push(project);
             }
@@ -118,17 +86,17 @@ export default class ProductBacklogs extends SoghChild {
         const types = {};
         const assignees = {};
 
-        const x = (project, attr, ht) => {
-            const key = project[attr];
-
-            if (!ht[key]) ht[key]  = 1;
-            else          ht[key] += 1;
+        const x = (key, ht) => {
+            if (!ht[key])
+                ht[key]  = 1;
+            else
+                ht[key] += 1;
         };
 
         for (const project of projects) {
-            x(project, 'priority', priorities);
-            x(project, 'type', types);
-            x(project, 'assignee', assignees);
+            x(project.priority(), priorities);
+            x(project.type(), types);
+            x(project.assignee(), assignees);
         }
 
         const out = {
@@ -170,25 +138,27 @@ export default class ProductBacklogs extends SoghChild {
         const assignees = filter.assignees;
         const closing = filter.closing;
 
-        return this.sortProjectsByPriority(projects.filter(d => {
-            if (keyword && !d.name.toUpperCase().includes(keyword))
+        return this.sortProjectsByPriority(projects.filter(project => {
+            if (keyword && !project.name().toUpperCase().includes(keyword))
                 return false;
 
-            if (priorities['priorities'+d.priority])
+            if (priorities['priorities'+project.priority()])
                 return false;
 
-            if (types['types'+d.type])
+            if (types['types'+project.type()])
                 return false;
 
-            if (assignees['assignees'+d.assignee])
+            if (assignees['assignees'+project.assignee()])
                 return false;
 
-            if (closing)
-                if (!(d.progress.doneCount > 1 &&
-                      d.progress.inProgressCount === 0 &&
-                      d.progress.todoCount <= 1)
-                    && !d.result.end)
+            if (closing) {
+                const progress = project.progress();
+                if (!(progress.doneCount > 1 &&
+                      progress.inProgressCount === 0 &&
+                      progress.todoCount <= 1)
+                    && !project.result().end)
                     return false;
+            }
 
             return true;
         }));

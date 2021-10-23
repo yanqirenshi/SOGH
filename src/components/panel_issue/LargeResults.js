@@ -4,7 +4,7 @@ const style = {};
 
 export default function LargeResults (props) {
     const issue = props.issue;
-    const point = issue.point;
+    const point = issue.points();
     const results = point.results ? point.results.details : [];
 
     return (

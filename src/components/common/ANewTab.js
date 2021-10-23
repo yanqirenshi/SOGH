@@ -4,6 +4,7 @@ export default function ANewTab (props) {
     const style = {
         color: 'inherit',
     };
+
     return (
         <a href={props.to}
            target="_blank"

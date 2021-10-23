@@ -10,10 +10,10 @@ function dt (v) {
 }
 
 function project (issue) {
-    if (issue.projectCards.nodes.length===0)
+    if (issue.projectCards().length===0)
         return '--';
 
-    const project = issue.projectCards.nodes[0].column.project;
+    const project = issue.projectCards()[0].column.project;
 
     return project.name;
 }
@@ -24,21 +24,22 @@ export default function TableReportTr (props) {
     };
 
     const issue = props.issue;
+
     return (
         <>
           {props.open &&
            <tr key={issue.id}>
-             <td>{dt(issue.updatedAt)}</td>
+             <td>{dt(issue.updatedAt())}</td>
              <td>
-               <a href={issue.url}>
-                 {issue.number}
+               <a href={issue.url()}>
+                 {issue.number()}
                </a>
              </td>
              <td>
                <button className="button"
-                       issue_id={issue.id}
+                       issue_id={issue.id()}
                        onClick={clickSwitch}>
-                 {issue.title}
+                 {issue.title()}
                </button>
              </td>
              <td>
@@ -48,11 +49,11 @@ export default function TableReportTr (props) {
            </tr>}
 
           {!props.open &&
-           <tr key={issue.id}>
-             <td>{dt(issue.updatedAt)}</td>
+           <tr key={issue.id()}>
+             <td>{dt(issue.updatedAt())}</td>
              <td>
-               <a href={issue.url}>
-                 {issue.number}
+               <a href={issue.url()}>
+                 {issue.number()}
                </a>
              </td>
              <td>
@@ -60,9 +61,9 @@ export default function TableReportTr (props) {
              </td>
              <td>
                <button className="button"
-                       issue_id={issue.id}
+                       issue_id={issue.id()}
                        onClick={clickSwitch}>
-                 {issue.title}
+                 {issue.title()}
                </button>
              </td>
              <td>{project(issue)}</td>

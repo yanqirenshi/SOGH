@@ -24,10 +24,12 @@ function diff (plan, result) {
 }
 
 function prjColumn (issue) {
-    return issue.projectCards.nodes.map(d=>{
-        return <p key={d.column.id}>
-                 {d.column.name}
-               </p>;
+    return issue.projectCards().map(d=>{
+        return (
+            <p key={d.column.id}>
+              {d.column.name}
+            </p>
+        );
     });
 }
 
@@ -44,52 +46,64 @@ function due (v) {
 }
 
 function makeTrs (issue) {
-    const point_result = issue.point.results ? issue.point.results.total : issue.point.result;
+    const point_result = issue.pointResultTotal();
+    const point_plan   = issue.pointPlansTotal();
 
-    return <tr key={issue.id}>
-             <td style={style.right}>
-               <LinkBlank href={issue.url}>
-                 {issue.number}
-               </LinkBlank>
-             </td>
-             <td>
-               <div style={{fontSize: 12}}>{prjColumn(issue)}</div>
-               <p>{issue.title}</p>
-             </td>
-             <td>
-               <Labels issue={issue}/>
-             </td>
-             <td style={style.nowrap}>
-               {issue.owner}
-             </td>
-             <td style={style.nowrap}>
-               {due(issue.due_date)}
-             </td>
-             <td style={style.nowrap}>
-               {issue.assignees.nodes.map(a => {
-                   return <span key={issue.id+'.'+a.id}>
-                            {a.name || a.login}
-                          </span>;
-               })}
-             </td>
-             <td style={style.nowrap}>
-               {due(issue.date_next_action)}
-             </td>
-             <td style={style.right}>{issue.point.plan}</td>
-             <td style={style.right}>
-               {point_result}
-             </td>
-             <td style={style.right}>
-               {diff(issue.point.plan, point_result)}
-             </td>
-             {/* <td style={style.nowrap}>{dt(issue.createdAt)}</td> */}
-             {/* <td style={style.nowrap}>{dt(issue.updatedAt)}</td> */}
-             <td style={style.nowrap}>{dt(issue.closedAt)}</td>
-           </tr>;
+    return (
+        <tr key={issue.id()}>
+          <td style={style.right}>
+            <LinkBlank href={issue.url()}>
+              {issue.number()}
+            </LinkBlank>
+          </td>
+
+          <td>
+            <div style={{fontSize: 12}}>{prjColumn(issue)}</div>
+            <p>{issue.title()}</p>
+          </td>
+
+          <td>
+            <Labels issue={issue}/>
+          </td>
+
+          <td style={style.nowrap}>
+            {issue.owner()}
+          </td>
+
+          <td style={style.nowrap}>
+            {due(issue.dueDate())}
+          </td>
+
+          <td style={style.nowrap}>
+            {issue.assignees().map(a => {
+                return <span key={issue.id+'.'+a.id}>
+                          {a.name || a.login}
+                        </span>;
+            })}
+          </td>
+
+          <td style={style.nowrap}>
+            {due(issue.nextActionDate())}
+          </td>
+
+          <td style={style.right}>{point_plan}</td>
+
+          <td style={style.right}>
+            {point_result}
+          </td>
+
+          <td style={style.right}>
+            {diff(point_plan, point_result)}
+          </td>
+
+          <td style={style.nowrap}>{dt(issue.closedAt())}</td>
+        </tr>
+    );
 }
 
 export default function TableSprintBacklogs (props) {
     const project = props.project;
+    const issues = project.issues();
 
     return (
         <table className="table is-striped is-narrow is-hoverable is-fullwidth"
@@ -102,8 +116,6 @@ export default function TableSprintBacklogs (props) {
               <th colSpan="2">Manegement</th>
               <th colSpan="2">Work</th>
               <th colSpan="3">Point</th>
-              {/* <th>Create</th> */}
-              {/* <th>Update</th> */}
               <th>Close</th>
             </tr>
             <tr>
@@ -114,14 +126,12 @@ export default function TableSprintBacklogs (props) {
               <th>Plan</th>
               <th>Result</th>
               <th>Diff</th>
-              {/* <th>At</th> */}
-              {/* <th>At</th> */}
               <th>At</th>
             </tr>
           </thead>
 
           <tbody>
-            {project.issues.map(d => makeTrs(d))}
+            {issues.map(d => makeTrs(d))}
           </tbody>
         </table>
     );
