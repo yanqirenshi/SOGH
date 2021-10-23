@@ -144,9 +144,7 @@ export default class Loader {
               .replace('@owner', repository.owner().login)
               .replace('@name', repository.name());
 
-        const isViewer = (issue) => {
-            return issue.assignees.nodes.find(d=>d.id===viewer.id);
-        };
+        const isViewer = (issue) => issue.assignees.nodes.find(d=>d.id===viewer.id());
 
         let issues = [];
         const getter = (endCursor) => {
