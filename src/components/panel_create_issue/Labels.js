@@ -43,7 +43,7 @@ function filtering (keyword, list) {
     const k = keyword.toUpperCase();
 
     return list.filter(d=>{
-        const name = d.name;
+        const name = d.name();
         return name.toUpperCase().includes(k);
     });
 }

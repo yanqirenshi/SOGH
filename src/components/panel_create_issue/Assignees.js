@@ -14,7 +14,7 @@ function filtering (keyword, list) {
     const k = keyword.toUpperCase();
 
     return list.filter(d=>{
-        const name = d.title || d.login;
+        const name = d.name() || d.login();
         return name.toUpperCase().includes(k);
     });
 }
