@@ -8,6 +8,7 @@ import Reports          from './components/Reports.js';
 import ScrumProjects    from './components/ScrumProjects.js';
 import ScrumTimeline    from './components/ScrumTimeline.js';
 import SprintPlanning   from './components/SprintPlanning.js';
+import Calendar         from './components/Calendar.js';
 
 import Filter from './js/Filter.js';
 import Sogh from './js/Sogh.js';
@@ -25,6 +26,7 @@ export {
     Reports,
     PanelCreateIssue,
     PanelIssue,
+    Calendar,
     //
     ControllerIssues,
     CardIssue,
