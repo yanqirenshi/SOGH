@@ -130,7 +130,46 @@ export default class Loader {
 
         getter();
     }
-    getIssuesOpenByRepository (repository, viewer, cb) {
+    getIssuesOpenByRepository (repository, cb) {
+        console.warn('このメソッドは利用しないでください。\nGtd.getIssuesOpenByRepository の内容で置きかえる予定です。');
+        if (!this.api.v4._token || !repository)
+            cb([]);
+
+        this._data.viwer.issues.fetch.start = new Date();
+        this._data.viwer.issues.fetch.end = null;
+
+        const api = this.api.v4;
+
+        const base_query = query.issues_open_by_repository
+              .replace('@owner', repository.owner().login)
+              .replace('@name', repository.name());
+
+        let issues = [];
+        const getter = (endCursor) => {
+            let query = this.ensureEndCursor(base_query, endCursor);
+
+            api.fetch(query, (results) => {
+                const data = results.data.repository.issues;
+                const page_info = data.pageInfo;
+
+                for(const issue of data.nodes)
+                    issues.push(new model.Issue(issue));
+
+                if (page_info.hasNextPage)
+                    getter(page_info.endCursor);
+                else {
+                    this._data.viwer.issues.fetch.end = new Date();
+
+                    this._data.viwer.issues.pool.list = issues;
+
+                    cb(issues);
+                }
+            });
+        };
+
+        getter();
+    }
+    getIssuesOpenByRepositoryAndViewer (repository, viewer, cb) {
         console.warn('このメソッドは利用しないでください。\nGtd.getIssuesOpenByRepository の内容で置きかえる予定です。');
         if (!this.api.v4._token || !repository)
             cb([]);
