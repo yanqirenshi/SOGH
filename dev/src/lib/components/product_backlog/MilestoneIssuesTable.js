@@ -14,7 +14,11 @@ function makeProjectColumn (d, project) {
     if (!target)
         return '';
 
-    return <p>{target.column.name}</p>;
+    return (
+        <p style={{fontSize:12}}>
+          {target.column.name}
+        </p>
+    );
 }
 
 function due (v) {
@@ -57,7 +61,8 @@ function makeTr (issue, project) {
           <td>
             {issue.assignees().map(a => {
                 return (
-                    <p key={issue.id() + '.' + a.id}>
+                    <p key={issue.id() + '.' + a.id}
+                       style={{whiteSpace: 'nowrap'}}>
                       {a.name || a.login}
                     </p>
                 );
@@ -68,9 +73,6 @@ function makeTr (issue, project) {
           </td>
           <td>{issue.pointPlansTotal()}</td>
           <td>{point_result}</td>
-          <td style={{whiteSpace: 'nowrap'}}>
-            {due(issue.updatedAt())}
-          </td>
         </tr>
     );
 }
@@ -80,7 +82,8 @@ export default function MilestoneIssuesTable (props) {
     const issues = props.issues;
 
     return (
-        <table className="table is-striped is-narrow is-hoverable is-fullwidth">
+        <table className="table is-striped is-narrow is-hoverable is-fullwidth"
+               style={{fontSize:14}}>
           <thead>
             <tr>
               <th>Project</th>
@@ -88,7 +91,6 @@ export default function MilestoneIssuesTable (props) {
               <th colSpan="2">Manegement</th>
               <th colSpan="2">Work</th>
               <th colSpan="2">Point</th>
-              <th>Updated</th>
             </tr>
             <tr>
               <th>Column</th>
@@ -101,7 +103,6 @@ export default function MilestoneIssuesTable (props) {
               <th>Next</th>
               <th>Plan</th>
               <th>Result</th>
-              <th>At</th>
             </tr>
           </thead>
 

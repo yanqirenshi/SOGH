@@ -33,7 +33,7 @@ const tabs = [
     { code: 'sp',  label: 'Sprint planning' },
     { code: 'pb',  label: 'Product backlog' },
     { code: 'rp',  label: 'Reports' },
-    { code: 'id',  label: 'Issue Description' },
+    { code: 'pb2', label: 'Panel Product backlog' },
 ];
 
 function PageHome (props) {
@@ -101,11 +101,11 @@ function PageHome (props) {
                           repository={repository} />
           </div>
 
-          {/* <div style={isActive(tabs[7], selected)}> */}
-          {/*   {sogh && <IssueDescription sogh={sogh} */}
-          {/*                              repository={repository} */}
-          {/*                              listener={listener} />} */}
-          {/* </div> */}
+          <div style={isActive(tabs[7], selected)}>
+            <SOGH.PanelProductBacklog sogh={sogh}
+                                      project_id="MDc6UHJvamVjdDU4Mzk4NDM="
+                                      repository={repository} />
+          </div>
         </div>
     );
 }

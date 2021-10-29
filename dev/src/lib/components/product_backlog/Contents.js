@@ -1,26 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from "react-router-dom";
 
-import ControllerIssues from '../common/ControllerIssues.js';
-
 import Hero from './Hero.js';
-import Overivew from './Overivew.js';
-import Milestones from './Milestones.js';
-import Columns from './Columns.js';
-
-const style = {
-    controller: {
-        display:'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        padding: 11,
-        paddingLeft: 88,
-        paddingRight: 88,
-    },
-    milestones: {
-        paddingTop:0,
-    },
-};
+import PanelProductBacklog from './PanelProductBacklog.js';
 
 export default function Contents (props) {
     const [tabs] = useState([
@@ -61,11 +43,6 @@ export default function Contents (props) {
         },
     };
 
-    if (!project) return null;
-
-    const data = core._data;
-    const filters = core._filters;
-
     return (
         <div>
           <span style={{display:'none'}}>{!!updated_at}</span>
@@ -76,43 +53,10 @@ export default function Contents (props) {
                 selected_tab={selected_tab}
                 root_url={props.root_url} />
 
-          {selected_tab.code==='overview' &&
-           <div>
-             <Overivew core={core}
-                       project={project}
-                       data={data}/>
-           </div>}
-
-          {selected_tab.code==='milestones' &&
-           <div>
-             <div style={style.controller}>
-               <ControllerIssues issues={data.issues}
-                                 filter={filters.milestones}
-                                 callbacks={callbacks.milestones}
-                                 sogh={core._sogh}/>
-             </div>
-
-             <Milestones style={style.milestones}
-                         project={project}
-                         milestones={data.milestones.list}
-                         filter={filters.milestones} />
-           </div>}
-
-          {selected_tab.code==='columns' &&
-           <div>
-             <div style={style.controller}>
-               <ControllerIssues issues={data.issues}
-                                 filter={filters.columns}
-                                 callbacks={callbacks.columns}
-                                 sogh={core._sogh}/>
-             </div>
-
-             <Columns style={style.milestones}
-                      core={core}
-                      columns={data.columns.list}
-                      project={project}
-                      filter={filters.columns} />
-           </div>}
+          <PanelProductBacklog core={core}
+                               project={project}
+                               selected_tab={selected_tab}
+                               callbacks={callbacks} />
         </div>
     );
 }

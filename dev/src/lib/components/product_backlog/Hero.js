@@ -13,6 +13,8 @@ export default function Hero (props) {
     const tabs = props.tabs;
     const selected_tab = props.selected_tab;
 
+    if (!project) return null;
+
     const style = project.colorByPriority();
 
     return (
