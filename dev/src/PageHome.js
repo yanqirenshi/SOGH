@@ -33,7 +33,6 @@ const tabs = [
     { code: 'sp',  label: 'Sprint planning' },
     { code: 'pb',  label: 'Product backlog' },
     { code: 'rp',  label: 'Reports' },
-    { code: 'pb2', label: 'Panel Product backlog' },
 ];
 
 function PageHome (props) {
@@ -99,12 +98,6 @@ function PageHome (props) {
           <div style={isActive(tabs[7], selected)}>
             <SOGH.Reports sogh={sogh}
                           repository={repository} />
-          </div>
-
-          <div style={isActive(tabs[7], selected)}>
-            <SOGH.PanelProductBacklog sogh={sogh}
-                                      project_id="MDc6UHJvamVjdDU4Mzk4NDM="
-                                      repository={repository} />
           </div>
         </div>
     );

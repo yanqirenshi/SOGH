@@ -25,10 +25,11 @@ export default function ProductBacklog (props) {
 
     const updated = ()=> setUpdatedAt(new Date());
     const refresh = ()=> core && core.fetch(project, ()=>updated());
+    const getProject = (id)=> core.getProjectByID(id, (prj)=>setProject(prj));
 
-    useEffect(() => sogh && setCore(sogh.productBacklog()), [sogh]);
-    useEffect(() => core && core.getProjectByID(props.project_id, setProject), [core]);
-    useEffect(() => refresh(), [project]);
+    useEffect(()=> sogh && setCore(sogh.productBacklog()), [sogh]);
+    useEffect(()=> core && getProject(project_id), [core, project_id]);
+    useEffect(()=> refresh(), [project]);
 
     if (!core) return <NotSignIn />;
 
@@ -36,20 +37,20 @@ export default function ProductBacklog (props) {
 
     const callbacks = {
         milestones: {
-            refresh: () => refresh(),
+            refresh: ()=> refresh(),
             filter: {
-                click: (type, id) => core.changeFilter('milestones', type, id, ()=>updated()),
+                click: (type, id)=> core.changeFilter('milestones', type, id, ()=>updated()),
                 keyword: {
-                    change: (val) => core.changeFilter('milestones', 'keyword', val, ()=>updated()),
+                    change: (val)=> core.changeFilter('milestones', 'keyword', val, ()=>updated()),
                 } ,
             },
         },
         columns: {
-            refresh: () => refresh(),
+            refresh: ()=> refresh(),
             filter: {
-                click: (type, id) => core.changeFilter('columns', type, id, ()=>updated()),
+                click: (type, id)=> core.changeFilter('columns', type, id, ()=>updated()),
                 keyword: {
-                    change: (val) => core.changeFilter('columns', 'keyword', val, ()=>updated()),
+                    change: (val)=> core.changeFilter('columns', 'keyword', val, ()=>updated()),
                 } ,
             },
         },
@@ -59,11 +60,11 @@ export default function ProductBacklog (props) {
         <div>
           <span style={{display:'none'}}>{!!updated_at}</span>
 
-          <Hero sogh={core._sogh}
+          <Hero sogh={sogh}
                 project={project}
                 tabs={tabs}
                 selected_tab={selected_tab}
-                root_url={props.root_url} />
+                root_url={root_url} />
 
           <PanelProductBacklog core={core}
                                project={project}
