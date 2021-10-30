@@ -1,7 +1,7 @@
 import React from 'react';
 
 import ButtonRefresh from './ButtonRefresh.js';
-import Filter from './Filter.js';
+import Filter from './FiltersIssue.js';
 
 const style = {
     root: {

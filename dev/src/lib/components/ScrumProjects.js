@@ -4,7 +4,7 @@ import NotSignIn           from './common/NotSignIn.js';
 import ButtonRefresh       from './common/ButtonRefresh.js';
 import ProductBacklogs     from './common/ProductBacklogs.js';
 import ProductAndMilestone from './common/ProductAndMilestone.js';
-import Filter              from './common/Filter.js';
+import Filter              from './common/FiltersIssue.js';
 import ChartBardown        from './common/ChartBardown.js';
 import OperatorOpenClose   from './common/OperatorOpenClose.js';
 import Summary             from './common/Summary.js';

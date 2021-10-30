@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 
 import IconFilter from './IconFilter.js';
-import FilterDevelopers from './FilterDevelopers.js';
-import FilterStatus from './FilterStatus.js';
-import FilterOthers from './FilterOthers.js';
+
+import FilterDevelopers from './filters_issue/FilterDevelopers.js';
+import FilterStatus from './filters_issue/FilterStatus.js';
+import FilterOthers from './filters_issue/FilterOthers.js';
 
 import Core from '../../js/Filter.js';
 
@@ -23,7 +24,7 @@ const style = {
     },
 };
 
-export default function Filter (props) {
+export default function FiltersIssue (props) {
     const [core] = useState(new Core());
 
     const filter = core.issues2filter(props.issues);
