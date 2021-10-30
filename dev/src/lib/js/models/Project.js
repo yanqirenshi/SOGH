@@ -166,4 +166,19 @@ export default class Project extends GraphQLNode {
 
         return palette[priority];
     }
+    priorityLabel () {
+        const code = this.priority();
+
+        const m = {
+            c: '急',
+            h: '高',
+            n: '普',
+            l: '低',
+        };
+        const label = m[code];
+        if (!label)
+            return '??';
+
+        return label;
+    }
 }

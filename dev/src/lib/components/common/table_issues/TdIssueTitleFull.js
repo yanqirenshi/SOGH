@@ -2,6 +2,8 @@ import React from 'react';
 import { Link } from "react-router-dom";
 import {LinkBlank} from '../Links.js';
 
+import Labels from '../Labels.js';
+
 function prjColumn (issue) {
     return issue.projectCards().map((d,i)=>{
         if (!d.column)
@@ -52,12 +54,12 @@ function prjName (issue, productbacklog_url_prefix) {
     );
 }
 
-export default function SprintBacklogName (props) {
+export default function TdIssueTitleFull (props) {
     const issue = props.issue;
     const productbacklog_url_prefix = props.productbacklog_url_prefix;
 
     return (
-        <>
+        <td>
           {issue.project.id() &&
            <div style={{display:'flex', fontSize:12}}>
              <div style={{marginRight:11}}>
@@ -69,10 +71,13 @@ export default function SprintBacklogName (props) {
              </div>
            </div>}
 
-          <p style={{fontSize:16}}>
+          <p style={{fontWeight:'bold', fontSize:14}}>
             {issue.title()}
           </p>
 
-        </>
+          <div style={{marginTop:3, textAlign:'right'}}>
+            <Labels issue={issue} split={10}/>
+          </div>
+        </td>
     );
 }

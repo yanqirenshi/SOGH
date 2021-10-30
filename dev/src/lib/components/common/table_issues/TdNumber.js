@@ -1,13 +1,21 @@
 import React from 'react';
 
+import {LinkBlank} from '../Links.js';
+
+const style = {
+    right: {
+        textAlign: 'right',
+    },
+};
+
 export default function TdNumber (props) {
     const issue = props.issue;
 
     return (
-        <td>
-          <a href={issue.url()} target="_blank" rel="noreferrer">
+        <td style={style.right}>
+          <LinkBlank href={issue.url()}>
             {issue.number()}
-          </a>
+          </LinkBlank>
         </td>
     );
 }
