@@ -565,16 +565,60 @@ export default class Loader {
 
         getter();
     }
-    updateIssue (data, cb_success, cb_error) {
-        if (!this.api.v4._token || !data)
+    updateIssueBody (issue, cb_success, cb_error) {
+        if (!this.api.v4._token || !issue)
             cb_success(null);
 
         const api = this.api.v4;
 
         const q = query.update_issue_body
               .replace('@issue-data', this.makeGraphQLData({
-                  id: data.id(),
-                  body: data.body(),
+                  id: issue.id(),
+                  body: issue.body(),
+              }));
+
+        const getter = (endCursor) => {
+            api.fetch(
+                q,
+                (results) => { if (cb_success) cb_success(results); },
+                (error)   => { if (cb_error)   cb_error(error); },
+            );
+        };
+
+        getter();
+    }
+    updateIssueMilestone (issue, milestoneId, cb_success, cb_error) {
+        if (!this.api.v4._token || !issue)
+            cb_success(null);
+
+        const api = this.api.v4;
+
+        const q = query.update_issue_body
+              .replace('@issue-data', this.makeGraphQLData({
+                  id: issue.id(),
+                  milestoneId: milestoneId,
+              }));
+        console.log(q);
+        const getter = (endCursor) => {
+            api.fetch(
+                q,
+                (results) => { if (cb_success) cb_success(results); },
+                (error)   => { if (cb_error)   cb_error(error); },
+            );
+        };
+
+        getter();
+    }
+    updateIssueProjects (issue, projectIds, cb_success, cb_error) {
+        if (!this.api.v4._token || !issue)
+            cb_success(null);
+
+        const api = this.api.v4;
+
+        const q = query.update_issue_body
+              .replace('@issue-data', this.makeGraphQLData({
+                  id: issue.id(),
+                  projectIds: projectIds,
               }));
 
         const getter = (endCursor) => {

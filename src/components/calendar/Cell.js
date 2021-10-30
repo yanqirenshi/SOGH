@@ -1,31 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import moment from 'moment';
+import React from 'react';
 
 import CellHead from './CellHead.js';
 import CellBody from './CellBody.js';
-
-
-function makeCalendarWeek (day) {
-    const week = [];
-
-    for (let i=0 ; i<7 ; i++)
-        week.push(moment(day.add(1, 'd')));
-
-    return week;
-}
-
-function makeCalendarData (month = moment().startOf('month')) {
-    const start = moment(month).startOf('week');
-    const end   = moment(month).endOf("month").endOf("week");
-
-    const calendar = [];
-
-    const day = moment(start);
-
-    do calendar.push(makeCalendarWeek(day)); while (day.isSameOrBefore(end));
-
-    return calendar;
-}
 
 function cellBackground (data) {
     if (data.is_selected)

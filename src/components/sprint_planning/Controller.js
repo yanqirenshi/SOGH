@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Filter from '../common/Filter.js';
+import Filter from '../common/FiltersIssue.js';
 import ControllerProductBacklogs from '../common/ControllerProductBacklogs.js';
 
 export default function Controller (props) {
