@@ -319,4 +319,14 @@ export default class Issue extends GraphQLNode {
 
         return project ? project.id : null;
     }
+    milestoneId () {
+        const m = this.milestone();
+        return m ? m.id : null;
+    }
+    projects () {
+        return this.projectCards().map(d=> d.column.project);
+    }
+    projectIds () {
+        return this.projects().map(d=>d.id);
+    }
 }

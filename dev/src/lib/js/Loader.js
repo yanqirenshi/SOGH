@@ -587,7 +587,7 @@ export default class Loader {
 
         getter();
     }
-    updateIssueMilestone (issue, cb_success, cb_error) {
+    updateIssueMilestone (issue, milestoneId, cb_success, cb_error) {
         if (!this.api.v4._token || !issue)
             cb_success(null);
 
@@ -596,9 +596,9 @@ export default class Loader {
         const q = query.update_issue_body
               .replace('@issue-data', this.makeGraphQLData({
                   id: issue.id(),
-                  milestoneId: null,
+                  milestoneId: milestoneId,
               }));
-
+        console.log(q);
         const getter = (endCursor) => {
             api.fetch(
                 q,
@@ -607,9 +607,9 @@ export default class Loader {
             );
         };
 
-        // getter();
+        getter();
     }
-    updateIssueProjects (issue, cb_success, cb_error) {
+    updateIssueProjects (issue, projectIds, cb_success, cb_error) {
         if (!this.api.v4._token || !issue)
             cb_success(null);
 
@@ -618,7 +618,7 @@ export default class Loader {
         const q = query.update_issue_body
               .replace('@issue-data', this.makeGraphQLData({
                   id: issue.id(),
-                  projectIds: null,
+                  projectIds: projectIds,
               }));
 
         const getter = (endCursor) => {
@@ -629,7 +629,7 @@ export default class Loader {
             );
         };
 
-        // getter();
+        getter();
     }
     fetchRepositories (owner, name, cb) {
         if (!this.api.v4._token || !owner || !name)
