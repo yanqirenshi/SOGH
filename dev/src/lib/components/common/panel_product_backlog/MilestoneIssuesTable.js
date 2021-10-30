@@ -33,6 +33,21 @@ function due (v) {
     return m.format('MM-DD ddd');
 }
 
+function issueTitle (issue) {
+    return (
+        <>
+          <p style={{fontWeight:'bold'}}>
+            {issue.title()}
+          </p>
+
+          <div style={{marginTop:6, marginLeft:22}}>
+            <Labels issue={issue} split={10}/>
+          </div>
+        </>
+    );
+}
+
+
 function makeTr (issue, project) {
     const point_result = issue.pointResultTotal();
 
@@ -47,10 +62,7 @@ function makeTr (issue, project) {
             </a>
           </td>
           <td>
-            {issue.title()}
-          </td>
-          <td>
-            <Labels issue={issue}/>
+            {issueTitle(issue)}
           </td>
           <td style={{whiteSpace: 'nowrap'}}>
             {issue.owner()}
@@ -87,7 +99,7 @@ export default function MilestoneIssuesTable (props) {
           <thead>
             <tr>
               <th>Project</th>
-              <th colSpan="3">Issue</th>
+              <th colSpan="2">Issue</th>
               <th colSpan="2">Manegement</th>
               <th colSpan="2">Work</th>
               <th colSpan="2">Point</th>
@@ -96,7 +108,6 @@ export default function MilestoneIssuesTable (props) {
               <th>Column</th>
               <th>#</th>
               <th>Title</th>
-              <th>Labels</th>
               <th>Owner</th>
               <th>Due</th>
               <th>Assignees</th>

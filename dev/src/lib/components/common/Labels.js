@@ -15,23 +15,23 @@ function labelStyle (d) {
         color: color(background),
         background: background,
         whiteSpace: 'nowrap',
-        padding: ' 2px 4px',
-        borderRadius: 5,
+        padding: '1px 5px',
+        borderRadius: 3,
         display: 'inline-block',
         marginRight: '.25em',
         marginBottom: '.25em',
-        fontSize: 12,
+        fontSize: 10,
     };
 }
 
-function makeLabelsList (issue) {
+function makeLabelsList (split_len, labels) {
     const out = [];
 
     let tmp = [];
-    for (const label of issue.labels()) {
+    for (const label of labels) {
         tmp.push(label);
 
-        if (tmp.length===2) {
+        if (tmp.length===split_len) {
             out.push(tmp);
             tmp = [];
         }
@@ -45,9 +45,10 @@ function makeLabelsList (issue) {
 
 export default function Labels (props) {
     const issue = props.issue;
+    const split_len = props.split || 2;
 
     // ラベルは一行二つ表示にする。
-    const labels_list = makeLabelsList(issue);
+    const labels_list = makeLabelsList(split_len, issue.labels());
 
     return (
         labels_list.map((labels,i) => {
