@@ -10,7 +10,6 @@ const style = {
 };
 
 export default function TableIssues (props) {
-    const sogh = props.sogh;
     const issues = props.issues;
     const productbacklog_url_prefix = props.productbacklog_url_prefix;
 

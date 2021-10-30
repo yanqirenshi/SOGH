@@ -18,7 +18,6 @@ export default function ProductBacklog (props) {
     const [updated_at, setUpdatedAt] = useState(null);
 
     const sogh       = props.sogh;
-    const repository = props.repository;
     const project_id = props.project_id;
     const root_url   = props.root_url;
     const location   = useLocation();

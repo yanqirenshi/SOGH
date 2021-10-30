@@ -84,8 +84,6 @@ export default function ProductBacklogs (props) {
         refresh: () => callbacks.refresh(),
     };
 
-    const url_prefix = productbacklog_url_prefix || "/product-backlogs/";
-
     const filterd_projects = core.filtering(projects);
 
     return (

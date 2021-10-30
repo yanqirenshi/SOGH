@@ -1,7 +1,4 @@
 import React from 'react';
-import moment from 'moment';
-
-import Labels from './Labels.js';
 
 import * as ti from './table_issues/index.js';
 

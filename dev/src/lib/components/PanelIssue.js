@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 
-import {Issue} from '../js/models/index.js';
-
 import Large from './panel_issue/Large.js';
 import Small from './panel_issue/Small.js';
 
