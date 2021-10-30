@@ -1,12 +1,12 @@
 import React from 'react';
 
-import HeroHead from './HeroHead.js';
-import HeroBody from './HeroBody.js';
-import HeroFoot from './HeroFoot.js';
+import Head from './hero_product_backlog/Head.js';
+import Body from './hero_product_backlog/Body.js';
+import Foot from './hero_product_backlog/Foot.js';
 
-import './Style.css';
+import './hero_product_backlog/Style.css';
 
-export default function Hero (props) {
+export default function HeroProductBacklog (props) {
     const sogh = props.sogh;
     const project = props.project;
     const root_url = props.root_url;
@@ -21,11 +21,11 @@ export default function Hero (props) {
         <section className="hero is-large sogh-product-backlog-hero"
                  style={{background: style.background}}>
 
-          <HeroHead root_url={root_url}/>
+          <Head root_url={root_url}/>
 
-          <HeroBody sogh={sogh} project={project}/>
+          <Body sogh={sogh} project={project}/>
 
-          <HeroFoot tabs={tabs} selected_tab={selected_tab}/>
+          <Foot tabs={tabs} selected_tab={selected_tab}/>
 
         </section>
     );

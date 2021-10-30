@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 import './Style.css';
 
-export default function HeroFoot (props) {
+export default function Foot (props) {
     return (
         <div className="hero-foot">
           <nav className="tabs is-boxed is-centered">

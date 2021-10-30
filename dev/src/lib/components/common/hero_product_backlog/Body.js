@@ -2,7 +2,7 @@ import React from 'react';
 
 import './Style.css';
 
-export default function HeroBody (props) {
+export default function Body (props) {
     const project = props.project;
 
     const style = project.colorByPriority();

@@ -3,10 +3,9 @@ import { useLocation } from "react-router-dom";
 
 import ControllerIssues from '../common/ControllerIssues.js';
 
-import Hero from './Hero.js';
-import Overivew from './Overivew.js';
-import Milestones from './Milestones.js';
-import Columns from './Columns.js';
+import Overivew from './panel_product_backlog/Overivew.js';
+import Milestones from './panel_product_backlog/Milestones.js';
+import Columns from './panel_product_backlog/Columns.js';
 
 const style = {
     controller: {

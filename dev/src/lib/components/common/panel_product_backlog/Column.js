@@ -1,6 +1,6 @@
 import React from 'react';
 
-import TablePointProductBacklog from '../common/TablePointProductBacklog.js';
+import TablePointProductBacklog from '../../common/TablePointProductBacklog.js';
 
 import MilestoneIssuesTable from './MilestoneIssuesTable.js';
 import MilestoneIssuesEmpty from './MilestoneIssuesEmpty.js';

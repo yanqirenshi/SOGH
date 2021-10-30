@@ -3,8 +3,8 @@ import { useLocation } from "react-router-dom";
 
 import NotSignIn from './common/NotSignIn.js';
 
-import Hero from './product_backlog/Hero.js';
-import PanelProductBacklog from './product_backlog/PanelProductBacklog.js';
+import Hero from './common/HeroProductBacklog.js';
+import PanelProductBacklog from './common/PanelProductBacklog.js';
 
 const tabs = [
     { code: 'columns',    label: 'Columns' },

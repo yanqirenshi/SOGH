@@ -1,7 +1,7 @@
 import React from 'react';
 import moment from 'moment';
 
-import Labels from '../common/Labels.js';
+import Labels from '../../common/Labels.js';
 
 function makeProjectColumn (d, project) {
     const cards = d.projectCards();

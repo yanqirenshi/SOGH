@@ -11,7 +11,7 @@ const style = {
     }
 };
 
-export default function HeroHead (props) {
+export default function Head (props) {
     return (
         <div className="hero-head">
           <nav className="navbar">
