@@ -14,6 +14,8 @@ const style = {
     width:'100%',
     height:'100%',
     padding: 22,
+    paddingLeft: 88,
+    paddingRight: 88,
 };
 
 export default function ScrumTimeline (props) {

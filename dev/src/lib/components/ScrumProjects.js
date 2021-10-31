@@ -11,7 +11,9 @@ import Summary             from './common/Summary.js';
 
 const style = {
     root: {
-        marginBottom:111
+        marginBottom:111,
+        paddingLeft: 88,
+        paddingRight: 88,
     },
     head: {
         padding: '11px 22px 0px 22px'
@@ -22,7 +24,7 @@ const style = {
     },
     body: {
         display:'flex',
-        padding: '11px 22px'
+        paddingTop: '11px',
     },
 };
 
