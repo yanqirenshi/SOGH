@@ -1,8 +1,13 @@
 import React from 'react';
 
 export default function ButtonToggle (props) {
+    const code = props.code;
+    const label = props.label;
+    const selected = props.on;
+    const callback = props.callback;
+
     const clickButton = (e) => {
-        props.callback(e.target.getAttribute('code'));
+        callback(e.target.getAttribute('code'));
     };
 
     const style = {
@@ -15,19 +20,20 @@ export default function ButtonToggle (props) {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
+            background: selected ? null : 'rgb(0, 136, 0)',
+            color: selected ? null : '#fff',
+            border: 'none',
         },
         ...props.style || {},
     };
 
-    const selected = props.on;
-
     return (
-        <button className={ "button is-small " + (selected ? '' : 'is-info')}
-                key={props.code}
-                code={props.code}
+        <button className={ "button is-small"}
+                key={code}
+                code={code}
                 style={style}
                 onClick={clickButton}>
-          {props.label}
+          {label}
         </button>
     );
 }

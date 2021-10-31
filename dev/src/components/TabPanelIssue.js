@@ -16,7 +16,6 @@ const style = {
 
 export default function TabPanelIssue (props) {
     const [issues, setIssues] = useState([]);
-    const [u, setU] = useState(null);
 
     const sogh = props.sogh;
     const repo = props.repository;

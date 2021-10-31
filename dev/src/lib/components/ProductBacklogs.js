@@ -28,16 +28,16 @@ export default function ProductBacklogs (props) {
     const repository = props.repository;
     const productbacklog_url_prefix = props.productbacklog_url_prefix;
 
-    useEffect(() => {
+    useEffect(()=> {
         if (!sogh) return;
 
         setCore(sogh.productBacklogs());
     }, [sogh]);
 
-    useEffect(() => {
+    useEffect(()=> {
         if (!repository) return;
 
-        sogh.getProjectsByRepository(repository, (projects) => {
+        sogh.getProjectsByRepository(repository, (projects)=> {
             setProjects(projects);
         });
 
@@ -46,10 +46,10 @@ export default function ProductBacklogs (props) {
     if (!core) return <NotSignIn />;
 
     const callbacks = {
-        refresh: () => {
+        refresh: ()=> {
             setProjects([]);
 
-            sogh.getProjectsByRepository(repository, (projects) => {
+            sogh.getProjectsByRepository(repository, (projects)=> {
                 console.log(projects);
                 setProjects(projects);
             });
@@ -59,29 +59,37 @@ export default function ProductBacklogs (props) {
     const callbacks2 = {
         filter: {
             keyword: {
-                change: (v) => {
+                change: (v)=> {
                     core.changeFilterKeyword(v);
                     setUpdatedAt(new Date());
                 },
             },
             priority: {
-                switch: (item) => {
+                switch: (item)=> {
                     core.switchFilterPriority(item);
                     setUpdatedAt(new Date());
                 }
             },
-            closing: (code) => {
-                core.switchFilterClosing (code);
+            setAllAttrs: (type, v)=> {
+                core.changeAttributeAll(type, v);
+                setUpdatedAt(new Date());
+            },
+            closing: (v)=> {
+                core.setFilterClosing(v);
+                setUpdatedAt(new Date());
+            },
+            ommitClose: (v)=> {
+                core.setFilterOmmitClose(v);
                 setUpdatedAt(new Date());
             },
         },
         view: {
-            change: (type) => {
+            change: (type)=> {
                 core.changeViewMode(type);
                 setUpdatedAt(new Date());
             },
         },
-        refresh: () => callbacks.refresh(),
+        refresh: ()=> callbacks.refresh(),
     };
 
     const filterd_projects = core.filtering(projects);
@@ -98,7 +106,7 @@ export default function ProductBacklogs (props) {
                         help={props.help} />
           </div>
 
-          <div style={{flexGrow: 1, overflow: 'auto', padding: 22, paddingTop:11}}>
+          <div style={{flexGrow: 1, overflow: 'auto', padding: 22, paddingTop:3}}>
             {'table'===core._view_mode &&
              <Table projects={filterd_projects}
                     sogh={sogh}

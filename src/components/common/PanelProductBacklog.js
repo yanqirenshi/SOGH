@@ -7,13 +7,13 @@ import Milestones from './panel_product_backlog/Milestones.js';
 import Columns from './panel_product_backlog/Columns.js';
 
 const style = {
+    paddingLeft: 88,
+    paddingRight: 88,
     controller: {
         display:'flex',
         justifyContent: 'center',
         alignItems: 'center',
         padding: 11,
-        paddingLeft: 88,
-        paddingRight: 88,
     },
     milestones: {
         paddingTop:0,
@@ -33,7 +33,7 @@ export default function PanelProductBacklog (props) {
 
     if (selected_tab.code==='overview')
         return (
-            <div>
+            <div style={style}>
               <Overivew core={core}
                         project={project}
                         data={data}/>
@@ -42,7 +42,7 @@ export default function PanelProductBacklog (props) {
 
     if (selected_tab.code==='milestones')
         return (
-            <div>
+            <div style={style}>
               <div style={style.controller}>
                 <ControllerIssues issues={data.issues}
                                   filter={filters.milestones}
@@ -59,7 +59,7 @@ export default function PanelProductBacklog (props) {
 
     if (selected_tab.code==='columns')
         return (
-            <div>
+            <div style={style}>
               <div style={style.controller}>
                 <ControllerIssues issues={data.issues}
                                   filter={filters.columns}

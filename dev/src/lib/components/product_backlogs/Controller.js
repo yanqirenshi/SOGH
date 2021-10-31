@@ -7,19 +7,15 @@ import ButtonToggle from '../common/ButtonToggle.js';
 
 import ButtonViewSwitch from './ButtonViewSwitch.js';
 import ButtonRefresh from './ButtonRefresh.js';
-import Search from './Search.js';
+
+import PBFilters from './PBFilters.js';
 
 const style = {
-    display:'flex',
-    justifyContent: 'center',
     paddingTop: 11,
-    paddingBottom: 0 ,
-    item1: { marginRight:11 },
-    help: {
-        marginLeft:22,
-        fontSize: 22,
+    contents: {
+        marginTop: 11,
         display: 'flex',
-        alignItems:'center',
+        justifyContent: 'center',
     }
 };
 
@@ -33,35 +29,31 @@ export default function Controller (props) {
 
     return (
         <div style={style}>
-          <div style={style.item1}>
-            <ButtonRefresh callbacks={callbacks} />
+          <div>
+            <PBFilters sogh={sogh}
+                       core={core}
+                       callbacks={callbacks}
+                       projects={projects}
+                       filterd_projects={filterd_projects}
+                       help={help}/>
           </div>
 
-          <div style={style.item1}>
-            <ButtonViewSwitch type={core._view_mode} callbacks={callbacks} />
+          <div style={style.contents}>
+            <div>
+              <ButtonRefresh callbacks={callbacks} />
+            </div>
+
+            <div>
+              <ButtonViewSwitch type={core._view_mode} />
+            </div>
+
+            {help &&
+             <div style={style.help}>
+               <ANewTab to={help.to}>
+                 <FontAwesomeIcon style={{}} icon={faQuestionCircle} />
+               </ANewTab>
+             </div>}
           </div>
-
-          <Search filter={core._filter}
-                  projects={projects || []}
-                  core={core}
-                  sogh={sogh}
-                  callbacks={callbacks.filter} />
-
-          {filterd_projects.length>0 &&
-           <div style={style.item1}>
-
-             <ButtonToggle label="Closing"
-                           on={!core._filter.closing}
-                           code={'closing'}
-                           callback={callbacks.filter.closing}/>
-           </div>}
-
-          {help &&
-           <div style={style.help}>
-             <ANewTab to={help.to}>
-               <FontAwesomeIcon style={{}} icon={faQuestionCircle} />
-             </ANewTab>
-           </div>}
         </div>
     );
 }

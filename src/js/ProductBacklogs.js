@@ -16,6 +16,7 @@ export default class ProductBacklogs extends SoghChild {
             priorities: {},
             types: {},
             assignees: {},
+            ommit_close: true,
             closing: false,
         };
     }
@@ -139,6 +140,9 @@ export default class ProductBacklogs extends SoghChild {
         const closing = filter.closing;
 
         return this.sortProjectsByPriority(projects.filter(project => {
+            if (filter.ommit_close && project.closed())
+                return false;
+
             if (keyword && !project.name().toUpperCase().includes(keyword))
                 return false;
 
@@ -194,6 +198,27 @@ export default class ProductBacklogs extends SoghChild {
         const new_filter = {...this._filter};
 
         new_filter[code] = !new_filter[code];
+
+        this._filter = new_filter;
+    }
+    setFilterClosing (v) {
+        const new_filter = {...this._filter};
+
+        new_filter.closing = v;
+
+        this._filter = new_filter;
+    }
+    setFilterOmmitClose (v) {
+        const new_filter = {...this._filter};
+
+        new_filter.ommit_close = v;
+
+        this._filter = new_filter;
+    }
+    changeAttributeAll (type, v) {
+        const new_filter = {...this._filter};
+
+        new_filter[type] = v;
 
         this._filter = new_filter;
     }
