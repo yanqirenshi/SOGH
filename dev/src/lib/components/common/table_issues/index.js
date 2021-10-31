@@ -2,6 +2,7 @@ import TdAssignees from './TdAssignees.js';
 import TdDueDate from './TdDueDate.js';
 import TdIssueTitle from './TdIssueTitle.js';
 import TdIssueTitleFull from './TdIssueTitleFull.js';
+import TdIssueTitleMilestone from './TdIssueTitleMilestone.js';
 import TdNextActionDate from './TdNextActionDate.js';
 import TdNumber from './TdNumber.js';
 import TdOwner from './TdOwner.js';
@@ -17,6 +18,7 @@ export {
     TdDueDate,
     TdIssueTitle,
     TdIssueTitleFull,
+    TdIssueTitleMilestone,
     TdNextActionDate,
     TdNumber,
     TdOwner,

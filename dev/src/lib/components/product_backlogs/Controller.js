@@ -3,7 +3,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faQuestionCircle } from "@fortawesome/free-solid-svg-icons";
 
 import ANewTab from '../common/ANewTab.js';
-import ButtonToggle from '../common/ButtonToggle.js';
 
 import ButtonViewSwitch from './ButtonViewSwitch.js';
 import ButtonRefresh from './ButtonRefresh.js';

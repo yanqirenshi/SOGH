@@ -1,7 +1,7 @@
 import React from 'react';
 
 import ProductBacklogHeader from './ProductBacklogHeader.js';
-import TableSprintBacklogs from './TableSprintBacklogs.js';
+import TableIssuesProductBacklog from './TableIssuesProductBacklog.js';
 import TablePointProductBacklog from './TablePointProductBacklog.js';
 
 const style = {
@@ -23,7 +23,7 @@ export default function ProductBacklog (props) {
 
           {!props.close &&
            <div className="panel-block">
-             <TableSprintBacklogs project={project} />
+             <TableIssuesProductBacklog project={project} />
            </div>}
 
           <div className="panel-block">

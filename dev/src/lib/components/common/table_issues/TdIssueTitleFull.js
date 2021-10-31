@@ -30,6 +30,14 @@ function prjNum (issue) {
     );
 }
 
+function milestoneNum (milestone) {
+    return (
+        <LinkBlank href={milestone.url}>
+          {milestone.number}
+        </LinkBlank>
+    );
+}
+
 function prjName (issue, productbacklog_url_prefix) {
     const style = {
         normal: {
@@ -58,8 +66,14 @@ export default function TdIssueTitleFull (props) {
     const issue = props.issue;
     const productbacklog_url_prefix = props.productbacklog_url_prefix;
 
+    const milestone = issue.milestone();
+
     return (
         <td>
+          <p style={{fontWeight:'bold', fontSize:14}}>
+            {issue.title()}
+          </p>
+
           {issue.project.id() &&
            <div style={{display:'flex', fontSize:12}}>
              <div style={{marginRight:11}}>
@@ -71,9 +85,12 @@ export default function TdIssueTitleFull (props) {
              </div>
            </div>}
 
-          <p style={{fontWeight:'bold', fontSize:14}}>
-            {issue.title()}
-          </p>
+          {milestone &&
+           <div style={{display:'flex', fontSize:12}}>
+             <div>
+               {milestone.title.replace('【スプリント】','')} ({milestoneNum(milestone)})
+             </div>
+           </div>}
 
           <div style={{marginTop:3, textAlign:'right'}}>
             <Labels issue={issue} split={10}/>

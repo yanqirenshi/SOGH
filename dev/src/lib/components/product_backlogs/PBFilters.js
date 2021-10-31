@@ -1,19 +1,11 @@
 import React from 'react';
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faQuestionCircle } from "@fortawesome/free-solid-svg-icons";
-
-import IconFilter from './IconFilter.js';
-
-import ANewTab from '../common/ANewTab.js';
-import ButtonToggle from '../common/ButtonToggle.js';
-
-import ButtonViewSwitch from './ButtonViewSwitch.js';
-import ButtonRefresh from './ButtonRefresh.js';
 
 import Keyword from './pb_filters/Keyword.js';
 import Attributes from './pb_filters/Attributes.js';
 import Closing from './pb_filters/Closing.js';
 import Close from './pb_filters/Close.js';
+
+import IconFilter from './IconFilter.js';
 
 const style = {
     first: {
@@ -30,12 +22,9 @@ export default function PBFilters (props) {
     const callbacks = props.callbacks.filter;
 
     const projects = props.projects;
-    const filterd_projects = props.filterd_projects;
 
     const filter = core._filter;
     const filters = core.getFilters(projects);
-
-    const help = props.help;
 
     const changeKeyword = (e) => callbacks.keyword.change(e.target.value);
     const clearKeyword = (e) => callbacks.keyword.change('');
