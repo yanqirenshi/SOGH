@@ -23,7 +23,10 @@ export default function TabPanelIssue (props) {
     useEffect(() => {
         if (!sogh || !repo) return;
 
-        sogh.getIssuesByRepository(repo, (issues) => setIssues(issues));
+        sogh.getIssuesOpenByRepository(
+            repo,
+            (issues)=> setIssues(issues),
+            (issues, page_info)=> console.log([issues, page_info]));
     }, [sogh, repo]);
 
     const callback = (action, data) => {

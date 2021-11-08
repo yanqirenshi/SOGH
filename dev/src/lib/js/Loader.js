@@ -130,7 +130,7 @@ export default class Loader {
 
         getter();
     }
-    getIssuesOpenByRepository (repository, cb) {
+    getIssuesOpenByRepository (repository, cb, cb2) {
         console.warn('このメソッドは利用しないでください。\nGtd.getIssuesOpenByRepository の内容で置きかえる予定です。');
         if (!this.api.v4._token || !repository)
             cb([]);
@@ -152,8 +152,15 @@ export default class Loader {
                 const data = results.data.repository.issues;
                 const page_info = data.pageInfo;
 
-                for(const issue of data.nodes)
-                    issues.push(new model.Issue(issue));
+                const tmp = [];
+                for(const issue of data.nodes) {
+                    const obj = new model.Issue(issue);
+                    tmp.push(obj);
+                    issues.push(obj);
+                }
+
+                if (cb2)
+                    cb2(tmp, page_info);
 
                 if (page_info.hasNextPage)
                     getter(page_info.endCursor);
