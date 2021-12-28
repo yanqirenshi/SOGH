@@ -66,7 +66,9 @@ export default function SprintPlanning (props) {
 
     useEffect(()=> {
         const filterd_issue = filter.apply(issues);
-        setProjects(sogh.issues2projects(filterd_issue));
+        const projects = sogh.issues2projects(filterd_issue);
+
+        setProjects(projects);
     }, [issues, sogh, changed]);
 
     if(!sogh || !repository) return <NotSignIn />;

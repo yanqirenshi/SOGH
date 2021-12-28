@@ -6,8 +6,8 @@ const style = {
         height: '100%',
     },
     left: {
-        minWidth: 255,
-        maxWidth: 255,
+        minWidth: 300,
+        maxWidth: 300,
         padding: 11,
     },
     right: {

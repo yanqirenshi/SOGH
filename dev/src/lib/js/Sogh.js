@@ -93,25 +93,30 @@ export default class Sogh extends Loader {
         };
 
         for (const issue of issues) {
-            if (issue.projectCards().length===0) {
-                const project = new Project(empyProject());
+            const cards = issue.projectCards();
+
+            if (cards.length===0) {
+                const project_id = null;
+
+                const project = pool.ht[project_id] || new Project(empyProject());
 
                 POOL2.addPool(project, pool);
 
                 project.issues().push(issue);
             } else {
-                const column = issue.projectCards()[0].column;
+                const column = cards[0].column;
 
                 if (!column) continue;
 
-                const project = new Project(column.project);
+                const project_id = column.project.id;
+
+                const project = pool.ht[project_id] || new Project(column.project);
 
                 POOL2.addPool(project, pool);
 
                 project.issues().push(issue);
             }
         }
-
         return pool;
     }
     issues2dueDates (issues) {
