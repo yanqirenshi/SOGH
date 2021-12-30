@@ -18,7 +18,7 @@ export default function Large (props) {
     const active = props.sogh.active();
 
     return (
-        <div>
+        <div style={{background:'#fff'}}>
           <LargeIssueTitle issue={issue} />
 
           <div>

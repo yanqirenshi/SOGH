@@ -16,7 +16,7 @@ export default function Small (props) {
     const column = issue.getColumnFirst();
 
     return (
-        <div style={{wordBreak: 'break-all', padding: 11}}>
+        <div style={{wordBreak: 'break-all', padding: 11, background:'#fff'}}>
           <SmallIssueTitle issue={issue} />
           <Labels issue={issue} />
           <SmallDueDate issue={issue} />
