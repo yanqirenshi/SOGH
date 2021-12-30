@@ -6,7 +6,12 @@ function makeProjectColumn (d, project) {
     if (cards.length===0)
         return '';
 
-    const target = cards.find(d => d.column.project.id===project.id());
+    const target = cards.find(d => {
+        if (!d.column)
+            return false;
+
+        return d.column.project.id===project.id();
+    });
 
     if (!target)
         return '';

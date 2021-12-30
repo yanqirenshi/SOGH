@@ -25,15 +25,15 @@ function drawPoints (plan, result) {
     return (
         <>
           <span style={{marginLeft:6}}>
-            {plan}
+            {Math.ceil(plan)}
           </span>,
 
           <span style={{marginLeft:8}}>
-            {result}
+            {Math.ceil(result)}
           </span>,
 
           <span style={{marginLeft:8}}>
-            {status}
+            {Math.ceil(status)}
           </span>
         </>
     );

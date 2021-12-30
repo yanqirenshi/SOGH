@@ -9,11 +9,11 @@ function makeRow (style, priority, priorities, point) {
         total += p;
 
         return <td key={d.code} style={style}>
-                 {p}
+                 {Math.ceil(p)}
                </td>;
     });
 
-    out.push(<td key="total" style={style}>{total}</td>);
+    out.push(<td key="total" style={style}>{Math.ceil(total)}</td>);
 
     return out;
 }
