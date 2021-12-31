@@ -22,6 +22,14 @@ const query = `{
           donePercentage
           doneCount
         }
+        columns(first: 100) {
+          nodes {
+            id
+            name
+            url
+            purpose
+          }
+        }
       }
       pageInfo {
         endCursor
