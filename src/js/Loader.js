@@ -676,4 +676,28 @@ export default class Loader {
 
         getter();
     }
+    fetchIssuesByProject (project, cb_success) {
+        if (!project) return;
+
+        const columns = project.columns();
+
+        const progress = columns.reduce((ht,d)=>{
+            ht[d.id] = null;
+            return ht;
+        }, {});
+
+        let issues = [];
+
+        for (const column of columns)
+            this.getIssuesByProjectColumn(column, (ret)=> {
+                issues = issues.concat(ret);
+
+                progress[column.id] = new Date();
+
+                const is_finished = Object.values(progress).indexOf(null)===-1;
+
+                if (is_finished)
+                    cb_success(issues);
+            });
+    }
 }

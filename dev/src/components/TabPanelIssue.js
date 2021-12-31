@@ -26,7 +26,8 @@ export default function TabPanelIssue (props) {
         sogh.getIssuesOpenByRepository(
             repo,
             (issues)=> setIssues(issues),
-            (issues, page_info)=> console.log([issues, page_info]));
+            (issues, page_info)=> null);
+            // (issues, page_info)=> console.log([issues, page_info]));
     }, [sogh, repo]);
 
     const callback = (action, data) => {

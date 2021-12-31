@@ -34,6 +34,11 @@ export default function ProductBacklog (props) {
 
     const selected_tab = core.selectedTab(location, tabs);
 
+    // if (project)
+    //     sogh.fetchIssuesByProject(project, (success) => {
+    //         console.log(success);
+    //     });
+
     const callbacks = {
         milestones: {
             refresh: ()=> refresh(),
