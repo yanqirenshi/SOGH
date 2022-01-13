@@ -12,6 +12,7 @@ import TdProjectColumn from './TdProjectColumn.js';
 import TdClosedAt from './TdClosedAt.js';
 import TdPointDiff from './TdPointDiff.js';
 import TdProjectPriority from './TdProjectPriority.js';
+import TdMilestone from './TdMilestone.js';
 
 export {
     TdAssignees,
@@ -28,4 +29,5 @@ export {
     TdClosedAt,
     TdPointDiff,
     TdProjectPriority,
+    TdMilestone,
 }

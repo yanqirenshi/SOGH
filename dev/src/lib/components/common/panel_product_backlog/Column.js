@@ -1,7 +1,7 @@
 import React from 'react';
 
 import TablePointProductBacklog from '../../common/TablePointProductBacklog.js';
-import TableIssuesMilestones from '../../common/TableIssuesMilestones.js';
+import TableIssuesColumn from '../../common/TableIssuesColumn.js';
 
 import MilestoneIssuesEmpty from './MilestoneIssuesEmpty.js';
 
@@ -24,7 +24,7 @@ export default function Column (props) {
           <div className="panel-block">
             {is_empty && <MilestoneIssuesEmpty />}
             {!is_empty &&
-             <TableIssuesMilestones project={project} issues={issues_filterd} />}
+             <TableIssuesColumn project={project} issues={issues_filterd} />}
           </div>
 
           <div className="panel-block">
