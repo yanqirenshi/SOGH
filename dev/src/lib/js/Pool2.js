@@ -1,7 +1,7 @@
 export default class Pool2 {
-    list2Pool (list, key="id") {
+    list2Pool (list) {
         const reducer = (ht,d)=> {
-            ht[d[key]] = d;
+            ht[d.id()] = d;
             return ht;
         };
 

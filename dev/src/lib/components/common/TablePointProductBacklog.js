@@ -33,7 +33,7 @@ function drawPoints (plan, result) {
           </span>,
 
           <span style={{marginLeft:8}}>
-            {Math.ceil(status)}
+            {status}
           </span>
         </>
     );

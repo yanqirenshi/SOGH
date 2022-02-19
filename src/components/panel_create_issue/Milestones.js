@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import moment from 'moment';
+
+import Milestone from './Milestone.js';
 
 const style = {
     display: 'flex',
@@ -7,34 +8,6 @@ const style = {
     overflow: 'auto',
     paddingTop: 3,
 };
-
-function marker (today, d) {
-    const style = {
-        width: 6,
-        minWidth: 6,
-        height: '100%',
-        background : 'rgb(162, 32, 65)',
-        marginRight: 6,
-        borderRadius: 2,
-    };
-
-    const ret = /(\d+-\d+-\d+)\s+〜\s+(\d+-\d+-\d+)/.exec(d.title());
-
-    if (!ret)
-        return null;
-
-    const from = moment(ret[1]);
-    const to   = moment(ret[2]);
-
-    if (!from.isValid() || !to.isValid())
-        return null;
-
-
-    if (today.isSameOrAfter(from) && today.isSameOrBefore(to.add(1,'d')))
-        return <div style={style} />;
-
-    return null;
-}
 
 function filtering (keyword, list) {
     if (keyword.trim()==='')
@@ -48,21 +21,8 @@ function filtering (keyword, list) {
     });
 }
 
-
-function itemStyle (mailestone, selected_milestone) {
-    const slected = selected_milestone && selected_milestone===mailestone.id();
-
-    return {
-        color: slected ? 'rgb(162, 32, 65)' : '#333',
-        background: '#fff',
-        border: slected ? '1px solid rgb(162, 32, 65)' : '1px solid #dddddd',
-        borderRadius: 3,
-        marginRight: 3,
-        marginBottom: 3,
-        padding: '3px 6px',
-        fontSize: 14,
-        display: 'flex',
-    };
+function isSelected (mailestone, selected_milestone) {
+    return selected_milestone && selected_milestone===mailestone.id();
 }
 
 function split (selected, list) {
@@ -99,8 +59,6 @@ export default function Milestones (props) {
         callback(new_data);
     };
 
-    const today = moment().startOf('day');
-
     const milestones_filterd = filtering(keyword, props.milestones.list);
     const selected_milestone = data.milestone;
 
@@ -118,15 +76,10 @@ export default function Milestones (props) {
                  onChange={change} />
 
           {list.map(milestone=>{
-              const milestone_id = milestone.id();
               return (
-                  <div key={milestone_id}
-                       style={itemStyle(milestone, selected_milestone)}
-                       data_id={milestone_id}
-                       onClick={click}>
-                    {marker(today, milestone)}
-                    {milestone.title()}
-                  </div>
+                  <Milestone milestone={milestone}
+                             selected={isSelected(milestone, selected_milestone)}
+                             callback={click}/>
               );
           })}
         </div>

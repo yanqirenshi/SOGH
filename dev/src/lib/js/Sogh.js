@@ -8,11 +8,9 @@ import Gtd from './Gtd.js';
 import Scrum from './Scrum.js';
 import ProductBacklogs from './ProductBacklogs.js';
 import ProductBacklog from './ProductBacklog.js';
-import Pool from './Pool.js';
 import Pool2 from './Pool2.js';
 import {Project} from './models/index.js';
 
-const POOL = new Pool();
 const POOL2 = new Pool2();
 
 export default class Sogh extends Loader {
@@ -67,10 +65,10 @@ export default class Sogh extends Loader {
             };
 
             const active = this._data.active;
-            this.getMilestonesByRepository(repo, (l)=> active.milestones = POOL.list2Pool(l));
-            this.getProjectsByRepository(repo,   (l)=> active.projects   = POOL.list2Pool(l));
-            this.getAssigneesByRepository(repo,  (l)=> active.assignees  = POOL.list2Pool(l));
-            this.getLabelsByRepository(repo,     (l)=> active.labels     = POOL.list2Pool(l));
+            this.getMilestonesByRepository(repo, (l)=> active.milestones = POOL2.list2Pool(l));
+            this.getProjectsByRepository(repo,   (l)=> active.projects   = POOL2.list2Pool(l));
+            this.getAssigneesByRepository(repo,  (l)=> active.assignees  = POOL2.list2Pool(l));
+            this.getLabelsByRepository(repo,     (l)=> active.labels     = POOL2.list2Pool(l));
         }
 
         return this._data.active.repository;

@@ -1,15 +1,16 @@
-import CardIssue           from './components/common/CardIssue.js';
-import ControllerIssues    from './components/common/ControllerIssues.js';
-import PanelCreateIssue    from './components/PanelCreateIssue.js';
-import PanelIssue          from './components/PanelIssue.js';
-import ProductBacklog      from './components/ProductBacklog.js';
-import ProductBacklogs     from './components/ProductBacklogs.js';
-import Reports             from './components/Reports.js';
-import ScrumProjects       from './components/ScrumProjects.js';
-import ScrumTimeline       from './components/ScrumTimeline.js';
-import SprintPlanning      from './components/SprintPlanning.js';
-import Calendar            from './components/Calendar.js';
-import TableIssuesFull     from './components/common/TableIssuesFull.js';
+import CardIssue              from './components/common/CardIssue.js';
+import ControllerIssues       from './components/common/ControllerIssues.js';
+import PanelCreateIssue       from './components/PanelCreateIssue.js';
+import PanelCreateIssueSimple from './components/PanelCreateIssueSimple.js';
+import PanelIssue             from './components/PanelIssue.js';
+import ProductBacklog         from './components/ProductBacklog.js';
+import ProductBacklogs        from './components/ProductBacklogs.js';
+import Reports                from './components/Reports.js';
+import ScrumProjects          from './components/ScrumProjects.js';
+import ScrumTimeline          from './components/ScrumTimeline.js';
+import SprintPlanning         from './components/SprintPlanning.js';
+import Calendar               from './components/Calendar.js';
+import TableIssuesFull        from './components/common/TableIssuesFull.js';
 
 import Filter from './js/Filter.js';
 import Sogh from './js/Sogh.js';
@@ -26,6 +27,7 @@ export {
     SprintPlanning,
     Reports,
     PanelCreateIssue,
+    PanelCreateIssueSimple,
     PanelIssue,
     Calendar,
     //

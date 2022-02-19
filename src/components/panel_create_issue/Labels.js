@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 
+import Label from './Label.js';
+
 const style = {
     width: '100%',
     height: '100%',
@@ -22,20 +24,6 @@ const style = {
     },
 };
 
-function marker (d) {
-    const style = {
-        width: 6,
-        minWidth: 6,
-        background : '#' + d.color(),
-        marginRight: 6,
-        borderRadius: 2,
-    };
-
-    return (
-        <div style={style} data_id={d.id()} />
-    );
-}
-
 function filtering (keyword, list) {
     if (keyword==='')
         return list;
@@ -48,19 +36,8 @@ function filtering (keyword, list) {
     });
 }
 
-function itemStyle (label, selected_labels) {
-    const slected = selected_labels.find(d=>d===label.id());
-
-    return {
-        padding: '4px 6px',
-        fontSize: 14,
-        color: slected ? 'rgb(162, 32, 65)' : '#333',
-        background: '#fff',
-        marginBottom: 3,
-        border: slected ? '1px solid rgb(162, 32, 65)' : '1px solid #dddddd',
-        borderRadius: 3,
-        display: 'flex',
-    };
+function isSelected (label, selected_labels) {
+    return selected_labels.find(d=>d===label.id());
 }
 
 function split (selected, list) {
@@ -115,16 +92,10 @@ export default function Labels (props) {
         <div style={style}>
           <div>
             {x.selected.map(d=>{
-                const label_id = d.id();
-
                 return (
-                    <div key={label_id}
-                         style={itemStyle(d, selected_labels)}
-                         data_id={label_id}
-                         onClick={click}>
-                      {marker(d)}
-                      {d.name()}
-                    </div>
+                    <Label label={d}
+                           selected={isSelected(d, selected_labels)}
+                           callback={click}/>
                 );
             })}
           </div>
@@ -140,16 +111,10 @@ export default function Labels (props) {
           <div style={style.list}>
             <div style={style.list.container}>
               {x.un_selected.map(d=>{
-                  const label_id = d.id();
-
                   return (
-                      <div key={label_id}
-                           style={itemStyle(d, selected_labels)}
-                           data_id={label_id}
-                           onClick={click}>
-                        {marker(d)}
-                        {d.name()}
-                      </div>
+                      <Label label={d}
+                             selected={isSelected(d, selected_labels)}
+                             callback={click}/>
                   );
               })}
             </div>

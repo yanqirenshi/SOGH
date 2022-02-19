@@ -7,6 +7,7 @@ export default function TableReports (props) {
 
     const issues = props.issues;
     const opens = props.opens;
+
     return (
         <table className="table is-bordered is-striped is-narrow is-hoverable is-fullwidth"
                style={{fontSize:14}}>
@@ -21,12 +22,13 @@ export default function TableReports (props) {
            </thead>
 
            <tbody>
-             {issues.map(d =>
-                         <TableReportTr key={d.id}
-                                        issue={d}
-                                        open={opens[d.id]}
-                                        callbacks={props.callbacks}
-                                        sogh={sogh} />)}
+             {issues.map(issue => (
+                 <TableReportTr key={issue.id()}
+                                issue={issue}
+                                open={opens[issue.id]}
+                                callbacks={props.callbacks}
+                                sogh={sogh} />
+             ))}
            </tbody>
         </table>
     );

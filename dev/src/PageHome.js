@@ -8,6 +8,7 @@ import * as SOGH from './lib/index.js';
 
 import Tabs from './components/Tabs.js';
 import TabCreateIssue from './components/TabCreateIssue.js';
+import TabCreateIssueSimple from './components/TabCreateIssueSimple.js';
 // import IssueDescription from './components/IssueDescription.js';
 import TabPanelIssue from './components/TabPanelIssue.js';
 import TabCalendar from './components/TabCalendar.js';
@@ -28,6 +29,7 @@ const tabs = [
     { code: 'cl',  label: 'Calendar' },
     { code: 'pi',  label: 'Panel Issue' },
     { code: 'ci',  label: 'Create Issue' },
+    { code: 'cis', label: 'Create Issue Simple' },
     { code: 'sct', label: 'Scrum (Timeline)' },
     { code: 'ds',  label: 'Scrum (Projects)' },
     { code: 'sp',  label: 'Sprint planning' },
@@ -51,6 +53,7 @@ function PageHome (props) {
 
     const pb_url_prefix = '/product-backlogs/';
 
+    let i = 0;
     return (
         <div>
 
@@ -59,37 +62,41 @@ function PageHome (props) {
           </div>
 
 
-          <div style={isActive(tabs[0], selected)}>
+          <div style={isActive(tabs[i++], selected)}>
             {sogh && <TabCalendar repository={repository} sogh={sogh} />}
           </div>
 
-          <div style={isActive(tabs[1], selected)}>
+          <div style={isActive(tabs[i++], selected)}>
             {sogh && <TabPanelIssue repository={repository} sogh={sogh} />}
           </div>
 
-          <div style={isActive(tabs[2], selected)}>
+          <div style={isActive(tabs[i++], selected)}>
             {sogh && <TabCreateIssue sogh={sogh} />}
           </div>
 
-          <div style={isActive(tabs[3], selected)}>
+          <div style={isActive(tabs[i++], selected)}>
+            {sogh && <TabCreateIssueSimple sogh={sogh} />}
+          </div>
+
+          <div style={isActive(tabs[i++], selected)}>
             <SOGH.ScrumTimeline sogh={sogh}
                                 repository={repository}
                                 productbacklog_url_prefix={pb_url_prefix} />
           </div>
 
-          <div style={isActive(tabs[4], selected)}>
+          <div style={isActive(tabs[i++], selected)}>
             <SOGH.ScrumProjects sogh={sogh}
                                 repository={repository}
                                 productbacklog_url_prefix={pb_url_prefix} />
           </div>
 
-          <div style={isActive(tabs[5], selected)}>
+          <div style={isActive(tabs[i++], selected)}>
             <SOGH.SprintPlanning sogh={sogh}
                                  repository={repository}
                                  productbacklog_url_prefix={pb_url_prefix} />
           </div>
 
-          <div style={isActive(tabs[6], selected)}>
+          <div style={isActive(tabs[i++], selected)}>
             <SOGH.ProductBacklogs sogh={sogh}
                                   repository={repository}
                                   productbacklog_url_prefix={pb_url_prefix} />

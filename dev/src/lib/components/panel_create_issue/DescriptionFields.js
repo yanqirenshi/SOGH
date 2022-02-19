@@ -1,26 +1,11 @@
 import React from 'react';
 
-const style = {
-    field: { padding: 3, paddingBottom: 0, marginBottom: 0, flexGrow:1 },
-    label: { marginBottom: 0, fontSize: 14 },
-};
-
-function Field (props) {
-    return (
-        <div className="field" style={style.field}>
-          <label className="label" style={style.label}>
-            {props.label}
-          </label>
-          <div className="control">
-            {props.children}
-          </div>
-        </div>
-    );
-}
+import Field from './Field.js';
 
 export default function DescriptionFields (props) {
     const data = props.data;
     const callback = props.callback;
+    const direction = props.direction || 'row';
 
     const callCb = (key, val) => {
         const new_data = {...data};
@@ -38,8 +23,9 @@ export default function DescriptionFields (props) {
     };
 
     return (
-        <div style={{display:'flex'}}>
-          <Field label="$Owner">
+        <div style={{display:'flex', flexDirection: direction}}>
+
+          <Field label="イシューのオーナー">
             <div style={{display:'flex'}}>
               <input className="input is-small"
                      type="text"
@@ -54,7 +40,7 @@ export default function DescriptionFields (props) {
             </div>
           </Field>
 
-          <Field label="$Date.Next">
+          <Field label="次の作業日">
             <div style={{display:'flex'}}>
               <input className="input is-small"
                      type="date"
@@ -68,7 +54,7 @@ export default function DescriptionFields (props) {
             </div>
           </Field>
 
-          <Field label="$Date.Due">
+          <Field label="希望納期">
             <div style={{display:'flex'}}>
               <input className="input is-small"
                      type="date"
@@ -81,6 +67,7 @@ export default function DescriptionFields (props) {
                       onClick={click}>X</button>
             </div>
           </Field>
+
         </div>
     );
 }

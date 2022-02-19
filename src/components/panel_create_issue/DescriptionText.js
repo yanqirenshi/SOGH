@@ -10,21 +10,27 @@ const style = {
         flexGrow:1,
         width: '100%',
         height: '100%',
+        marginRight: 4,
         input: {
-            border: 'none',
-            background: '#f8fbf8',
+            border: '1px solid #f3f3f3',
+            background: '#fff',
             fontSize: 14,
             width: '100%',
             height: '100%',
+            maxHeight: '100%',
         }
     },
     right: {
         flexGrow:1,
         width: '100%',
         height: '100%',
-        marginLeft: 20,
+        marginLeft: 4,
         position: 'relative',
         overflow: 'auto',
+        background: 'rgba(254, 244, 244, 0.3)',
+        border: '1.5px solid rgba(254, 244, 244, 0.7)',
+        borderRadius: 5,
+        padding: '0px 22px',
         viewer: {
             position: 'absolute',
         }

@@ -1,8 +1,6 @@
 import React from 'react';
 import {LinkBlank} from '../Links.js';
 
-import Labels from '../Labels.js';
-
 function milestoneNum (milestone) {
     return (
         <LinkBlank href={milestone.url}>

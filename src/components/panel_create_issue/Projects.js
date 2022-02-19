@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 
+import Project from './Project.js';
+
 const style = {
     width: '100%',
     height: '100%',
@@ -22,22 +24,6 @@ const style = {
     },
 };
 
-function marker (project) {
-    const color = project.colorByPriority();
-
-    const style = {
-        width: 6,
-        minWidth: 6,
-        background : color.background,
-        marginRight: 6,
-        borderRadius: 2,
-    };
-
-    return (
-        <div style={style} data_id={project.id()} />
-    );
-}
-
 function filtering (keyword, list) {
     if (keyword.trim()==='')
         return list;
@@ -50,19 +36,8 @@ function filtering (keyword, list) {
     });
 }
 
-function itemStyle (project, selected_projects) {
-    const slected = selected_projects.find(d=>d===project.id());
-
-    return {
-        padding: '4px 6px',
-        fontSize: 14,
-        color: slected ? 'rgb(162, 32, 65)' : '#333',
-        background: '#fff',
-        marginBottom: 3,
-        border: slected ? '1px solid rgb(162, 32, 65)' : '1px solid #dddddd',
-        borderRadius: 3,
-        display: 'flex',
-    };
+function isSelected (project, selected_projects) {
+    return selected_projects.find(d=>d===project.id()) ? true : false;
 }
 
 function split (selected, list) {
@@ -117,16 +92,10 @@ export default function Projects (props) {
         <div style={style}>
           <div>
             {x.selected.map(project=>{
-                const project_id = project.id();
-
                 return (
-                    <div key={project_id}
-                         style={itemStyle(project, selected_projects)}
-                         data_id={project_id}
-                         onClick={click}>
-                      {marker(project)}
-                      {project.name()}
-                    </div>
+                    <Project project={project}
+                             callback={click}
+                             selected={isSelected(project, selected_projects)}/>
                 );
             })}
           </div>
@@ -141,19 +110,13 @@ export default function Projects (props) {
 
           <div style={style.list}>
             <div style={style.list.container}>
-            {x.un_selected.map(project=>{
-                const project_id = project.id();
-
-                return (
-                    <div key={project_id}
-                         style={itemStyle(project, selected_projects)}
-                         data_id={project_id}
-                         onClick={click}>
-                      {marker(project)}
-                      {project.name()}
-                    </div>
-                );
-            })}
+              {x.un_selected.map(project=>{
+                  return (
+                      <Project project={project}
+                               callback={click}
+                               selected={isSelected(project, selected_projects)}/>
+                  );
+              })}
             </div>
           </div>
         </div>
