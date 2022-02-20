@@ -54,8 +54,7 @@ export default function Milestone (props) {
     const click = (e) => {callback && callback(e);};
 
     return (
-        <div key={milestone_id}
-             style={itemStyle(milestone, selected)}
+        <div style={itemStyle(milestone, selected)}
              data_id={milestone_id}
              onClick={click}>
           {marker(today, milestone)}

@@ -37,8 +37,7 @@ export default function Label (props) {
     const label_id = d.id();
 
     return (
-        <div key={label_id}
-             style={itemStyle(d, selected)}
+        <div style={itemStyle(d, selected)}
              data_id={label_id}
              onClick={click}>
           {marker(d)}

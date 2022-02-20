@@ -39,8 +39,7 @@ export default function Project (props) {
     const click = (e) => {callback && callback(e);};
 
     return (
-        <div key={project_id}
-             style={itemStyle(project, selected)}
+        <div style={itemStyle(project, selected)}
              data_id={project_id}
              onClick={click}>
           {marker(project)}

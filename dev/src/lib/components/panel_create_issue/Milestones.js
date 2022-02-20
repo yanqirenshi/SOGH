@@ -77,7 +77,8 @@ export default function Milestones (props) {
 
           {list.map(milestone=>{
               return (
-                  <Milestone milestone={milestone}
+                  <Milestone key={milestone.id()}
+                             milestone={milestone}
                              selected={isSelected(milestone, selected_milestone)}
                              callback={click}/>
               );

@@ -112,7 +112,8 @@ export default function Projects (props) {
             <div style={style.list.container}>
               {x.un_selected.map(project=>{
                   return (
-                      <Project project={project}
+                      <Project key={project.id()}
+                               project={project}
                                callback={click}
                                selected={isSelected(project, selected_projects)}/>
                   );

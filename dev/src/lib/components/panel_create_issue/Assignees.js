@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 
+import Assignee from './Assignee.js';
+
 const style = {
     display: 'flex',
     flexWrap: 'wrap',
@@ -19,19 +21,8 @@ function filtering (keyword, list) {
     });
 }
 
-function itemStyle (label, selected_assignees) {
-    const slected = selected_assignees.find(d=>d===label.id());
-
-    return {
-        color: slected ? 'rgb(162, 32, 65)' : '#333',
-        background: '#fff',
-        border: slected ? '1px solid rgb(162, 32, 65)' : '1px solid #dddddd',
-        borderRadius: 3,
-        marginRight: 3,
-        marginBottom: 3,
-        padding: '3px 6px',
-        fontSize: 14,
-    };
+function isActive (label, selected_assignees) {
+    return selected_assignees.find(d=>d===label.id());
 }
 
 function split (selected, list) {
@@ -94,15 +85,11 @@ export default function Assignees (props) {
                  onChange={change} />
 
           {list.map(d=>{
-              const assignee_id = d.id();
-
               return (
-                  <div key={assignee_id}
-                       style={itemStyle(d, selected_assignees)}
-                       data_id={assignee_id}
-                       onClick={click}>
-                    {d.name() || d.login()}
-                  </div>
+                  <Assignee key={d.id()}
+                            assignee={d}
+                            selected={isActive(d, selected_assignees)}
+                            callback={click}/>
               );
           })}
         </div>

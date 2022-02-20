@@ -93,7 +93,8 @@ export default function Labels (props) {
           <div>
             {x.selected.map(d=>{
                 return (
-                    <Label label={d}
+                    <Label key={d.id()}
+                           label={d}
                            selected={isSelected(d, selected_labels)}
                            callback={click}/>
                 );
@@ -112,7 +113,8 @@ export default function Labels (props) {
             <div style={style.list.container}>
               {x.un_selected.map(d=>{
                   return (
-                      <Label label={d}
+                      <Label key={d.id()}
+                             label={d}
                              selected={isSelected(d, selected_labels)}
                              callback={click}/>
                   );

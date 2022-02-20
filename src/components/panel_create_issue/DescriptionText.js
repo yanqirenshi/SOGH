@@ -7,27 +7,25 @@ const style = {
     height: '100%',
     display: 'flex',
     left: {
-        flexGrow:1,
-        width: '100%',
+        flexGrow: 1,
         height: '100%',
-        marginRight: 4,
+        marginLeft: 4,
         input: {
-            border: '1px solid #f3f3f3',
+            border: '1px solid #eeeeee',
             background: '#fff',
-            fontSize: 14,
+            fontSize: 16,
             width: '100%',
             height: '100%',
             maxHeight: '100%',
         }
     },
     right: {
-        flexGrow:1,
-        width: '100%',
+        flexGrow: 0.99,
         height: '100%',
-        marginLeft: 4,
+        marginRight: 4,
         position: 'relative',
         overflow: 'auto',
-        background: 'rgba(254, 244, 244, 0.3)',
+        background: 'rgba(254, 244, 244, 0.1)',
         border: '1.5px solid rgba(254, 244, 244, 0.7)',
         borderRadius: 5,
         padding: '0px 22px',
@@ -52,6 +50,15 @@ export default function Description (props) {
 
     return (
         <div style={style}>
+
+          <div style={style.right}
+               className="sogh_markdown">
+            <div style={style.right.viewer}>
+              <ReactMarkdown remarkPlugins={[gfm]}
+                             children={data.description} />,
+            </div>
+          </div>
+
           <div style={style.left}>
             <textarea className="textarea has-fixed-size"
                       style={style.left.input}
@@ -60,14 +67,6 @@ export default function Description (props) {
                       onChange={change} />
           </div>
 
-          <div style={style.right}
-               className="sogh_markdown">
-            <div style={style.right.viewer}>
-              <ReactMarkdown remarkPlugins={[gfm]}
-                             children={data.description} />,
-            </div>
-
-          </div>
         </div>
     );
 }
