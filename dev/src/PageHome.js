@@ -12,6 +12,7 @@ import TabCreateIssueSimple from './components/TabCreateIssueSimple.js';
 // import IssueDescription from './components/IssueDescription.js';
 import TabPanelIssue from './components/TabPanelIssue.js';
 import TabCalendar from './components/TabCalendar.js';
+import TabApi from './components/TabApi.js';
 
 function isActive (a,b) {
     if (a.code===b)
@@ -26,6 +27,7 @@ function selectedTab (location, tabs) {
 }
 
 const tabs = [
+    { code: 'api',  label: 'API' },
     { code: 'cl',  label: 'Calendar' },
     { code: 'pi',  label: 'Panel Issue' },
     { code: 'ci',  label: 'Create Issue' },
@@ -61,6 +63,9 @@ function PageHome (props) {
             <Tabs tabs={tabs} selected={selected} pathname={location.pathname} />
           </div>
 
+          <div style={isActive(tabs[i++], selected)}>
+            {sogh && <TabApi repository={repository} sogh={sogh} />}
+          </div>
 
           <div style={isActive(tabs[i++], selected)}>
             {sogh && <TabCalendar repository={repository} sogh={sogh} />}
