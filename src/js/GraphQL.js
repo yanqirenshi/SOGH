@@ -1,21 +1,22 @@
 // https://docs.github.com/en/graphql/overview/explorer
 
+import assignees_by_repository from './graphql/assignees_by_repository.js';
+import create_issue from './graphql/create_issue.js';
 import issues_by_milestone from './graphql/issues_by_milestone.js';
 import issues_by_report_label from './graphql/issues_by_report_label.js';
 import issues_by_repository from './graphql/issues_by_repository.js';
 import issues_by_viwer from './graphql/issues_by_viwer.js';
+import issues_open_by_label from './graphql/issues_open_by_label.js';
 import issues_open_by_project_column from './graphql/issues_open_by_project_column.js';
 import issues_open_by_repository from './graphql/issues_open_by_repository.js';
-import issues_open_by_label from './graphql/issues_open_by_label.js';
-import milestone_by_reposigory from './graphql/milestones_by_repository.js';
-import projects_by_repository from './graphql/projects_by_repository.js';
-import assignees_by_repository from './graphql/assignees_by_repository.js';
 import labels_by_repository from './graphql/labels_by_repository.js';
+import milestone_by_reposigory from './graphql/milestones_by_repository.js';
 import project_by_id from './graphql/project_by_id.js';
+import projects_by_repository from './graphql/projects_by_repository.js';
 import repository from './graphql/repository.js';
-import viwer from './graphql/viwer.js';
-import create_issue from './graphql/create_issue.js';
+import search_issues from './graphql/search_issues.js';
 import update_issue_body from './graphql/update_issue_body.js';
+import viwer from './graphql/viwer.js';
 
 export {
     issues_by_milestone,
@@ -34,4 +35,5 @@ export {
     viwer,
     create_issue,
     update_issue_body,
+    search_issues,
 }

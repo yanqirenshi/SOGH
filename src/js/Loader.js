@@ -605,7 +605,7 @@ export default class Loader {
                   id: issue.id(),
                   milestoneId: milestoneId,
               }));
-        console.log(q);
+
         const getter = (endCursor) => {
             api.fetch(
                 q,
@@ -699,5 +699,45 @@ export default class Loader {
                 if (is_finished)
                     cb_success(issues);
             });
+    }
+    /** **************************************************************** *
+     * Search
+     * **************************************************************** */
+    searchIssues  (query_in, cb_success, cb_error)  {
+        if (!this.api.v4._token || !query)
+            cb_success([]);
+
+        const api = this.api.v4;
+
+        const base_query = query.search_issues
+              .replace('@QUERY', query_in);
+
+        let issues = [];
+        const getter = (endCursor) => {
+            let query = this.ensureEndCursor(base_query, endCursor);
+
+            api.fetch(query, (results) => {
+                if ('errors' in results) {
+                    cb_error({
+                        errors: results.errors,
+                        issues: [],
+                    });
+                    return;
+                }
+
+                const data = results.data.search.edges;
+                const page_info = results.data.search.pageInfo;
+
+                issues = issues.concat(data.map(d=> new model.Issue(d.node)));
+
+                if (page_info.hasNextPage) {
+                    getter(page_info.endCursor);
+                } else {
+                    cb_success(issues);
+                }
+            });
+        };
+
+        getter();
     }
 }
