@@ -1,5 +1,7 @@
 import * as model from './models/index.js';
 
+import GRAPH from './Graph.js';
+
 import * as query from './GraphQL.js';
 import GithubApiV3 from './GithubApiV3.js';
 import GithubApiV4 from './GithubApiV4.js';
@@ -151,6 +153,8 @@ export default class Loader {
             api.fetch(query, (results) => {
                 const data = results.data.repository.issues;
                 const page_info = data.pageInfo;
+
+                GRAPH.merge('issues', data.nodes);
 
                 const tmp = [];
                 for(const issue of data.nodes) {

@@ -1,4 +1,4 @@
-import moment from 'moment';
+import {s2d} from './Utilities.js';
 
 import Loader from './Loader.js';
 
@@ -122,15 +122,9 @@ export default class Sogh extends Loader {
         const list = [];
 
         const dd = (v) => {
-            if (!v)
-                return null;
+            const m = s2d(v);
 
-            const m = moment(v);
-
-            if (!m.isValid())
-                return null;
-
-            return m.format('YYYY-MM-DD');
+            return m ? m.format('YYYY-MM-DD') : null;
         };
 
         for (const issue of issues) {

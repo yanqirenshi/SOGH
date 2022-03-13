@@ -1,9 +1,8 @@
-import moment from 'moment';
-
 // import Column from './Column.js';
 // import Label  from './Label.js';
 
 import GraphQLNode from '../GraphQLNode.js';
+import { s2d } from '../Utilities.js';
 
 // id
 // number
@@ -123,7 +122,7 @@ export default class Project extends GraphQLNode {
             if (!ret)
                 return { start: null, end: null };
 
-            return { start: moment(ret[1]), end: moment(ret[2]) };
+            return { start: s2d(ret[1]), end: s2d(ret[2]) };
         };
 
         const scheduleResult = (p) => {
@@ -132,7 +131,7 @@ export default class Project extends GraphQLNode {
             if (!ret)
                 return { start: null, end: null };
 
-            return { start: moment(ret[1]), end: moment(ret[2]) };
+            return { start: s2d(ret[1]), end: s2d(ret[2]) };
         };
 
         const type = (p) => {

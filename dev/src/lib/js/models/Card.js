@@ -1,3 +1,5 @@
+import GraphQLNode from '../GraphQLNode.js';
+
 // id
 // url
 // note
@@ -5,5 +7,5 @@
 // isArchived
 // column	model
 
-export default class Card {
+export default class Card extends GraphQLNode {
 }

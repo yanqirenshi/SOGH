@@ -1,16 +1,11 @@
 import React from 'react';
-import moment from 'moment';
+
+import {s2d} from '../../../js/Utilities.js';
 
 function due (v) {
-    if (!v)
-        return '';
+    const m = s2d(v);
 
-    const m = moment(v);
-
-    if (!m.isValid())
-        return '';
-
-    return m.format('MM-DD ddd');
+    return m ? m.format('MM-DD ddd') : '';
 }
 
 export default function TdNextActionDate (props) {

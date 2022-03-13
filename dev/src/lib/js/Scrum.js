@@ -1,5 +1,7 @@
 import moment from 'moment';
 
+import {s2d} from './Utilities.js';
+
 import SoghChild from './SoghChild.js';
 
 import Filter from './Filter.js';
@@ -113,7 +115,7 @@ export default class Scrum extends SoghChild {
             if (!ret)
                 return { start: null, end: null };
 
-            return { start: moment(ret[1]), end: moment(ret[2]) };
+            return { start: s2d(ret[1]), end: s2d(ret[2]) };
         };
         const scheduleResult = (p) => {
             const ret = /.*@Result:(\s+\d+-\d+-\d+),\s+(\d+-\d+-\d+).*/.exec(p.body);
@@ -121,7 +123,7 @@ export default class Scrum extends SoghChild {
             if (!ret)
                 return { start: null, end: null };
 
-            return { start: moment(ret[1]), end: moment(ret[2]) };
+            return { start: s2d(ret[1]), end: s2d(ret[2]) };
         };
 
         const tat = titleAndType(project);
@@ -143,8 +145,8 @@ export default class Scrum extends SoghChild {
 
             if (!ret) return false;
 
-            const from = moment(ret[1]);
-            const to   = moment(ret[2]);
+            const from = s2d(ret[1]);
+            const to   = s2d(ret[2]);
 
             if (!from.isValid() || !to.isValid())
                 return false;
@@ -176,15 +178,9 @@ export default class Scrum extends SoghChild {
         const list = [];
 
         const dd = (v) => {
-            if (!v)
-                return null;
+            const m = s2d(v);
 
-            const m = moment(v);
-
-            if (!m.isValid())
-                return null;
-
-            return m.format('YYYY-MM-DD');
+            return m ? m.format('YYYY-MM-DD') : null;
         };
 
         const dateByType = (issue) => {
