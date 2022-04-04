@@ -177,7 +177,7 @@ export default class ProductBacklog extends SoghChild {
         return [ 'TODO', 'IN_PROGRESS', null, 'DONE' ].reduce((out, p) => {
             if (!purposes[p]) return out;
 
-            return out.concat(purposes[p].sort((a,b) => a.id<b.id ? -1 : 1));
+            return out.concat(purposes[p].sort((a,b) => a.name < b.name ? -1 : 1));
         }, []);
     }
 }
