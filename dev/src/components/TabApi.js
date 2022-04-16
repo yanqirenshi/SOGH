@@ -12,7 +12,7 @@ function TabApi (props) {
 
 
     const click = ()=> {
-        sogh.searchIssues("is:issue in:title 1030210012", (issues)=>{
+        sogh.searchIssues('is:open is:issue \\"$Owner 岩崎\\" in:body', (issues)=>{
             console.log(issues);
         }); // is:open
     };

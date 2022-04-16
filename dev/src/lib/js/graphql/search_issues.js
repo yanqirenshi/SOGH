@@ -1,5 +1,5 @@
 const query = `{
-  search(query: "@QUERY", type: ISSUE, first: 100) {
+  search(after: "", first: 100, type: ISSUE, query: "@QUERY") {
     edges {
       node {
         ... on Issue {
