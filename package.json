@@ -1,6 +1,6 @@
 {
     "name": "@yanqirenshi/sogh",
-    "version": "0.2.26",
+    "version": "0.2.27",
     "description": "Scram on Github",
     "main": "dist/index.js",
     "scripts": {
@@ -22,6 +22,7 @@
         "@fortawesome/free-brands-svg-icons": "^5.15.3",
         "@fortawesome/free-solid-svg-icons": "^5.15.2",
         "@fortawesome/react-fontawesome": "^0.1.14",
+        "@yanqirenshi/d3.gantt": "0.0.9",
         "moment": "^2.29.1",
         "react-markdown": "^6.0.2",
         "react-masonry-component": "^6.2.1",

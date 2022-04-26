@@ -12,6 +12,12 @@ export default function Overivew (props) {
                                          assignees={data.assignees}
                                          columns={data.columns} />
           </div>
+
+          <div className="container" style={{marginTop:22}}>
+            <pre>
+              {props.project.body()}
+            </pre>
+          </div>
         </section>
     );
 }

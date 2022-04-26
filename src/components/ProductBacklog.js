@@ -8,6 +8,7 @@ import PanelProductBacklog from './common/PanelProductBacklog.js';
 
 const tabs = [
     { code: 'columns',    label: 'Columns' },
+    { code: 'gantt',      label: 'Gantt Chart' },
     { code: 'milestones', label: 'Milestones' },
     { code: 'overview',   label: 'Overview' },
 ];

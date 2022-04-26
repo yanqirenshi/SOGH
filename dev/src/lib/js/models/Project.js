@@ -118,7 +118,8 @@ export default class Project extends GraphQLNode {
         };
 
         const schedulePlan = (p) => {
-            const ret = /.*@Plan:(\s+\d+-\d+-\d+),\s+(\d+-\d+-\d+).*/.exec(p.body);
+            const ret = /.*@Plan:(\s+\d+-\d+-\d+),\s+(\d+-\d+-\d+).*/.exec(p.body)
+                  || /.*@Plan:(\s+\d+-\d+-\d+)\s+(\d+-\d+-\d+).*/.exec(p.body);
 
             if (!ret)
                 return { start: null, end: null };
@@ -127,7 +128,8 @@ export default class Project extends GraphQLNode {
         };
 
         const scheduleResult = (p) => {
-            const ret = /.*@Result:(\s+\d+-\d+-\d+),\s+(\d+-\d+-\d+).*/.exec(p.body);
+            const ret = /.*@Result:(\s+\d+-\d+-\d+),\s+(\d+-\d+-\d+).*/.exec(p.body)
+                  || /.*@Result:(\s+\d+-\d+-\d+)\s+(\d+-\d+-\d+).*/.exec(p.body);
 
             if (!ret)
                 return { start: null, end: null };

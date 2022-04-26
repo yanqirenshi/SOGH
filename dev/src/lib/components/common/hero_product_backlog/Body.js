@@ -5,6 +5,9 @@ import './Style.css';
 export default function Body (props) {
     const project = props.project;
 
+    const plan = props.project.plan();
+    const type = props.project.type();
+
     const style = project.colorByPriority();
 
     return (
@@ -32,6 +35,9 @@ export default function Body (props) {
 
             </p>
 
+            <p>
+              Plan: {plan.start ? plan.start.format('YYYY-MM-DD ddd') : '????-??-??'} 〜 {plan.end ? plan.end.format('YYYY-MM-DD ddd') : '????-??-??'}
+            </p>
           </div>
         </div>
     );

@@ -2,6 +2,7 @@ import React from 'react';
 
 import ControllerIssues from '../common/ControllerIssues.js';
 
+import GanttChart from './panel_product_backlog/GanttChart.js';
 import Overivew from './panel_product_backlog/Overivew.js';
 import Milestones from './panel_product_backlog/Milestones.js';
 import Columns from './panel_product_backlog/Columns.js';
@@ -30,6 +31,15 @@ export default function PanelProductBacklog (props) {
 
     const data = core._data;
     const filters = core._filters;
+
+    if (selected_tab.code==='gantt')
+        return (
+            <div style={style}>
+              <GanttChart core={core}
+                          project={project}
+                          data={data}/>
+            </div>
+        );
 
     if (selected_tab.code==='overview')
         return (
