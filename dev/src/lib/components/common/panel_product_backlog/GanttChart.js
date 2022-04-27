@@ -45,6 +45,7 @@ function makeGraphData (columns) {
                 parent: column.id,
                 name: issue.title(),
                 plan: term(issue.createdAt(), issue.dueDate()),
+                url: issue.url(),
                 style: { background: issue.closedAt() ? '#ccc' : '#c1e4e9' },
                 _core: issue,
             });
