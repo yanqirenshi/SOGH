@@ -129,12 +129,17 @@ export default class Project extends GraphQLNode {
 
         const scheduleResult = (p) => {
             const ret = /.*@Result:(\s+\d+-\d+-\d+),\s+(\d+-\d+-\d+).*/.exec(p.body)
-                  || /.*@Result:(\s+\d+-\d+-\d+)\s+(\d+-\d+-\d+).*/.exec(p.body);
+                  || /.*@Result:(\s+\d+-\d+-\d+)\s+(\d+-\d+-\d+).*/.exec(p.body)
+                  || /.*@Result:(\s+\d+-\d+-\d+),\s+(.+).*/.exec(p.body)
+                  || /.*@Result:(\s+\d+-\d+-\d+)\s+(.+).*/.exec(p.body);
 
             if (!ret)
                 return { start: null, end: null };
 
-            return { start: moment(ret[1]), end: moment(ret[2]) };
+            const start = moment(ret[1]);
+            const end   = moment(ret[2]);
+
+            return { start: start, end: end.isValid() ? end : null };
         };
 
         const type = (p) => {
