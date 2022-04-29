@@ -5,8 +5,8 @@ const term = (start, end) => {
     const end_m = moment(end);
 
     return {
-        start: start_m.toDate(),
-        end: end_m.toDate(),
+        start: start_m.isValid() ? start_m.toDate() : null,
+        end:   end_m.isValid()   ? end_m.toDate()   : null,
     };
 };
 
@@ -99,14 +99,16 @@ const DATA = {
                 },
                 plan: {
                     h: 111,
-                    color: '#e0ebaf',
+                    background: '#e0ebaf',
                 },
                 result: {
+                    h: 111,
                     shift: 22,
-                    color: '#eeeeee',
+                    background: '#eeeeee',
                 },
                 progress: {
-                    color: '#eeeeee',
+                    h: 111,
+                    background: '#f00',
                 },
             },
             background: '#fff',
