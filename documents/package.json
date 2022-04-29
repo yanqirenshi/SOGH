@@ -12,7 +12,7 @@
     "@yanqirenshi/table.wbs": "0.0.12",
     "d3": "^5.16.0",
     "deepmerge": "^4.2.2",
-    "moment": "^2.24.0",
+    "moment": "^2.29.2",
     "react": "^17.0.1",
     "react-bulma-components": "^3.4.0",
     "react-dom": "^17.0.1",
