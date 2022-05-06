@@ -36,12 +36,14 @@ export default class ProductBacklog extends SoghChild {
         this._sogh.getProjectByID(id, (project) => cb(project));
     }
     ensureMilestone (issue, milestones) {
-        const milestone_id = issue.milestone ? issue.milestone.id : null;
+        const milestone_id = issue.milestone() ? issue.milestone().id : null;
 
         if (milestones[milestone_id])
             return milestones[milestone_id];
 
-        const milestone = milestone_id ? {...issue.milestone} : {
+        const milestone = milestone_id ? {
+            ... issue.milestone()
+        } : {
             id: null,
             title: "未割り当て",
             labels: {nodes: []},

@@ -66,6 +66,10 @@ export default function GanttChart (props) {
 
     React.useEffect(()=> {
         setData(makeGraphData(props.data.columns.list));
+    }, []);
+
+    React.useEffect(()=> {
+        setData(makeGraphData(props.data.columns.list));
     }, [props.data.columns.list]);
 
     React.useEffect(()=> {
