@@ -52,11 +52,15 @@ const query = `{
           }
           assignees(first: 10) {
             nodes {
-              email
               id
-              name
               login
+              name
               url
+              email
+              avatarUrl
+              company
+              createdAt
+              updatedAt
             }
           }
           labels(first: 10) {

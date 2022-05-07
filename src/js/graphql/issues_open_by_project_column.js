@@ -63,10 +63,15 @@ const query = `{
                 }
                 assignees(first: 10) {
                   nodes {
+                    id
                     login
                     name
-                    id
                     url
+                    email
+                    avatarUrl
+                    company
+                    createdAt
+                    updatedAt
                   }
                 }
               }

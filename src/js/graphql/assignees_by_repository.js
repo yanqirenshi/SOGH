@@ -7,6 +7,7 @@ const query = `{
         name
         url
         email
+        avatarUrl
         company
         createdAt
         updatedAt

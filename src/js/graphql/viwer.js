@@ -1,10 +1,14 @@
 const query = `{
   viewer {
-    login
-    email
     id
+    login
     name
     url
+    email
+    avatarUrl
+    company
+    createdAt
+    updatedAt
   }
 }`;
 
