@@ -15,7 +15,15 @@ import TableIssuesFull        from './components/common/TableIssuesFull.js';
 import Filter from './js/Filter.js';
 import Sogh from './js/Sogh.js';
 
+import Assignee from './js/models/Assignee.js';
+import Card from './js/models/Card.js';
+import Column from './js/models/Column.js';
 import Issue from './js/models/Issue.js';
+import Label from './js/models/Label.js';
+import Milestone from './js/models/Milestone.js';
+import Project from './js/models/Project.js';
+import Repository from './js/models/Repository.js';
+import Viewer from './js/models/Viewer.js';
 
 export default Sogh;
 
@@ -36,7 +44,15 @@ export {
     //
     Filter,
     //
+    Assignee,
+    Card,
+    Column,
     Issue,
+    Label,
+    Milestone,
+    Project,
+    Repository,
+    Viewer,
     //
     TableIssuesFull,
 }
