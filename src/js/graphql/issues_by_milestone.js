@@ -2,14 +2,14 @@ const query = `{
   node(id: "@milestone-id") {
     ... on Milestone {
       id
-      createdAt
-      number
-      title
-      updatedAt
       url
+      title
+      createdAt
+      closedAt
+      updatedAt
       dueOn
       description
-      closedAt
+      number
       issues(after: "", first: 100) {
         nodes {
           id
