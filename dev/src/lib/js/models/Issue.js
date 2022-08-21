@@ -12,10 +12,10 @@ import GraphQLNode from '../GraphQLNode.js';
 // body
 // bodyHTML
 // state
-// projectCard	model
-// milestone	model
-// assignees	model
-// labels	model
+// projectCard   model
+// milestone   model
+// assignees   model
+// labels   model
 
 export default class Issue extends GraphQLNode {
     constructor (data) {
@@ -75,25 +75,6 @@ export default class Issue extends GraphQLNode {
 
         return this._core.labels.nodes;
     }
-    owner () {
-        return this._owner || null;
-    }
-    points () {
-        return this._points || null;
-    }
-    pointPlansTotal () {
-        const points = this.points();
-
-        return points.plan || 0;
-    }
-    pointResultTotal () {
-        const points = this.points();
-
-        if (!points.results)
-            return points.result || 0;
-
-        return points.results.total;
-    }
     body (v) {
         const core = this.core();
 
@@ -104,7 +85,86 @@ export default class Issue extends GraphQLNode {
 
         return core.body;
     }
-    // due_date: "2021-08-31"
+
+    /** ****************************************************************
+     *  Body
+     * **************************************************************** */
+    addAnotetionValue (issue) {
+        const body = issue.body();
+
+        issue.point = this.getPointFromBody(body);
+        issue.due_date = this.getDueDateFromBody(body);
+        issue.date_next_action = this.getNextActionFromBody(body);
+        issue.owner = this.getOwnerFromBody(body);
+
+        return issue;
+    }
+    addAnotetionValueNew (issue) {
+        const body = issue.body;
+
+        this._points = this.getPointFromBody(body);
+        this._due_date = this.getDueDateFromBody(body);
+        this._date_next_action = this.getNextActionFromBody(body);
+        this._owner = this.getOwnerFromBody(body);
+
+        return issue;
+    }
+
+    /** ****************************************************************
+     *  Owner
+     * **************************************************************** */
+    getOwnerFromBody (body) {
+        const owner = /.*\$[O|o]wner:*\s+(\S+).*/.exec(body);
+        return owner ? owner[1] : null;
+    }
+    updateBodyAnnotationValue (body, after_value, regex_match, regex_replace) {
+        if (body.match(regex_match)) {
+            const new_body = body.replace(
+                regex_replace,
+                () => after_value
+            );
+
+            this.body(new_body);
+        } else {
+            this.body(body + after_value);
+        }
+
+        this.addAnotetionValueNew(this.core());
+    }
+    owner (v) {
+        const body = this.body();
+
+        if (arguments.length===0 || this.dueDate()===v)
+            return this.getOwnerFromBody(body);
+
+        this.updateBodyAnnotationValue(
+            body,
+            '$Owner: ' + v,
+            /.*$[O|o]wner:*\s+.*/,
+            /.*$[O|o]wner:*\s+(\S+).*/,
+        );
+
+        return this.getOwnerFromBody(body);
+    }
+
+    /** ****************************************************************
+     *  Dates
+     * **************************************************************** */
+    getDueDateFromBody (body) {
+        const a = /.*[@|$]Date\.Due:*\s+(\d+-\d+-\d+).*/.exec(body);
+
+        if (a) return a[1];
+
+        const b = /.*[@|$]Due\.Date:*\s+(\d+-\d+-\d+).*/.exec(body);
+
+        if (b) return b[1];
+
+        return null;
+    };
+    getNextActionFromBody (body) {
+        const next_action = /.*[@|$]Date\.Next:*\s+(\d+-\d+-\d+).*/.exec(body);
+        return next_action ? next_action[1] : null;;
+    }
     dueDate (v) {
         const body = this.body();
 
@@ -129,7 +189,6 @@ export default class Issue extends GraphQLNode {
 
         return this.getDueDateFromBody(body);
     }
-    // date_next_action: "2021-08-24"
     nextActionDate (v) {
         const body = this.body();
 
@@ -150,26 +209,38 @@ export default class Issue extends GraphQLNode {
 
         return this.getNextActionFromBody(body);
     }
-    //
-    getPointResultsFromBody (body) {
-        const rs = /\$Point.[R|r]esult:*\s+(\S+)\s+(\d+-\d+-\d+)\s+(([1-9]\d*|0)(\.\d+)?)/g;
-        const regex = new RegExp(rs);
 
-        const result = [...body.matchAll(regex)];
+    /** ****************************************************************
+     *  Points
+     * **************************************************************** */
+    points () {
+        return this._points || null;
+    }
+    pointPlansTotal () {
+        const points = this.points();
 
-        if (result.length===0)
-            return null;
+        return points.plan || 0;
+    }
+    pointResultTotal () {
+        const points = this.points();
 
-        return result.reduce((ht, d)=>{
-            const parson = d[1];
-            const date = d[2];
-            const point = d[3] *1;
+        if (!points.results)
+            return points.result || 0;
 
-            ht.total += point;
-            ht.details.push({parson: parson, date: date, point: point});
+        return points.results.total;
+    }
+    getPointFromBody (body) {
+        const plan = /.*[@|$][P|p]oint\.[P|p]lan:*\s+(([1-9]\d*|0)(\.\d+)?).*/.exec(body);
+        const result = /.*[@|$][P|p]oint\.[R|r]esult:*\s+(([1-9]\d*|0)(\.\d+)?).*/.exec(body);
+        const results = this.getPointResultsFromBody(body);
+        const plans = this.getPointPlansFromBody(body);
 
-            return ht;
-        }, { total: 0, details: [] });
+        return {
+            plan:   plan ? plan[1] * 1 : null,
+            result: result ? result[1] * 1 : null,
+            plans: plans,
+            results : results,
+        };
     }
     getPointPlansFromBody (body) {
         const rs = /\$[P|p]oint.[P|p]lan:*\s+(\S+)\s+(\d+-\d+-\d+)\s+(([1-9]\d*|0)(\.\d+)?)/g;
@@ -191,56 +262,65 @@ export default class Issue extends GraphQLNode {
             return ht;
         }, { total: 0, details: [] });
     }
-    getPointFromBody (body) {
-        const plan = /.*[@|$][P|p]oint\.[P|p]lan:*\s+(([1-9]\d*|0)(\.\d+)?).*/.exec(body);
-        const result = /.*[@|$][P|p]oint\.[R|r]esult:*\s+(([1-9]\d*|0)(\.\d+)?).*/.exec(body);
-        const results = this.getPointResultsFromBody(body);
+    getPointResultsFromBody (body) {
+        const rs = /\$Point.[R|r]esult:*\s+(\S+)\s+(\d+-\d+-\d+)\s+(([1-9]\d*|0)(\.\d+)?)/g;
+        const regex = new RegExp(rs);
 
-        return {
-            plan:   plan ? plan[1] * 1 : null,
-            result: result ? result[1] * 1 : null,
-            results : results,
-        };
+        const result = [...body.matchAll(regex)];
+
+        if (result.length===0)
+            return null;
+
+        return result.reduce((ht, d)=>{
+            const parson = d[1];
+            const date = d[2];
+            const point = d[3] *1;
+
+            ht.total += point;
+            ht.details.push({parson: parson, date: date, point: point});
+
+            return ht;
+        }, { total: 0, details: [] });
     }
-    getDueDateFromBody (body) {
-        const a = /.*[@|$]Date\.Due:*\s+(\d+-\d+-\d+).*/.exec(body);
 
-        if (a) return a[1];
+    /** ****************************************************************
+     *  Projects / Columns
+     * **************************************************************** */
+    getColumnFirst () {
+        const cards = this.projectCards();
 
-        const b = /.*[@|$]Due\.Date:*\s+(\d+-\d+-\d+).*/.exec(body);
+        if (!cards)
+            return null;
 
-        if (b) return b[1];
-
-        return null;
-    };
-    getNextActionFromBody (body) {
-        const next_action = /.*[@|$]Date\.Next:*\s+(\d+-\d+-\d+).*/.exec(body);
-        return next_action ? next_action[1] : null;;
+        return cards[0] ? cards[0].column : null;
     }
-    getOwnerFromBody (body) {
-        const owner = /.*\$[O|o]wner:*\s+(\S+).*/.exec(body);
-        return owner ? owner[1] : null;
+    getFirstColumnProject () {
+        const column = this.getColumnFirst();
+
+        if (!column)
+            return null;
+
+        return column.project;
     }
-    addAnotetionValue (issue) {
-        const body = issue.body();
+    getFirstColumnProjectID () {
+        const project = this.getFirstColumnProject();
 
-        issue.point = this.getPointFromBody(body);
-        issue.due_date = this.getDueDateFromBody(body);
-        issue.date_next_action = this.getNextActionFromBody(body);
-        issue.owner = this.getOwnerFromBody(body);
-
-        return issue;
+        return project ? project.id : null;
     }
-    addAnotetionValueNew (issue) {
-        const body = issue.body;
-
-        this._points = this.getPointFromBody(body);
-        this._due_date = this.getDueDateFromBody(body);
-        this._date_next_action = this.getNextActionFromBody(body);
-        this._owner = this.getOwnerFromBody(body);
-
-        return issue;
+    milestoneId () {
+        const m = this.milestone();
+        return m ? m.id : null;
     }
+    projects () {
+        return this.projectCards().map(d=> d.column.project);
+    }
+    projectIds () {
+        return this.projects().map(d=>d.id);
+    }
+
+    /** ****************************************************************
+     *  ???
+     * **************************************************************** */
     // for create form
     makeIssueData () {
         return {
@@ -294,39 +374,5 @@ export default class Issue extends GraphQLNode {
             labelIds:     ids(data.labels),
             assigneeIds:  ids(data.assignees),
         };
-    }
-    /** ****************************************************************
-     *
-     * **************************************************************** */
-    getColumnFirst () {
-        const cards = this.projectCards();
-
-        if (!cards)
-            return null;
-
-        return cards[0] ? cards[0].column : null;
-    }
-    getFirstColumnProject () {
-        const column = this.getColumnFirst();
-
-        if (!column)
-            return null;
-
-        return column.project;
-    }
-    getFirstColumnProjectID () {
-        const project = this.getFirstColumnProject();
-
-        return project ? project.id : null;
-    }
-    milestoneId () {
-        const m = this.milestone();
-        return m ? m.id : null;
-    }
-    projects () {
-        return this.projectCards().map(d=> d.column.project);
-    }
-    projectIds () {
-        return this.projects().map(d=>d.id);
     }
 }
