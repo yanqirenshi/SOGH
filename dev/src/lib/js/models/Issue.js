@@ -219,10 +219,10 @@ export default class Issue extends GraphQLNode {
     pointPlansTotal () {
         const points = this.points();
 
-        if (!points.points)
+        if (!points.plan)
             return points.plan || 0;
 
-        return points.points.total;
+        return points.plan.total;
     }
     pointResultTotal () {
         const points = this.points();
