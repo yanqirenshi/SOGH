@@ -192,7 +192,7 @@ export default class Issue extends GraphQLNode {
     nextActionDate (v) {
         const body = this.body();
 
-        if (arguments.length===0 || this.dueDate()===v)
+        if (arguments.length===0 || this.nextActionDate()===v)
             return this.getNextActionFromBody(body);
 
         const replacer = () => '$Date.Next ' + (v ? v : 'yyyy-mm-dd');
