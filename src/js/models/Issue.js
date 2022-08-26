@@ -246,7 +246,7 @@ export default class Issue extends GraphQLNode {
         };
     }
     getPointPlansFromBody (body) {
-        const rs = /\$[P|p]oint.[P|p]lan:*\s+(\S+)\s+(\d+-\d+-\d+)\s+(([1-9]\d*|0)(\.\d+)?)/g;
+        const rs = /\$[P|p]oint.[P|p]lan:*\s+(\S+)\s+(([1-9]\d*|0)(\.\d+)?)/g;
         const regex = new RegExp(rs);
 
         const result = [...body.matchAll(regex)];
@@ -256,11 +256,10 @@ export default class Issue extends GraphQLNode {
 
         return result.reduce((ht, d)=>{
             const parson = d[1];
-            const date = d[2];
-            const point = d[3] *1;
+            const point = d[2] *1;
 
             ht.total += point;
-            ht.details.push({parson: parson, date: date, point: point});
+            ht.details.push({parson: parson, point: point});
 
             return ht;
         }, { total: 0, details: [] });
