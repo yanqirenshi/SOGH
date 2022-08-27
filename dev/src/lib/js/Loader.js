@@ -38,7 +38,7 @@ export default class Loader {
             this.api.v3 = null;
             this.api.v4 = null;
 
-            error(r);
+            error(r, this);
         });
     }
     ensureEndCursor(query, endCursor) {
@@ -747,9 +747,19 @@ export default class Loader {
     /** **************************************************************** *
      * Search
      * **************************************************************** */
-    searchIssues  (query_in, cb_success, cb_error)  {
+    searchIssues  (query_in, fn1, fn2, fn3)  {
+        let cb_success_all, cb_success_onetime, cb_error;
+        if (arguments.length===4) {
+            cb_success_onetime = fn1;
+            cb_success_all = fn2;
+            cb_error = fn3;
+        } else {
+            cb_success_all = fn1;
+            cb_error = fn2;
+        }
+
         if (!this.api.v4._token || !query)
-            cb_success([]);
+            cb_success_all([]);
 
         const api = this.api.v4;
 
@@ -772,16 +782,62 @@ export default class Loader {
                 const data = results.data.search.edges;
                 const page_info = results.data.search.pageInfo;
 
-                issues = issues.concat(data.map(d=> new model.Issue(d.node)));
+                const new_issues = data.map(d=> new model.Issue(d.node));
+
+                if (cb_success_onetime)
+                    cb_success_onetime(new_issues);
+
+                issues = issues.concat(new_issues);
 
                 if (page_info.hasNextPage) {
+                    // 次のデータが存在する場合
                     getter(page_info.endCursor);
                 } else {
-                    cb_success(issues);
+                    // 終り
+                    cb_success_all(issues);
                 }
             });
         };
 
         getter();
     }
+    // searchIssues  (query_in, cb_success, cb_error)  {
+    //     if (!this.api.v4._token || !query)
+    //         cb_success([]);
+
+    //     const api = this.api.v4;
+
+    //     const base_query = query.search_issues
+    //           .replace('@QUERY', query_in);
+
+    //     let issues = [];
+    //     const getter = (endCursor) => {
+    //         let query = this.ensureEndCursor(base_query, endCursor);
+
+    //         api.fetch(query, (results) => {
+    //             if ('errors' in results) {
+    //                 cb_error({
+    //                     errors: results.errors,
+    //                     issues: [],
+    //                 });
+    //                 return;
+    //             }
+
+    //             const data = results.data.search.edges;
+    //             const page_info = results.data.search.pageInfo;
+
+    //             issues = issues.concat(data.map(d=> new model.Issue(d.node)));
+
+    //             if (page_info.hasNextPage) {
+    //                 // 次のデータが存在する場合
+    //                 getter(page_info.endCursor);
+    //             } else {
+    //                 // 終り
+    //                 cb_success(issues);
+    //             }
+    //         });
+    //     };
+
+    //     getter();
+    // }
 }
