@@ -744,6 +744,57 @@ export default class Loader {
                     cb_success(issues);
             });
     }
+    getIssueByIssueId (id, cb) {
+        if (!this.api.v4._token || !id)
+            cb(null);
+
+        const api = this.api.v4;
+
+        const base_query = query.issue_by_issue_id
+              .replace('@issue-id', id);
+
+        const getter = (endCursor) => {
+            let query = this.ensureEndCursor(base_query, endCursor);
+
+            api.fetch(query, (results) => {
+                cb(new model.Issue({...results.data.node}));
+            });
+        };
+
+        getter();
+    }
+    getIssuesCommentsByIssueId (issue_id, cb) {
+        if (!this.api.v4._token, !issue_id) {
+            cb([]);
+            return;
+        }
+
+        const api = this.api.v4;
+
+        const base_query = query.issue_comments_by_issue_id
+              .replace('@issue-id', issue_id);
+
+        let issues = [];
+        const getter = (endCursor) => {
+            let query = this.ensureEndCursor(base_query, endCursor);
+
+            api.fetch(query, (results) => {
+                const data = results.data.node.comments;
+                const page_info = data.pageInfo;
+
+                for(const comment of data.nodes)
+                    issues.push(new model.IssueComment(comment));
+
+                if (page_info.hasNextPage)
+                    getter(page_info.endCursor);
+                else
+                    cb(issues);
+            });
+        };
+
+        getter();
+    }
+
     /** **************************************************************** *
      * Search
      * **************************************************************** */

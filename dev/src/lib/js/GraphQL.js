@@ -2,6 +2,8 @@
 
 import assignees_by_repository from './graphql/assignees_by_repository.js';
 import create_issue from './graphql/create_issue.js';
+import issue_by_issue_id from './graphql/issue_by_issue_id.js';
+import issue_comments_by_issue_id from './graphql/issue_comments_by_issue_id.js';
 import issues_by_milestone from './graphql/issues_by_milestone.js';
 import issues_by_report_label from './graphql/issues_by_report_label.js';
 import issues_by_repository from './graphql/issues_by_repository.js';
@@ -19,21 +21,23 @@ import update_issue_body from './graphql/update_issue_body.js';
 import viwer from './graphql/viwer.js';
 
 export {
+    assignees_by_repository,
+    create_issue,
+    issue_by_issue_id,
+    issue_comments_by_issue_id,
     issues_by_milestone,
     issues_by_report_label,
     issues_by_repository,
     issues_by_viwer,
+    issues_open_by_label,
     issues_open_by_project_column,
     issues_open_by_repository,
-    issues_open_by_label,
-    milestone_by_reposigory,
-    projects_by_repository,
-    assignees_by_repository,
     labels_by_repository,
+    milestone_by_reposigory,
     project_by_id,
+    projects_by_repository,
     repository,
-    viwer,
-    create_issue,
-    update_issue_body,
     search_issues,
+    update_issue_body,
+    viwer,
 }
