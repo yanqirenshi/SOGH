@@ -21,6 +21,7 @@ const query = `{
                 createdAt
                 closedAt
                 body
+                bodyHTML
                 labels(first: 10) {
                   nodes {
                     color

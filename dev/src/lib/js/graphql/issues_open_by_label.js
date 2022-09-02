@@ -11,6 +11,7 @@ const query = `{
           updatedAt
           number
           body
+          bodyHTML
           projectCards(first: 1) {
             nodes {
               id

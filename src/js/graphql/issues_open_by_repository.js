@@ -14,6 +14,7 @@ const query = `{
         updatedAt
         number
         body
+        bodyHTML
         repository {
           id
           name

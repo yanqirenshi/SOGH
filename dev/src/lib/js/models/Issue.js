@@ -85,7 +85,9 @@ export default class Issue extends GraphQLNode {
 
         return core.body;
     }
-
+    bodyHTML () {
+        return this._core.bodyHTML || null;
+    }
     /** ****************************************************************
      *  Body
      * **************************************************************** */
