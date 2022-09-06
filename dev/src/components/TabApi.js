@@ -32,6 +32,12 @@ function TabApi (props) {
         });
     };
 
+    const fetchPullrequestsByRepository = ()=> {
+        sogh.fetchPullrequestsByRepository(sogh.activeRepository(), (issue)=>{
+            console.log(issue);
+        });
+    };
+
     return (
         <div style={style}>
           <div>
@@ -91,6 +97,21 @@ function TabApi (props) {
 
               <Button color="" style={{marginBottom: '0.75em' }}
                       onClick={getIssuesCommentsByIssueId}>
+                Button
+              </Button>
+            </div>
+
+          </div>
+
+          {/* fetchPullrequestsByRepository */}
+          <div style={{marginTop:88}}>
+            <Heading>
+              fetchPullrequestsByRepository
+            </Heading>
+
+            <div style={{display:'flex', alignItems: 'flex-end'}}>
+              <Button color="" style={{marginBottom: '0.75em' }}
+                      onClick={fetchPullrequestsByRepository}>
                 Button
               </Button>
             </div>

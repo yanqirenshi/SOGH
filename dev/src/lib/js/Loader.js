@@ -794,7 +794,36 @@ export default class Loader {
 
         getter();
     }
+    fetchPullrequestsByRepository (repository, cb) {
+        if (!this.api.v4._token || !repository)
+            cb([]);
 
+        const api = this.api.v4;
+
+        const base_query = query.pullrequests_by_repository
+              .replace('@owner', repository.owner().login)
+              .replace('@name', repository.name());
+
+        let list = [];
+        const getter = (endCursor) => {
+            let query = this.ensureEndCursor(base_query, endCursor);
+
+            api.fetch(query, (results) => {
+                const data = results.data.repository.pullRequests;
+                const page_info = data.pageInfo;
+
+                list = list.concat(data.nodes.map(d=>new model.PullRequests(d)));
+
+                if (page_info.hasNextPage) {
+                    getter(page_info.endCursor);
+                } else {
+                    cb(list);
+                }
+            });
+        };
+
+        getter();
+    }
     /** **************************************************************** *
      * Search
      * **************************************************************** */

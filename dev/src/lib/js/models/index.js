@@ -6,6 +6,7 @@ import IssueComment from './IssueComment.js';
 import Label from './Label.js';
 import Milestone from './Milestone.js';
 import Project from './Project.js';
+import PullRequests from './PullRequests.js';
 import Repository from './Repository.js';
 import Viewer from './Viewer.js';
 
@@ -18,6 +19,7 @@ export {
     Label,
     Milestone,
     Project,
+    PullRequests,
     Repository,
     Viewer,
 }
