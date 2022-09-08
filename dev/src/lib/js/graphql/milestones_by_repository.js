@@ -1,17 +1,10 @@
+import * as attr from './attributes.js';
+
 const query = `{
-  repository (owner: "@owner", name: "@name") {
-    milestones(after: "", first: 100, states: OPEN) {
+  repository (${attr.repository_key}) {
+    milestones(${attr.pagenation}, states: OPEN) {
       nodes {
-        id
-        url
-        number
-        title
-        dueOn
-        state
-        description
-        createdAt
-        updatedAt
-        closedAt
+        ${attr.milestone}
       }
       pageInfo {
         endCursor

@@ -53,3 +53,46 @@ title
 updatedAt
 url
 `;
+
+export const milestone = `
+id
+url
+number
+title
+dueOn
+state
+description
+createdAt
+updatedAt
+closedAt
+`;
+
+export const project = `
+id
+name
+url
+updatedAt
+state
+number
+createdAt
+closedAt
+body
+closed
+progress {
+  todoPercentage
+  todoCount
+  inProgressPercentage
+  inProgressCount
+  enabled
+  donePercentage
+  doneCount
+}
+columns(first: 100) {
+  nodes {
+    id
+    name
+    url
+    purpose
+  }
+}
+`;

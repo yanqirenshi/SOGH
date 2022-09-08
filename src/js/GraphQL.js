@@ -12,6 +12,7 @@ import issues_open_by_label from './graphql/issues_open_by_label.js';
 import issues_open_by_project_column from './graphql/issues_open_by_project_column.js';
 import issues_open_by_repository from './graphql/issues_open_by_repository.js';
 import labels_by_repository from './graphql/labels_by_repository.js';
+import milestone_by_id from './graphql/milestone_by_id.js';
 import milestone_by_reposigory from './graphql/milestones_by_repository.js';
 import project_by_id from './graphql/project_by_id.js';
 import projects_by_repository from './graphql/projects_by_repository.js';
@@ -34,6 +35,7 @@ export {
     issues_open_by_project_column,
     issues_open_by_repository,
     labels_by_repository,
+    milestone_by_id,
     milestone_by_reposigory,
     project_by_id,
     projects_by_repository,

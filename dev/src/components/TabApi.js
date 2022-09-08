@@ -26,6 +26,14 @@ function TabApi (props) {
         });
     };
 
+    const getMilestonesByID = ()=> {
+        sogh.getMilestonesByID('MI_kwDOEMPGxM4Afs0w', (milestone)=>{
+            console.log(milestone);
+        });
+    };
+
+
+
     const getIssuesCommentsByIssueId = ()=> {
         sogh.getIssuesCommentsByIssueId('I_kwDOEMPGxM5AsSjS', (issue)=>{
             console.log(issue);
@@ -45,6 +53,33 @@ function TabApi (props) {
                     onClick={click}>
               Search
             </button>
+          </div>
+
+          {/* getMilestonesByID */}
+          <div style={{marginTop:88}}>
+            <Heading>
+              getMilestonesByID
+            </Heading>
+
+            <div style={{display:'flex', alignItems: 'flex-end'}}>
+              <Field>
+                <Label>
+                  Issue ID
+                </Label>
+                <Control>
+                  <Input
+                    placeholder="issue id"
+                    type="text"
+                    value="I_kwDOEMPGxM5AsSjS"
+                  />
+                </Control>
+              </Field>
+
+              <Button color="" style={{marginBottom: '0.75em' }}
+                      onClick={getMilestonesByID}>
+                Button
+              </Button>
+            </div>
           </div>
 
           {/* getIssueByIssueId */}
