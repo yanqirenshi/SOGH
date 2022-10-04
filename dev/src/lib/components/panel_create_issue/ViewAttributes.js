@@ -26,7 +26,6 @@ export default function ViewAttributes (props) {
 
     const milestone = master.milestones.ht[data.milestone];
 
-    data.assignees = ['MDQ6VXNlcjY2NjU4NzQw'];
     const assignees = data.assignees.reduce((list,id)=> {
         const data = master.assignees.ht[id];
         if (data) list.push(data);
