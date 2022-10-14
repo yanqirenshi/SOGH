@@ -551,12 +551,13 @@ export default class Loader {
         const base_query = query.projects_close_by_repository
               .replace('@owner', repository.owner().login)
               .replace('@name', repository.name());
-
+        console.log(base_query);
         let projects = [];
         const getter = (endCursor) => {
             let query = this.ensureEndCursor(base_query, endCursor);
 
             api.fetch(query, (results) => {
+                console.log(results);
                 const data = results.data.repository.projects;
                 const page_info = data.pageInfo;
 
