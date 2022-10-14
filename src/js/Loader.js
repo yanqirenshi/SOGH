@@ -512,6 +512,66 @@ export default class Loader {
 
         getter();
     }
+    getProjectsOpenByRepository (repository, cb) {
+        if (!this.api.v4._token || !repository)
+            cb([]);
+
+        const api = this.api.v4;
+
+        const base_query = query.projects_open_by_repository
+              .replace('@owner', repository.owner().login)
+              .replace('@name', repository.name());
+
+        let projects = [];
+        const getter = (endCursor) => {
+            let query = this.ensureEndCursor(base_query, endCursor);
+
+            api.fetch(query, (results) => {
+                const data = results.data.repository.projects;
+                const page_info = data.pageInfo;
+
+                projects = projects.concat(data.nodes);
+
+                if (page_info.hasNextPage) {
+                    getter(page_info.endCursor);
+                } else {
+                    cb(projects.map(d=>new model.Project(d)));
+                }
+            });
+        };
+
+        getter();
+    }
+    getProjectsCloseByRepository (repository, cb) {
+        if (!this.api.v4._token || !repository)
+            cb([]);
+
+        const api = this.api.v4;
+
+        const base_query = query.projects_close_by_repository
+              .replace('@owner', repository.owner().login)
+              .replace('@name', repository.name());
+
+        let projects = [];
+        const getter = (endCursor) => {
+            let query = this.ensureEndCursor(base_query, endCursor);
+
+            api.fetch(query, (results) => {
+                const data = results.data.repository.projects;
+                const page_info = data.pageInfo;
+
+                projects = projects.concat(data.nodes);
+
+                if (page_info.hasNextPage) {
+                    getter(page_info.endCursor);
+                } else {
+                    cb(projects.map(d=>new model.Project(d)));
+                }
+            });
+        };
+
+        getter();
+    }
     getAssigneesByRepository (repository, cb) {
         if (!this.api.v4._token || !repository)
             cb([]);

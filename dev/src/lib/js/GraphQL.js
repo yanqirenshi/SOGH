@@ -16,6 +16,8 @@ import milestone_by_id from './graphql/milestone_by_id.js';
 import milestone_by_reposigory from './graphql/milestones_by_repository.js';
 import project_by_id from './graphql/project_by_id.js';
 import projects_by_repository from './graphql/projects_by_repository.js';
+import projects_close_by_repository from './graphql/projects_close_by_repository.js';
+import projects_open_by_repository from './graphql/projects_open_by_repository.js';
 import pullrequests_by_repository from './graphql/pullrequests_by_repository.js';
 import repository from './graphql/repository.js';
 import search_issues from './graphql/search_issues.js';
@@ -39,6 +41,8 @@ export {
     milestone_by_reposigory,
     project_by_id,
     projects_by_repository,
+    projects_close_by_repository,
+    projects_open_by_repository,
     pullrequests_by_repository,
     repository,
     search_issues,
