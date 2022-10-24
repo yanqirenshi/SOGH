@@ -903,6 +903,27 @@ export default class Loader {
 
         getter();
     }
+    addComment (subject_id, body, client_mutation_id, cb_success, cb_error) {
+        if (!this.api.v4._token || !body || !subject_id)
+            cb_success(null);
+
+        const api = this.api.v4;
+
+        const q = query.addComment
+              .replace('@subjectId', subject_id)
+              .replace('@body', body)
+              .replace('@clientMutationId', client_mutation_id);
+
+        const getter = (endCursor) => {
+            api.fetch(
+                q,
+                (results) => { if (cb_success) cb_success(results); },
+                (error)   => { if (cb_error)   cb_error(error); },
+            );
+        };
+
+        getter();
+    }
     /** **************************************************************** *
      * Search
      * **************************************************************** */

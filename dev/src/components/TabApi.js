@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
+import moment from 'moment';
 
 import { Form, Button, Heading } from 'react-bulma-components';
 const { Input, Field, Control, Label } = Form;
@@ -32,8 +33,6 @@ function TabApi (props) {
         });
     };
 
-
-
     const getIssuesCommentsByIssueId = ()=> {
         sogh.getIssuesCommentsByIssueId('I_kwDOEMPGxM5AsSjS', (issue)=>{
             console.log(issue);
@@ -46,8 +45,47 @@ function TabApi (props) {
         });
     };
 
+    const addComment = (e)=> {
+        const subject_id = 'I_kwDOEMPGxM5GzPWe';
+        const body = 'aaa\nbbb\nccc';
+        const client_mutation_id = moment().format('YYYY-MM-DDTHH:mm:ss');
+
+        sogh.addComment(subject_id, body, client_mutation_id, (result)=>{
+            console.log(result);
+        });
+    };
+
+
     return (
         <div style={style}>
+          {/* getMilestonesByID */}
+          <div style={{marginTop:88}}>
+            <Heading>
+              addComment
+            </Heading>
+
+            <div style={{display:'flex', alignItems: 'flex-end'}}>
+              <Field>
+                <Label>
+                  Issue ID
+                </Label>
+                <Control>
+                  <Input
+                    placeholder="Issue ID"
+                    type="text"
+                    value="I_kwDOEMPGxM5GzPWe"
+                  />
+                </Control>
+              </Field>
+
+              <Button color="" style={{marginBottom: '0.75em' }}
+                      onClick={addComment}>
+                Button
+              </Button>
+            </div>
+          </div>
+
+          {/* search */}
           <div>
             <button className="button"
                     onClick={click}>

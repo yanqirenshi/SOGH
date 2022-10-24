@@ -1,5 +1,6 @@
 // https://docs.github.com/en/graphql/overview/explorer
 
+import addComment from './graphql/addComment.js';
 import assignees_by_repository from './graphql/assignees_by_repository.js';
 import create_issue from './graphql/create_issue.js';
 import issue_by_issue_id from './graphql/issue_by_issue_id.js';
@@ -25,6 +26,7 @@ import update_issue_body from './graphql/update_issue_body.js';
 import viwer from './graphql/viwer.js';
 
 export {
+    addComment,
     assignees_by_repository,
     create_issue,
     issue_by_issue_id,
