@@ -917,7 +917,16 @@ export default class Loader {
         const getter = (endCursor) => {
             api.fetch(
                 q,
-                (results) => { if (cb_success) cb_success(results); },
+                (results) => {
+                    if (!cb_success)
+                        return;
+
+                    cb_success({
+                        comment: new model.IssueComment(results.data.addComment.commentEdge.node),
+                        subject: results.data.addComment.subject,
+                        timelineEdge: results.data.addComment.timelineEdge,
+                    });
+                },
                 (error)   => { if (cb_error)   cb_error(error); },
             );
         };
