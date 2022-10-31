@@ -29,14 +29,20 @@ export default function TableReportTr (props) {
         <>
           {props.open &&
            <tr key={issue.id}>
-             <td>{dt(issue.updatedAt())}</td>
+             <td style={{whiteSpace: 'nowrap'}}>
+               {dt(issue.updatedAt())}
+             </td>
              <td>
                <a href={issue.url()}>
                  {issue.number()}
                </a>
              </td>
              <td>
-               <button className="button"
+               <button className="button is-fullwidth"
+                       style={{
+                           whiteSpace: 'break-spaces',
+                           textAlign: 'left',
+                       }}
                        issue_id={issue.id()}
                        onClick={clickSwitch}>
                  {issue.title()}
