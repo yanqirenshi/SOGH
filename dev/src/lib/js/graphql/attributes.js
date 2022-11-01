@@ -77,6 +77,7 @@ number
 createdAt
 closedAt
 body
+bodyHTML
 closed
 progress {
   todoPercentage
@@ -87,7 +88,7 @@ progress {
   donePercentage
   doneCount
 }
-columns(first: 100) {
+columns(first: 20) {
   nodes {
     id
     name

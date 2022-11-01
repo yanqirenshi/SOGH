@@ -1,3 +1,5 @@
+import * as attr from './attributes.js';
+
 const query = `{
   repository(name: "@name", owner: "@owner") {
     label(name: "@label_name") {
@@ -22,14 +24,7 @@ const query = `{
                 id
                 name
                 project {
-                  id
-                  number
-                  name
-                  body
-                  url
-                  createdAt
-                  updatedAt
-                  closedAt
+                  ${attr.project}
                 }
               }
             }

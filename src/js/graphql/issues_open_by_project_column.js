@@ -1,3 +1,5 @@
+import * as attr from './attributes.js';
+
 const query = `{
   node(id: "@column-id") {
     id
@@ -42,14 +44,7 @@ const query = `{
                       url
                       purpose
                       project {
-                        id
-                        number
-                        name
-                        body
-                        createdAt
-                        updatedAt
-                        closedAt
-                        url
+                        ${attr.project}
                       }
                     }
                   }
