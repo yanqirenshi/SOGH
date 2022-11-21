@@ -69,16 +69,16 @@ closedAt
 
 export const project = `
 id
+number
 name
 url
-updatedAt
-state
-number
-createdAt
-closedAt
 body
 bodyHTML
+state
 closed
+updatedAt
+createdAt
+closedAt
 progress {
   todoPercentage
   todoCount

@@ -69,6 +69,9 @@ export default class Project extends GraphQLNode {
     body () {
         return this._core.body || null;
     }
+    bodyHTML () {
+        return this._core.bodyHTML || null;
+    }
     progress () {
         return this._core.progress || null;
     }
@@ -95,6 +98,9 @@ export default class Project extends GraphQLNode {
             return [];
 
         return this._core.columns.nodes;
+    }
+    release () {
+        return this._release || null;
     }
     addAnotetionValue (project) {
         const priority = (p) => {
@@ -148,12 +154,20 @@ export default class Project extends GraphQLNode {
             return ret ? ret[1] : null;
         };
 
+        const release = (p) => {
+            const ret = /.*@Release:\s+(\S+).*/.exec(p.body);
+
+            return ret ? ret[1] : null;
+        };
+
         this._type = type(project);
         this._priority = priority(project);
         this._assignee = assignee(project);
 
         this._plan = schedulePlan(project);
         this._result = scheduleResult(project);
+
+        this._release = release(project);
 
         return project;
     }
