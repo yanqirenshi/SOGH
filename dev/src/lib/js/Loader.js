@@ -717,7 +717,7 @@ export default class Loader {
 
         getter();
     }
-    updateIssueAssignees(issue, assigneeIds, cb_success, cb_error) {
+    updateIssueAssignees (issue, assigneeIds, cb_success, cb_error) {
         if (!this.api.v4._token || !issue)
             cb_success(null);
 
@@ -739,7 +739,7 @@ export default class Loader {
 
         getter();
     }
-    updateIssueLabelIds(issue, labelIds, cb_success, cb_error) {
+    updateIssueLabelIds (issue, labelIds, cb_success, cb_error) {
         if (!this.api.v4._token || !issue)
             cb_success(null);
 
@@ -749,6 +749,29 @@ export default class Loader {
               .replace('@issue-data', this.makeGraphQLData({
                   id: issue.id(),
                   labelIds: labelIds,
+              }));
+
+        const getter = (endCursor) => {
+            api.fetch(
+                q,
+                (results) => { if (cb_success) cb_success(results); },
+                (error)   => { if (cb_error)   cb_error(error); },
+            );
+        };
+
+        getter();
+    }
+    updateIssue4request (issue, assigneeIds, cb_success, cb_error) {
+        if (!this.api.v4._token || !issue)
+            cb_success(null);
+
+        const api = this.api.v4;
+
+        const q = query.update_issue_body
+              .replace('@issue-data', this.makeGraphQLData({
+                  id: issue.id(),
+                  body: issue.body(),
+                  assigneeIds: assigneeIds,
               }));
 
         const getter = (endCursor) => {

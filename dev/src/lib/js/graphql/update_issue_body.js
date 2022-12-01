@@ -1,3 +1,5 @@
+import * as attr from './attributes.js';
+
 const query = `mutation {
   updateIssue(input:@issue-data) {
     issue {
@@ -19,14 +21,7 @@ const query = `mutation {
             id
             name
             project {
-              id
-              number
-              name
-              body
-              url
-              createdAt
-              updatedAt
-              closedAt
+              ${attr.project}
             }
           }
         }
