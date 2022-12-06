@@ -6,13 +6,7 @@ export default class Issue extends GraphQLNode {
     constructor (data) {
         super(data);
 
-        this._owner = null;
-        this._date_next_action = null;
-        this._due_date = null;
-        this._points = { plan: null, result: null, results: null };
-
-        if (arguments.length===1)
-            this.addAnotetionValueNew(data);
+        this.core(data);
 
         this.regex = {
             point: {
@@ -26,6 +20,20 @@ export default class Issue extends GraphQLNode {
             next_action: /.*[@|$]Date\.Next:*\s+(\d+-\d+-\d+).*/,
             owner:       /.*\$[O|o]wner:*\s+(\S+).*/,
         };
+    }
+    core (data) {
+        if (arguments.length===1) {
+            this._owner = null;
+            this._date_next_action = null;
+            this._due_date = null;
+            this._points = { plan: null, result: null, results: null };
+
+            this.addAnotetionValueNew(data);
+
+            this._core = data;
+        }
+
+        return this._core;
     }
     number () {
         return this._core.number || null;
