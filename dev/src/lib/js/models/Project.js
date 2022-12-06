@@ -78,6 +78,15 @@ export default class Project extends GraphQLNode {
     type () {
         return this._type || null;
     }
+    scope () {
+        return this._scope || null;
+    }
+    cost () {
+        return this._cost || null;
+    }
+    type () {
+        return this._type || null;
+    }
     priority () {
         return this._priority || null;
     }
@@ -160,6 +169,18 @@ export default class Project extends GraphQLNode {
             return ret ? ret[1] : null;
         };
 
+        const scope = (p) => {
+            const ret = /.*@Scope:\s+(\S+).*/.exec(p.body);
+
+            return ret ? ret[1] : null;
+        };
+
+        const cost = (p) => {
+            const ret = /.*@Cost:\s+(\S+).*/.exec(p.body);
+
+            return ret ? ret[1] : null;
+        };
+
         this._type = type(project);
         this._priority = priority(project);
         this._assignee = assignee(project);
@@ -168,6 +189,8 @@ export default class Project extends GraphQLNode {
         this._result = scheduleResult(project);
 
         this._release = release(project);
+        this._scope = scope(project);
+        this._cost = cost(project);
 
         return project;
     }
