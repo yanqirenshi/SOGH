@@ -4,70 +4,39 @@ const query = `{
   node(id: "@column-id") {
     id
     ... on ProjectColumn {
-      id
+      ${attr.project_column}
       cards(after: "", first: 100) {
         edges {
           node {
-            id
-            note
-            state
-            isArchived
+            ${attr.project_card}
             content {
               ... on Issue {
-                id
-                url
-                title
-                updatedAt
-                state
-                number
-                createdAt
-                closedAt
-                body
-                bodyHTML
-                labels(first: 10) {
-                  nodes {
-                    color
-                    id
-                    name
-                    url
-                  }
+                ${attr.issue}
+                repository {
+                  ${attr.repository}
                 }
                 projectCards {
                   nodes {
-                    id
-                    url
-                    note
-                    state
+                    ${attr.project_card}
                     column {
-                      id
-                      name
-                      url
-                      purpose
+                      ${attr.project_column}
                       project {
-                        ${attr.project}
+                        ${attr.project2}
                       }
                     }
                   }
                 }
                 milestone {
-                  id
-                  url
-                  title
-                  state
-                  number
-                  dueOn
+                  ${attr.milestone}
                 }
                 assignees(first: 10) {
                   nodes {
-                    id
-                    login
-                    name
-                    url
-                    email
-                    avatarUrl
-                    company
-                    createdAt
-                    updatedAt
+                    ${attr.user}
+                  }
+                }
+                labels(first: 10) {
+                  nodes {
+                    ${attr.label}
                   }
                 }
               }

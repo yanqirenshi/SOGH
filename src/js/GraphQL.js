@@ -2,6 +2,7 @@
 
 import addComment from './graphql/addComment.js';
 import assignees_by_repository from './graphql/assignees_by_repository.js';
+import close_issue from './graphql/close_issue.js';
 import create_issue from './graphql/create_issue.js';
 import issue_by_issue_id from './graphql/issue_by_issue_id.js';
 import issue_comments_by_issue_id from './graphql/issue_comments_by_issue_id.js';
@@ -20,6 +21,7 @@ import projects_by_repository from './graphql/projects_by_repository.js';
 import projects_close_by_repository from './graphql/projects_close_by_repository.js';
 import projects_open_by_repository from './graphql/projects_open_by_repository.js';
 import pullrequests_by_repository from './graphql/pullrequests_by_repository.js';
+import reopen_issue from './graphql/reopen_issue.js';
 import repository from './graphql/repository.js';
 import search_issues from './graphql/search_issues.js';
 import update_issue_body from './graphql/update_issue_body.js';
@@ -28,6 +30,7 @@ import viwer from './graphql/viwer.js';
 export {
     addComment,
     assignees_by_repository,
+    close_issue,
     create_issue,
     issue_by_issue_id,
     issue_comments_by_issue_id,
@@ -46,6 +49,7 @@ export {
     projects_close_by_repository,
     projects_open_by_repository,
     pullrequests_by_repository,
+    reopen_issue,
     repository,
     search_issues,
     update_issue_body,

@@ -3,24 +3,15 @@ import * as attr from './attributes.js';
 const query = `{
   node(id: "@issue-id") {
     ... on Issue {
-      id
-      url
-      title
-      createdAt
-      closedAt
-      updatedAt
-      number
-      body
-      bodyHTML
+      ${attr.issue}
+      repository {
+        ${attr.repository}
+      }
       projectCards(first: 1) {
         nodes {
-          id
-          url
-          note
-          state
+          ${attr.project_card}
           column {
-            id
-            name
+            ${attr.project_column}
             project {
               ${attr.project}
             }
@@ -28,91 +19,16 @@ const query = `{
         }
       }
       milestone {
-        id
-        url
-        title
-        state
-        number
-        dueOn
+        ${attr.milestone}
       }
       assignees(first: 10) {
         nodes {
-          id
-          login
-          name
-          url
-          email
-          avatarUrl
-          company
-          createdAt
-          updatedAt
+          ${attr.user}
         }
       }
       labels(first: 10) {
         nodes {
-          color
-          id
-          name
-          url
-        }
-      }
-      id
-      url
-      title
-      createdAt
-      closedAt
-      updatedAt
-      number
-      body
-      projectCards(first: 1) {
-        nodes {
-          id
-          url
-          note
-          state
-          column {
-            id
-            name
-            project {
-              id
-              number
-              name
-              body
-              url
-              createdAt
-              updatedAt
-              closedAt
-            }
-          }
-        }
-      }
-      milestone {
-        id
-        url
-        title
-        state
-        number
-        dueOn
-      }
-      assignees(first: 10) {
-        nodes {
-          id
-          login
-          name
-          url
-          email
-          avatarUrl
-          company
-          createdAt
-          updatedAt
-        }
-      }
-      labels(first: 10) {
-        nodes {
-          color
-          id
-          name
-          url
+          ${attr.label}
         }
       }
     }

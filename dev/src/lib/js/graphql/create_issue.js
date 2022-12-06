@@ -1,64 +1,35 @@
+import * as attr from './attributes.js';
+
 // https://docs.github.com/ja/graphql/reference/mutations#createissue
 const query = `mutation {
   createIssue(input:@issue-data) {
     issue {
-      id
-      url
-      title
-      createdAt
-      closedAt
-      updatedAt
-      number
-      body
+      ${attr.issue}
+      repository {
+        ${attr.repository}
+      }
       projectCards(first: 1) {
         nodes {
-          id
-          url
-          note
-          state
+          ${attr.project_card}
           column {
-            id
-            name
+            ${attr.project_column}
             project {
-              id
-              number
-              name
-              body
-              url
-              createdAt
-              updatedAt
-              closedAt
+              ${attr.project2}
             }
           }
         }
       }
       milestone {
-        id
-        url
-        title
-        state
-        number
-        dueOn
+        ${attr.milestone}
       }
       assignees(first: 10) {
         nodes {
-          id
-          login
-          name
-          url
-          email
-          avatarUrl
-          company
-          createdAt
-          updatedAt
+          ${attr.user}
         }
       }
       labels(first: 10) {
         nodes {
-          color
-          id
-          name
-          url
+          ${attr.label}
         }
       }
     }

@@ -3,74 +3,40 @@ import * as attr from './attributes.js';
 const query = `{
   node(id: "@milestone-id") {
     ... on Milestone {
-      id
-      url
-      title
-      createdAt
-      closedAt
-      updatedAt
-      dueOn
-      description
-      number
+      ${attr.milestone}
       issues(after: "", first: 100) {
         nodes {
-          id
-          url
-          title
-          createdAt
-          closedAt
-          updatedAt
-          number
-          body
-          bodyHTML
+          ${attr.issue}
+          repository {
+            ${attr.repository}
+          }
           projectCards(first: 1) {
             nodes {
-              id
-              url
-              note
-              state
+              ${attr.project_card}
               column {
-                id
-                name
+                ${attr.project_column}
                 project {
-                  ${attr.project}
+                  ${attr.project2}
                 }
               }
             }
           }
           milestone {
-            id
-            url
-            title
-            state
-            number
-            dueOn
+            ${attr.milestone}
           }
           assignees(first: 10) {
             nodes {
-              id
-              login
-              name
-              url
-              email
-              avatarUrl
-              company
-              createdAt
-              updatedAt
+              ${attr.user}
             }
           }
           labels(first: 10) {
             nodes {
-              color
-              id
-              name
-              url
+              ${attr.label}
             }
           }
         }
         pageInfo {
-          endCursor
-          hasNextPage
+          ${attr.page_info}
         }
       }
     }

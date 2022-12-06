@@ -2,40 +2,42 @@ import * as attr from './attributes.js';
 
 const query = `{
   repository(name: "@name", owner: "@owner") {
-    id
+    ${attr.repository}
     label(name: "報告") {
-      id
-      name
-      url
-      createdAt
-      updatedAt
+      ${attr.label}
       issues(after: "", first: 100) {
-        pageInfo {
-          hasNextPage
-          endCursor
-        }
         nodes {
-          id
-          url
-          title
-          createdAt
-          closedAt
-          updatedAt
-          number
-          body
-          bodyHTML
+          ${attr.issue}
+          repository {
+            ${attr.repository}
+          }
           projectCards(first: 1) {
             nodes {
+              ${attr.project_card}
               column {
-                id
-                name
-                url
+                ${attr.project_column}
                 project {
-                  ${attr.project}
+                  ${attr.project2}
                 }
               }
             }
           }
+          milestone {
+            ${attr.milestone}
+          }
+          assignees(first: 10) {
+            nodes {
+              ${attr.user}
+            }
+          }
+          labels(first: 10) {
+            nodes {
+              ${attr.label}
+            }
+          }
+        }
+        pageInfo {
+          ${attr.page_info}
         }
       }
     }

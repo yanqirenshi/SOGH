@@ -2,21 +2,6 @@ import moment from 'moment';
 
 import GraphQLNode from '../GraphQLNode.js';
 
-// id
-// url
-// title
-// createdAt
-// closedAt
-// updatedAt
-// number
-// body
-// bodyHTML
-// state
-// projectCard   model
-// milestone   model
-// assignees   model
-// labels   model
-
 export default class Issue extends GraphQLNode {
     constructor (data) {
         super(data);
@@ -50,6 +35,9 @@ export default class Issue extends GraphQLNode {
     }
     url () {
         return this._core.url || null;
+    }
+    state () {
+        return this._core.state || null;
     }
     closedAt () {
         return this._core.closedAt || null;
