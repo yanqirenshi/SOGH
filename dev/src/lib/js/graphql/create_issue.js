@@ -1,3 +1,4 @@
+// https://docs.github.com/ja/graphql/reference/mutations#createissue
 const query = `mutation {
   createIssue(input:@issue-data) {
     issue {

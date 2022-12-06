@@ -651,6 +651,44 @@ export default class Loader {
 
         getter();
     }
+    closeIssue (data, cb_success, cb_error) {
+        if (!this.api.v4._token || !data)
+            cb_success(null);
+
+        const api = this.api.v4;
+
+        const q = query.close_issue
+              .replace('@issue-data', this.makeGraphQLData(data));
+
+        const getter = (endCursor) => {
+            api.fetch(
+                q,
+                (results) => { if (cb_success) cb_success(results); },
+                (error)   => { if (cb_error)   cb_error(error); },
+            );
+        };
+
+        getter();
+    }
+    reopenIssue (data, cb_success, cb_error) {
+        if (!this.api.v4._token || !data)
+            cb_success(null);
+
+        const api = this.api.v4;
+
+        const q = query.reopen_issue
+              .replace('@issue-data', this.makeGraphQLData(data));
+
+        const getter = (endCursor) => {
+            api.fetch(
+                q,
+                (results) => { if (cb_success) cb_success(results); },
+                (error)   => { if (cb_error)   cb_error(error); },
+            );
+        };
+
+        getter();
+    }
     updateIssueBody (issue, cb_success, cb_error) {
         if (!this.api.v4._token || !issue)
             cb_success(null);
