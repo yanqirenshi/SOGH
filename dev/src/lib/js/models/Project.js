@@ -28,14 +28,14 @@ export default class Project extends GraphQLNode {
         this._plan = null;
         this._result = null;
 
-        this.addAnotetionValue(data);
-
-        this._issues = [];
-
         this._scope = null;
         this._cost = null;
         this._estimate = null;
         this._purchase = null;
+
+        this.addAnotetionValue(data);
+
+        this._issues = [];
 
         // const priority = [
         //     { code: 'c', label: '急' },
