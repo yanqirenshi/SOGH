@@ -6,7 +6,8 @@ export default class Issue extends GraphQLNode {
     constructor (data) {
         super(data);
 
-        this.core(data);
+        if (arguments.length===1)
+            this.core(data);
 
         this.regex = {
             point: {
