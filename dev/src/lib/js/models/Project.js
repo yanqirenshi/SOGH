@@ -32,6 +32,11 @@ export default class Project extends GraphQLNode {
 
         this._issues = [];
 
+        this._scope = null;
+        this._cost = null;
+        this._estimate = null;
+        this._purchase = null;
+
         // const priority = [
         //     { code: 'c', label: '急' },
         //     { code: 'h', label: '高' },
@@ -75,14 +80,17 @@ export default class Project extends GraphQLNode {
     progress () {
         return this._core.progress || null;
     }
-    type () {
-        return this._type || null;
-    }
     scope () {
         return this._scope || null;
     }
     cost () {
         return this._cost || null;
+    }
+    estimate () {
+        return this._estimate || null;
+    }
+    purchase () {
+        return this._estimate || null;
     }
     type () {
         return this._type || null;
@@ -181,6 +189,18 @@ export default class Project extends GraphQLNode {
             return ret ? ret[1] : null;
         };
 
+        const estimate = (p) => {
+            const ret = /.*@Estimate:\s+(\S+).*/.exec(p.body);
+
+            return ret ? ret[1] : null;
+        };
+
+        const purchase = (p) => {
+            const ret = /.*@Purchase:\s+(\S+).*/.exec(p.body);
+
+            return ret ? ret[1] : null;
+        };
+
         this._type = type(project);
         this._priority = priority(project);
         this._assignee = assignee(project);
@@ -191,6 +211,8 @@ export default class Project extends GraphQLNode {
         this._release = release(project);
         this._scope = scope(project);
         this._cost = cost(project);
+        this._estimate = estimate(project);
+        this._purchase = purchase(project);
 
         return project;
     }
