@@ -1,21 +1,6 @@
 import moment from 'moment';
 
-// import Column from './Column.js';
-// import Label  from './Label.js';
-
 import GraphQLNode from '../GraphQLNode.js';
-
-// id
-// number
-// name
-// body
-// url
-// state
-// closed
-// progress
-// createdAt
-// updatedAt
-// closedAt
 
 export default class Project extends GraphQLNode {
     constructor (data) {
@@ -32,6 +17,7 @@ export default class Project extends GraphQLNode {
         this._cost = null;
         this._estimate = null;
         this._purchase = null;
+        this._phase = null;
 
         this.addAnotetionValue(data);
 
@@ -201,6 +187,12 @@ export default class Project extends GraphQLNode {
             return ret ? ret[1] : null;
         };
 
+        const phase = (p) => {
+            const ret = /.*@Phase:\s+(\S+).*/.exec(p.body);
+
+            return ret ? ret[1] : null;
+        };
+
         this._type = type(project);
         this._priority = priority(project);
         this._assignee = assignee(project);
@@ -213,6 +205,7 @@ export default class Project extends GraphQLNode {
         this._cost = cost(project);
         this._estimate = estimate(project);
         this._purchase = purchase(project);
+        this._phase = phase(project);
 
         return project;
     }
