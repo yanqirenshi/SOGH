@@ -39,6 +39,33 @@ export default class Project extends GraphQLNode {
         //     { code: '改善',       order: 6 },
         // ];
     }
+    assignee () {
+        return this._assignee || null;
+    }
+    body () {
+        return this._core.body || null;
+    }
+    bodyHTML () {
+        return this._core.bodyHTML || null;
+    }
+    columns () {
+        if (!this._core.columns)
+            return [];
+
+        return this._core.columns.nodes;
+    }
+    closedAt () {
+        return this._core.closedAt || null;
+    }
+    closed () {
+        return this._core.closed || null;
+    }
+    cost () {
+        return this._cost || null;
+    }
+    estimate () {
+        return this._estimate || null;
+    }
     number () {
         return this._core.number || null;
     }
@@ -48,59 +75,35 @@ export default class Project extends GraphQLNode {
     url () {
         return this._core.url || null;
     }
-    state () {
-        return this._core.state || null;
-    }
-    closedAt () {
-        return this._core.closedAt || null;
-    }
-    closed () {
-        return this._core.closed || null;
-    }
-    body () {
-        return this._core.body || null;
-    }
-    bodyHTML () {
-        return this._core.bodyHTML || null;
-    }
-    progress () {
-        return this._core.progress || null;
-    }
-    scope () {
-        return this._scope || null;
-    }
-    cost () {
-        return this._cost || null;
-    }
-    estimate () {
-        return this._estimate || null;
-    }
-    purchase () {
-        return this._purchase || null;
-    }
     type () {
         return this._type || null;
-    }
-    priority () {
-        return this._priority || null;
-    }
-    assignee () {
-        return this._assignee || null;
     }
     plan () {
         return this._plan || null;
     }
+    progress () {
+        return this._core.progress || null;
+    }
+    purchase () {
+        return this._purchase || null;
+    }
+    phase () {
+        return this._phase || null;
+    }
+    priority () {
+        return this._priority || null;
+    }
     result () {
         return this._result || null;
     }
+    state () {
+        return this._core.state || null;
+    }
+    scope () {
+        return this._scope || null;
+    }
     issues () {
         return this._issues;
-    }
-    columns () {
-        if (!this._core.columns)
-            return [];
-
-        return this._core.columns.nodes;
     }
     release () {
         return this._release || null;
