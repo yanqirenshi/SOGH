@@ -90,7 +90,7 @@ export default class Project extends GraphQLNode {
         return this._estimate || null;
     }
     purchase () {
-        return this._estimate || null;
+        return this._purchase || null;
     }
     type () {
         return this._type || null;
