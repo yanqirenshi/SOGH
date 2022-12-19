@@ -16,6 +16,8 @@ export default class Project extends GraphQLNode {
         this._scope = null;
         this._cost = null;
         this._estimate = null;
+        this._estimate_detail = null;
+        this._estimate_description = null;
         this._purchase = null;
         this._phase = null;
 
@@ -65,6 +67,12 @@ export default class Project extends GraphQLNode {
     }
     estimate () {
         return this._estimate || null;
+    }
+    estimateDetail () {
+        return this._estimate_detail || null;
+    }
+    estimateDescription () {
+        return this._estimate_description || null;
     }
     number () {
         return this._core.number || null;
@@ -184,6 +192,18 @@ export default class Project extends GraphQLNode {
             return ret ? ret[1] : null;
         };
 
+        const estimate_detail = (p) => {
+            const ret = /.*@Estimate.Detail:\s+(\S+).*/.exec(p.body);
+
+            return ret ? ret[1] : null;
+        };
+
+        const estimate_description = (p) => {
+            const ret = /.*@Estimate.Description:\s+(\S+).*/.exec(p.body);
+
+            return ret ? ret[1] : null;
+        };
+
         const purchase = (p) => {
             const ret = /.*@Purchase:\s+(\S+).*/.exec(p.body);
 
@@ -207,6 +227,8 @@ export default class Project extends GraphQLNode {
         this._scope = scope(project);
         this._cost = cost(project);
         this._estimate = estimate(project);
+        this._estimate_detail = estimate_detail(project);
+        this._estimate_description = estimate_description(project);
         this._purchase = purchase(project);
         this._phase = phase(project);
 
