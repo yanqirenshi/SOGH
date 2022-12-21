@@ -118,12 +118,26 @@ export default class Project extends GraphQLNode {
     }
     addAnotetionValue (project) {
         const priority = (p) => {
-            const ret = /.*@Priority:\s+([c|h|n|l]).*/.exec(p.body);
+            const ret = /.*@Priority:\s+(\S).*/.exec(p.body);
 
             if (!ret)
                 return '?';
 
-            return ret[1];
+            const code = 'ret[1]';
+
+            const x = {
+                'c': '急',  // Critical :  最高の優先度のユーザー・ジョブ。
+                'h': '高',  // High : 高い優先度のユーザー・ジョブ。
+                'n': '普',  // Normal : 通常の優先度のユーザー・ジョブ。
+                'l': '低',  // Low : 低い優先度のユーザー・ジョブ。
+                'w': '保',  // Wait: 待ち状態、保留中など
+                '?': '未',  // 未確定
+            }[code];
+
+            if (!code)
+                return '?';
+
+            return code;
         };
 
         const assignee = (p) => {
