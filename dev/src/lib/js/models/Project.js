@@ -123,7 +123,7 @@ export default class Project extends GraphQLNode {
             if (!ret)
                 return '?';
 
-            const code = 'ret[1]';
+            const code = ret[1];
 
             const x = {
                 'c': '急',  // Critical :  最高の優先度のユーザー・ジョブ。
