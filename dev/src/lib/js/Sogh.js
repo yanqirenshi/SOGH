@@ -247,7 +247,7 @@ export default class Sogh extends Loader {
 
         const sorted_projects = projects.sort((a,b)=> v(a.type()) - v(b.type()));
 
-        const x = { c: [], h: [], n: [], l: [], '?': [] };
+        const x = { c: [], h: [], n: [], l: [], w: [], '?': [] };
 
         for (const project of sorted_projects) {
             const p = project.priority() || '?';
@@ -353,7 +353,7 @@ export default class Sogh extends Loader {
                 gross: {
                     points: {...x},
                     issues: { open: 0, close:  0 },
-                    priority: { c: {...x}, h: {...x}, n: {...x}, l: {...x} },
+                    priority: { c: {...x}, h: {...x}, n: {...x}, l: {...x}, w: {...x}, '?': {...x} },
                 },
                 assignees: {},
             };
