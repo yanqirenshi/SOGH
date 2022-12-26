@@ -254,6 +254,7 @@ export default class Project extends GraphQLNode {
             'h': { background: '#fcc800', color: '#333' },
             'n': { background: '#89c3eb', color: '#333' },
             'l': { background: '#dcdddd', color: '#333' },
+            'w': { background: '#ffffff', color: '#333' },
             '?': { background: '#ffffff', color: '#333' },
         };
 

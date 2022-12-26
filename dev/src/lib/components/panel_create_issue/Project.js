@@ -19,7 +19,7 @@ function marker (project) {
     const style = {
         width: 6,
         minWidth: 6,
-        background : color.background,
+        background : (color && color.background) ? color.background : 'none',
         marginRight: 6,
         borderRadius: 2,
     };
