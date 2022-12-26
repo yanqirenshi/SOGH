@@ -24,36 +24,6 @@ const style = {
     },
 };
 
-function filtering (keyword, list) {
-    if (keyword.trim()==='')
-        return list;
-
-    const k = keyword.toUpperCase();
-
-    return list.filter(d=>{
-        const name = d.name();
-        return name.toUpperCase().includes(k);
-    });
-}
-
-function isSelected (project, selected_projects) {
-    return selected_projects.find(d=>d===project.id()) ? true : false;
-}
-
-function split (selected, list) {
-    if (selected.length===0)
-        return { selected: [], un_selected: list };
-
-    return list.reduce((out, d)=> {
-        if (selected.find(id=>id===d.id()))
-            out.selected.push(d);
-        else
-            out.un_selected.push(d);
-
-        return out;
-    }, { selected: [], un_selected: [] });
-};
-
 export default function Projects (props) {
     const [keyword, setKeyword] = useState('');
 
@@ -91,7 +61,7 @@ export default function Projects (props) {
     return (
         <div style={style}>
           <div>
-            {x.selected.map(project=>{
+            {sort(x.selected).map(project=>{
                 return (
                     <Project project={project}
                              callback={click}
@@ -110,7 +80,7 @@ export default function Projects (props) {
 
           <div style={style.list}>
             <div style={style.list.container}>
-              {x.un_selected.map(project=>{
+              {sort(x.un_selected).map(project=>{
                   return (
                       <Project key={project.id()}
                                project={project}
@@ -122,4 +92,52 @@ export default function Projects (props) {
           </div>
         </div>
     );
+}
+
+function filtering (keyword, list) {
+    if (keyword.trim()==='')
+        return list;
+
+    const k = keyword.toUpperCase();
+
+    return list.filter(d=>{
+        const name = d.name();
+        return name.toUpperCase().includes(k);
+    });
+}
+
+function isSelected (project, selected_projects) {
+    return selected_projects.find(d=>d===project.id()) ? true : false;
+}
+
+function split (selected, list) {
+    if (selected.length===0)
+        return { selected: [], un_selected: list };
+
+    return list.reduce((out, d)=> {
+        if (selected.find(id=>id===d.id()))
+            out.selected.push(d);
+        else
+            out.un_selected.push(d);
+
+        return out;
+    }, { selected: [], un_selected: [] });
+};
+
+function sort (projects) {
+    const x = projects.reduce((ht,project)=> {
+        if (project.state()==='OPEN')
+            ht['OPEN'].push(project);
+        else
+            ht['CLOSED'].push(project);
+
+        return ht;
+    }, { OPEN: [], CLOSED: []});
+
+    const sorter = (a,b)=> a.name()<b.name() ? -1 : 1;
+
+    return [
+        ...x['OPEN'].sort(sorter),
+        ...x['CLOSED'].sort(sorter),
+    ];
 }

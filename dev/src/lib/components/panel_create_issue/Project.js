@@ -5,7 +5,7 @@ function itemStyle (project, selected) {
         padding: '4px 6px',
         fontSize: 14,
         color: selected ? 'rgb(162, 32, 65)' : '#333',
-        background: '#fff',
+        background: project.state()==='CLOSED' ? '#eee' : '#fff',
         marginBottom: 3,
         border: selected ? '1px solid rgb(162, 32, 65)' : '1px solid #dddddd',
         borderRadius: 3,

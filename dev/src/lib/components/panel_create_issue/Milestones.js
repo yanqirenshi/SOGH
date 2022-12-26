@@ -9,6 +9,56 @@ const style = {
     paddingTop: 3,
 };
 
+export default function Milestones (props) {
+    const [keyword, setKeyword] = useState('');
+
+    const data = props.source;
+    const callback = props.callback;
+
+    const change = (e) => setKeyword(e.target.value);
+
+    const click = (e) => {
+        const data_id = e.target.getAttribute('data_id');
+        const new_data = {...data};
+
+        if (new_data.milestone===null || new_data.milestone!==data_id)
+            new_data.milestone = data_id;
+        else
+            new_data.milestone = null;
+
+        callback(new_data);
+    };
+
+    const milestones_filterd = filtering(keyword, props.milestones.list);
+    const selected_milestone = data.milestone;
+
+    const x = split([selected_milestone], milestones_filterd);
+
+    const list = [].concat(x.selected).concat(x.un_selected.sort((a,b)=> {
+        return a.dueOn() < b.dueOn() ? -1 : 1;
+    }));
+
+    return (
+        <div style={style}>
+          <input className="input is-small"
+                 style={{width:222, marginRight:3,marginBottom:3}}
+                 type="text"
+                 placeholder="Filter"
+                 value={keyword}
+                 onChange={change} />
+
+          {list.map(milestone=>{
+              return (
+                  <Milestone key={milestone.id()}
+                             milestone={milestone}
+                             selected={isSelected(milestone, selected_milestone)}
+                             callback={click}/>
+              );
+          })}
+        </div>
+    );
+}
+
 function filtering (keyword, list) {
     if (keyword.trim()==='')
         return list;
@@ -39,50 +89,3 @@ function split (selected, list) {
     }, { selected: [], un_selected: [] });
 };
 
-export default function Milestones (props) {
-    const [keyword, setKeyword] = useState('');
-
-    const data = props.source;
-    const callback = props.callback;
-
-    const change = (e) => setKeyword(e.target.value);
-
-    const click = (e) => {
-        const data_id = e.target.getAttribute('data_id');
-        const new_data = {...data};
-
-        if (new_data.milestone===null || new_data.milestone!==data_id)
-            new_data.milestone = data_id;
-        else
-            new_data.milestone = null;
-
-        callback(new_data);
-    };
-
-    const milestones_filterd = filtering(keyword, props.milestones.list);
-    const selected_milestone = data.milestone;
-
-    const x = split([selected_milestone], milestones_filterd);
-
-    const list = [].concat(x.selected).concat(x.un_selected);
-
-    return (
-        <div style={style}>
-          <input className="input is-small"
-                 style={{width:222, marginRight:3,marginBottom:3}}
-                 type="text"
-                 placeholder="Filter"
-                 value={keyword}
-                 onChange={change} />
-
-          {list.map(milestone=>{
-              return (
-                  <Milestone key={milestone.id()}
-                             milestone={milestone}
-                             selected={isSelected(milestone, selected_milestone)}
-                             callback={click}/>
-              );
-          })}
-        </div>
-    );
-}

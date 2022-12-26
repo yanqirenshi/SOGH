@@ -25,7 +25,7 @@ export default class ProductBacklogs extends SoghChild {
     }
     sortProjectsByPriority (projects) {
         const splitByState = (projects) => {
-            const x = { c: [], h: [], n: [], l: [], '?': [], closed: [] };
+            const x = { c: [], h: [], n: [], l: [], w: [], '?': [], closed: [] };
 
             for (const project of projects) {
                 let p;

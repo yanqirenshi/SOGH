@@ -24,36 +24,6 @@ const style = {
     },
 };
 
-function filtering (keyword, list) {
-    if (keyword==='')
-        return list;
-
-    const k = keyword.toUpperCase();
-
-    return list.filter(d=>{
-        const name = d.name();
-        return name.toUpperCase().includes(k);
-    });
-}
-
-function isSelected (label, selected_labels) {
-    return selected_labels.find(d=>d===label.id());
-}
-
-function split (selected, list) {
-    if (selected.length===0)
-        return { selected: [], un_selected: list };
-
-    return list.reduce((out, d)=> {
-        if (selected.find(id=>id===d.id()))
-            out.selected.push(d);
-        else
-            out.un_selected.push(d);
-
-        return out;
-    }, { selected: [], un_selected: [] });
-};
-
 export default function Labels (props) {
     const [keyword, setKeyword] = useState('');
 
@@ -91,7 +61,7 @@ export default function Labels (props) {
     return (
         <div style={style}>
           <div>
-            {x.selected.map(d=>{
+            {sort(x.selected).map(d=>{
                 return (
                     <Label key={d.id()}
                            label={d}
@@ -111,7 +81,7 @@ export default function Labels (props) {
 
           <div style={style.list}>
             <div style={style.list.container}>
-              {x.un_selected.map(d=>{
+              {sort(x.un_selected).map(d=>{
                   return (
                       <Label key={d.id()}
                              label={d}
@@ -123,4 +93,40 @@ export default function Labels (props) {
           </div>
         </div>
     );
+}
+
+function filtering (keyword, list) {
+    if (keyword==='')
+        return list;
+
+    const k = keyword.toUpperCase();
+
+    return list.filter(d=>{
+        const name = d.name();
+        return name.toUpperCase().includes(k);
+    });
+}
+
+function isSelected (label, selected_labels) {
+    return selected_labels.find(d=>d===label.id());
+}
+
+function split (selected, list) {
+    if (selected.length===0)
+        return { selected: [], un_selected: list };
+
+    return list.reduce((out, d)=> {
+        if (selected.find(id=>id===d.id()))
+            out.selected.push(d);
+        else
+            out.un_selected.push(d);
+
+        return out;
+    }, { selected: [], un_selected: [] });
+}
+
+function sort (list) {
+    return list.sort((a,b)=> {
+        return a.name() < b.name() ? -1 : 1;
+    });
 }
