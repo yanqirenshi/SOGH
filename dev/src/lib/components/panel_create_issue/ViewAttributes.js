@@ -12,13 +12,13 @@ export default function ViewAttributes (props) {
 
     const master = sogh.active();
 
-    const projects = data.projects.reduce((list,id)=> {
+    const projects = ensureList(data, 'projects').reduce((list,id)=> {
         const data = master.projects.ht[id];
         if (data) list.push(data);
         return list;
     }, []);
 
-    const labels = data.labels.reduce((list,id)=> {
+    const labels = ensureList(data, 'labels').reduce((list,id)=> {
         const data = master.labels.ht[id];
         if (data) list.push(data);
         return list;
@@ -26,7 +26,7 @@ export default function ViewAttributes (props) {
 
     const milestone = master.milestones.ht[data.milestone];
 
-    const assignees = data.assignees.reduce((list,id)=> {
+    const assignees = ensureList(data, 'assignees').reduce((list,id)=> {
         const data = master.assignees.ht[id];
         if (data) list.push(data);
         return list;
@@ -55,4 +55,11 @@ export default function ViewAttributes (props) {
           </Field>
         </div>
     );
+}
+
+function ensureList (data, key) {
+    if (!data || !data[key])
+        return [];
+
+    return data[key];
 }
