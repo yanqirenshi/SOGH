@@ -364,12 +364,7 @@ export default class Issue extends GraphQLNode {
             return d.id;
         };
 
-        console.log('-------------');
-        console.log(data);
-        const ids = (l) => {
-            console.log(l);
-            l.map(d=>id(d));
-        };
+        const ids = (l) => l.map(d=>id(d));
 
         return {
             repositoryId: data.repository.id(),
