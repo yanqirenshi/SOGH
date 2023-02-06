@@ -22,6 +22,7 @@ import Issue from './js/models/Issue.js';
 import Label from './js/models/Label.js';
 import Milestone from './js/models/Milestone.js';
 import Project from './js/models/Project.js';
+import PullRequests from './js/models/PullRequests.js';
 import Repository from './js/models/Repository.js';
 import Viewer from './js/models/Viewer.js';
 
@@ -51,6 +52,7 @@ export {
     Label,
     Milestone,
     Project,
+    PullRequests,
     Repository,
     Viewer,
     //
