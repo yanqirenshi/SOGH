@@ -1,73 +1,43 @@
+import * as attr from './attributes.js';
+
 const query = `{
   search(after: "", first: 100, type: ISSUE, query: "@QUERY") {
     edges {
       node {
         ... on Issue {
-          id
-          url
-          title
-          createdAt
-          closedAt
-          updatedAt
-          number
-          body
+          ${attr.issue}
+          repository {
+            ${attr.repository}
+          }
           projectCards(first: 1) {
             nodes {
-              id
-              url
-              note
-              state
+              ${attr.project_card}
               column {
-                id
-                name
+                ${attr.project_column}
                 project {
-                  id
-                  number
-                  name
-                  body
-                  url
-                  createdAt
-                  updatedAt
-                  closedAt
+                  ${attr.project}
                 }
               }
             }
           }
           milestone {
-            id
-            url
-            title
-            state
-            number
-            dueOn
+            ${attr.milestone}
           }
           assignees(first: 10) {
             nodes {
-              id
-              login
-              name
-              url
-              email
-              avatarUrl
-              company
-              createdAt
-              updatedAt
+              ${attr.user}
             }
           }
           labels(first: 10) {
             nodes {
-              color
-              id
-              name
-              url
+              ${attr.label}
             }
           }
         }
       }
     }
     pageInfo {
-      endCursor
-      hasNextPage
+      ${attr.page_info}
     }
   }
 }`;

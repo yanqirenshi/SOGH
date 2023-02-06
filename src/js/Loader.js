@@ -1090,4 +1090,19 @@ export default class Loader {
 
     //     getter();
     // }
+    /** **************************************************************** *
+     * Search
+     * **************************************************************** */
+    submitQuery (query, cb_finished) {
+        if (!this.api.v4._token || !query) {
+            cb_finished([]);
+            return;
+        }
+
+        const api = this.api.v4;
+
+        const base_query = query;
+
+        api.fetch(query, (results)=> cb_finished(results));
+    }
 }
