@@ -994,6 +994,34 @@ export default class Loader {
 
         getter();
     }
+    deleteComment (id, client_mutation_id, cb_success, cb_error) {
+        if (!this.api.v4._token || !id)
+            cb_success(null);
+
+        const api = this.api.v4;
+
+        const query = query.deleteIssueComment
+              .replace('@id', id)
+              .replace('@clientMutationId', client_mutation_id);
+
+        const getter = (endCursor) => {
+            api.fetch(
+                query,
+                (results) => {
+                    if (!cb_success)
+                        return;
+
+                    cb_success({
+                        id: id,
+                        client_mutation_id: client_mutation_id,
+                    });
+                },
+                (error)   => { if (cb_error)   cb_error(error); },
+            );
+        };
+
+        getter();
+    }
     /** **************************************************************** *
      * Search
      * **************************************************************** */

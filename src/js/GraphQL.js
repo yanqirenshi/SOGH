@@ -4,6 +4,7 @@ import addComment from './graphql/addComment.js';
 import assignees_by_repository from './graphql/assignees_by_repository.js';
 import close_issue from './graphql/close_issue.js';
 import create_issue from './graphql/create_issue.js';
+import deleteIssueComment from './graphql/deleteIssueComment.js';
 import issue_by_issue_id from './graphql/issue_by_issue_id.js';
 import issue_comments_by_issue_id from './graphql/issue_comments_by_issue_id.js';
 import issues_by_milestone from './graphql/issues_by_milestone.js';
@@ -32,6 +33,7 @@ export {
     assignees_by_repository,
     close_issue,
     create_issue,
+    deleteIssueComment,
     issue_by_issue_id,
     issue_comments_by_issue_id,
     issues_by_milestone,
