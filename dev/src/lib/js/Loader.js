@@ -689,6 +689,25 @@ export default class Loader {
 
         getter();
     }
+    updateIssue (update_issue_input, cb_success, cb_error) {
+        if (!this.api.v4._token || !update_issue_input)
+            cb_success(null);
+
+        const api = this.api.v4;
+
+        const q = query.update_issue_body
+              .replace('@issue-data', this.makeGraphQLData(update_issue_input));
+
+        const getter = (endCursor) => {
+            api.fetch(
+                q,
+                (results) => { if (cb_success) cb_success(results); },
+                (error)   => { if (cb_error)   cb_error(error); },
+            );
+        };
+
+        getter();
+    }
     updateIssueBody (issue, cb_success, cb_error) {
         if (!this.api.v4._token || !issue)
             cb_success(null);
