@@ -1019,13 +1019,11 @@ export default class Loader {
 
         const api = this.api.v4;
 
-        const query = query.deleteIssueComment
-              .replace('@id', id)
-              .replace('@clientMutationId', client_mutation_id);
-
         const getter = (endCursor) => {
             api.fetch(
-                query,
+                query.deleteIssueComment
+                    .replace('@id', id)
+                    .replace('@clientMutationId', client_mutation_id),
                 (results) => {
                     if (!cb_success)
                         return;
