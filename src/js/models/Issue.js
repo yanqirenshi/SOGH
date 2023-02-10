@@ -283,6 +283,35 @@ export default class Issue extends GraphQLNode {
             return ht;
         }, { total: 0, details: [] });
     }
+    mekePointResultLine (parson, date, point) {
+        return `$Point.Result ${parson} ${date} ${point}`;
+    }
+    addPointResult (parson, date, point) {
+        const body = this.body();
+
+        const regex = new RegExp(`\\$Point\.Result\\s+${parson}\\s+${date}\\s+(\\d+)`);
+
+        const ret = body.match(regex);
+
+        if (ret) {
+            // update
+            const new_point = ret[1] * 1 + point;
+
+            const new_point_line = this.mekePointResultLine(parson, date, new_point);
+
+            const new_body = body.replace(regex, new_point_line);
+
+            this.body(new_body);
+        } else {
+            // add
+            const new_point_line = this.mekePointResultLine(parson, date, point);
+            const new_body = body.replace(regex, '\n' + new_point_line);
+
+            this.body(new_body);
+        }
+
+        this.addAnotetionValueNew(this.core());
+    }
 
     /** ****************************************************************
      *  Projects / Columns
