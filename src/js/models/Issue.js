@@ -295,7 +295,7 @@ export default class Issue extends GraphQLNode {
 
         if (ret) {
             // update
-            const new_point = ret[1] * 1 + point;
+            const new_point = ret[1] * 1 + point * 1;
 
             const new_point_line = this.mekePointResultLine(parson, date, new_point);
 
@@ -305,7 +305,7 @@ export default class Issue extends GraphQLNode {
         } else {
             // add
             const new_point_line = this.mekePointResultLine(parson, date, point);
-            const new_body = body.replace(regex, '\n' + new_point_line);
+            const new_body = body + '\n' + new_point_line;
 
             this.body(new_body);
         }
