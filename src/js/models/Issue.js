@@ -60,7 +60,10 @@ export default class Issue extends GraphQLNode {
 
         return this._core.projectCards.nodes;
     }
-    assignees () {
+    assignees (v) {
+        if (arguments.length===1)
+            this._core.assignees = Array.isArray(v) ? v : [];
+
         if (!this._core.assignees)
             return [];
 
@@ -189,6 +192,7 @@ export default class Issue extends GraphQLNode {
         return this.getDueDateFromBody(body);
     }
     nextActionDate (v) {
+
         const body = this.body();
 
         if (arguments.length===0 || this.nextActionDate()===v)
