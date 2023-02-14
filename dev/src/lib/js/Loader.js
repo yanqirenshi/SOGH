@@ -131,7 +131,6 @@ export default class Loader {
         getter();
     }
     getIssuesOpenByRepository (repository, cb, cb2) {
-        console.warn('このメソッドは利用しないでください。\nGtd.getIssuesOpenByRepository の内容で置きかえる予定です。');
         if (!this.api.v4._token || !repository)
             cb([]);
 
@@ -140,12 +139,15 @@ export default class Loader {
 
         const api = this.api.v4;
 
+        console.log('1-------------------------------');
+        console.log(repository);
         const base_query = query.issues_open_by_repository
               .replace('@owner', repository.owner().login)
               .replace('@name', repository.name());
 
         let issues = [];
         const getter = (endCursor) => {
+            console.log('2-------------------------------');
             let query = this.ensureEndCursor(base_query, endCursor);
 
             api.fetch(query, (results) => {
@@ -159,9 +161,12 @@ export default class Loader {
                     issues.push(obj);
                 }
 
+                console.log('3-------------------------------');
                 if (cb2)
                     cb2(tmp, page_info);
 
+                console.log('4-------------------------------');
+                console.log(page_info.hasNextPage);
                 if (page_info.hasNextPage)
                     getter(page_info.endCursor);
                 else {
