@@ -130,7 +130,7 @@ export default class Loader {
 
         getter();
     }
-    getIssuesOpenByRepository (repository, cb, cb2) {
+    getIssuesOpenByRepository (repository, cb, cb2, cb_error) {
         if (!this.api.v4._token || !repository)
             cb([]);
 
@@ -139,49 +139,44 @@ export default class Loader {
 
         const api = this.api.v4;
 
-        console.log('1-------------------------------');
-        console.log(repository);
         const base_query = query.issues_open_by_repository
               .replace('@owner', repository.owner().login)
               .replace('@name', repository.name());
-        console.log(base_query);
 
         let issues = [];
         const getter = (endCursor) => {
-            console.log('2-------------------------------');
-            console.log(endCursor);
             let query = this.ensureEndCursor(base_query, endCursor);
-            console.log(query);
 
-            api.fetch(query, (results) => {
-                console.log('3-------------------------------');
-                const data = results.data.repository.issues;
-                const page_info = data.pageInfo;
+            api.fetch(
+                query,
+                (results) => {
+                    const data = results.data.repository.issues;
+                    const page_info = data.pageInfo;
 
-                console.log('4-------------------------------');
-                const tmp = [];
-                for(const issue of data.nodes) {
-                    const obj = new model.Issue(issue);
-                    tmp.push(obj);
-                    issues.push(obj);
-                }
+                    const tmp = [];
+                    for(const issue of data.nodes) {
+                        const obj = new model.Issue(issue);
+                        tmp.push(obj);
+                        issues.push(obj);
+                    }
 
-                console.log('5-------------------------------');
-                if (cb2)
-                    cb2(tmp, page_info);
+                    if (cb2)
+                        cb2(tmp, page_info);
 
-                console.log('6-------------------------------');
-                console.log(page_info.hasNextPage);
-                if (page_info.hasNextPage)
-                    getter(page_info.endCursor);
-                else {
-                    this._data.viwer.issues.fetch.end = new Date();
+                    if (page_info.hasNextPage)
+                        getter(page_info.endCursor);
+                    else {
+                        this._data.viwer.issues.fetch.end = new Date();
 
-                    this._data.viwer.issues.pool.list = issues;
+                        this._data.viwer.issues.pool.list = issues;
 
-                    cb(issues);
-                }
-            });
+                        cb(issues);
+                    }
+                },
+                (error) => {
+                    if (cb_error)
+                        cb_error(error);
+                });
         };
 
         getter();
