@@ -144,16 +144,21 @@ export default class Loader {
         const base_query = query.issues_open_by_repository
               .replace('@owner', repository.owner().login)
               .replace('@name', repository.name());
+        console.log(base_query);
 
         let issues = [];
         const getter = (endCursor) => {
             console.log('2-------------------------------');
+            console.log(endCursor);
             let query = this.ensureEndCursor(base_query, endCursor);
+            console.log(query);
 
             api.fetch(query, (results) => {
+                console.log('3-------------------------------');
                 const data = results.data.repository.issues;
                 const page_info = data.pageInfo;
 
+                console.log('4-------------------------------');
                 const tmp = [];
                 for(const issue of data.nodes) {
                     const obj = new model.Issue(issue);
@@ -161,11 +166,11 @@ export default class Loader {
                     issues.push(obj);
                 }
 
-                console.log('3-------------------------------');
+                console.log('5-------------------------------');
                 if (cb2)
                     cb2(tmp, page_info);
 
-                console.log('4-------------------------------');
+                console.log('6-------------------------------');
                 console.log(page_info.hasNextPage);
                 if (page_info.hasNextPage)
                     getter(page_info.endCursor);
