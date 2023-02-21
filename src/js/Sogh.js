@@ -64,14 +64,19 @@ export default class Sogh extends Loader {
                 labels:     {ht:{}, list:[]},
             };
 
-            const active = this._data.active;
-            this.getMilestonesByRepository(repo, (l)=> active.milestones = POOL2.list2Pool(l));
-            this.getProjectsByRepository(repo,   (l)=> active.projects   = POOL2.list2Pool(l));
-            this.getAssigneesByRepository(repo,  (l)=> active.assignees  = POOL2.list2Pool(l));
-            this.getLabelsByRepository(repo,     (l)=> active.labels     = POOL2.list2Pool(l));
+            // const active = this._data.active;
+            // this.getMilestonesByRepository(repo, (l)=> active.milestones = POOL2.list2Pool(l));
+            // this.getProjectsByRepository(repo,   (l)=> active.projects   = POOL2.list2Pool(l));
+            // this.getAssigneesByRepository(repo,  (l)=> active.assignees  = POOL2.list2Pool(l));
+            // this.getLabelsByRepository(repo,     (l)=> active.labels     = POOL2.list2Pool(l));
         }
 
         return this._data.active.repository;
+    }
+    setActiveRepositoryData (key, l) {
+        const active = this._data.active;
+
+        active[key] = POOL2.list2Pool(l);
     }
     // from core
     issues2projects (issues) {
