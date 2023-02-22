@@ -322,10 +322,10 @@ export default class Issue extends GraphQLNode {
     getColumnFirst () {
         const cards = this.projectCards();
 
-        if (!cards)
+        if (!cards || !cards[0])
             return null;
 
-        return cards[0] ? cards[0].column : null;
+        return cards.find(c=> c.column) || null;
     }
     getFirstColumnProject () {
         const column = this.getColumnFirst();
@@ -350,7 +350,14 @@ export default class Issue extends GraphQLNode {
         if (!cards)
             return null;
 
-        return cards.map(d=> d.column.project);
+        return cards.reduce((list,d)=> {
+            const column = d.column;
+
+            if (column)
+                list.push(column.project);
+
+            return list;
+        }, []);
     }
     projectIds () {
         return this.projects().map(d=>d.id);
