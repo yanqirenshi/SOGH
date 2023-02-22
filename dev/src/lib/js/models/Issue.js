@@ -325,7 +325,9 @@ export default class Issue extends GraphQLNode {
         if (!cards || !cards[0])
             return null;
 
-        return cards.find(c=> c.column) || null;
+        const card = cards.find(c=> c.column) || null;
+
+        return (card && card.column) ? card.column : null;
     }
     getFirstColumnProject () {
         const column = this.getColumnFirst();
@@ -350,8 +352,8 @@ export default class Issue extends GraphQLNode {
         if (!cards)
             return null;
 
-        return cards.reduce((list,d)=> {
-            const column = d.column;
+        return cards.reduce((list, card)=> {
+            const column = card.column;
 
             if (column)
                 list.push(column.project);
