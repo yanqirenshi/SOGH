@@ -345,7 +345,12 @@ export default class Issue extends GraphQLNode {
         return m ? m.id : null;
     }
     projects () {
-        return this.projectCards().map(d=> d.column.project);
+        const cards = this.projectCards();
+
+        if (!cards)
+            return null;
+
+        return cards.map(d=> d.column.project);
     }
     projectIds () {
         return this.projects().map(d=>d.id);
