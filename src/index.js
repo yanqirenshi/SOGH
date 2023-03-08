@@ -19,6 +19,7 @@ import Assignee from './js/models/Assignee.js';
 import Card from './js/models/Card.js';
 import Column from './js/models/Column.js';
 import Issue from './js/models/Issue.js';
+import IssueComment from './js/models/IssueComment.js';
 import Label from './js/models/Label.js';
 import Milestone from './js/models/Milestone.js';
 import Project from './js/models/Project.js';
@@ -49,6 +50,7 @@ export {
     Card,
     Column,
     Issue,
+    IssueComment,
     Label,
     Milestone,
     Project,
