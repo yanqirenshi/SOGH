@@ -57,14 +57,20 @@ export default class Loader {
         return v;
     }
     makeGraphQLData (data) {
-        const x = Object.keys(data).map(key => {
+        const keys = Object.keys(data);
+
+        const x = keys.map(key => {
             const val = data[key];
 
-            if (val===null
-                || (Array.isArray(val) && val.length===0))
+            if (val===null)
                 return null;
 
-            return key + ': ' + this.makeGraphQLDataItem(data[key]);
+            if ((Array.isArray(val) && val.length===0))
+                return '[]';
+
+            const value = this.makeGraphQLDataItem(data[key]);
+
+            return key + ': ' + value;
         });
 
         return '{ ' + x.filter(d=>d!==null).join(', ') + ' }';
