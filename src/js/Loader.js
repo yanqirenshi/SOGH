@@ -51,8 +51,12 @@ export default class Loader {
         if ("string"===(typeof v))
             return JSON.stringify(v);
 
-        if (Array.isArray(v))
+        if (Array.isArray(v)) {
+            if (v.length===0)
+                return '[]';
+
             return '[' + v.map(d => this.makeGraphQLDataItem(d)).join(', ') + ']';
+        }
 
         return v;
     }
@@ -65,10 +69,7 @@ export default class Loader {
             if (val===null)
                 return null;
 
-            if ((Array.isArray(val) && val.length===0))
-                return '[]';
-
-            const value = this.makeGraphQLDataItem(data[key]);
+            const value = this.makeGraphQLDataItem(val);
 
             return key + ': ' + value;
         });
