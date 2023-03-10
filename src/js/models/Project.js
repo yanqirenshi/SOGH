@@ -153,20 +153,23 @@ export default class Project extends GraphQLNode {
             if (!ret)
                 return { start: null, end: null };
 
-            return { start: moment(ret[1]), end: moment(ret[2]) };
+            const start = ret[1].match(/\d+-\d+-\d+/) ? moment(ret[1]) : null;
+            const end   = ret[2].match(/\d+-\d+-\d+/) ? moment(ret[2]) : null;
+
+            return { start: start, end: end.isValid() ? end : null };
         };
 
         const scheduleResult = (p) => {
-            const ret = /.*@Result:(\s+\d+-\d+-\d+),\s+(\d+-\d+-\d+).*/.exec(p.body)
-                  || /.*@Result:(\s+\d+-\d+-\d+)\s+(\d+-\d+-\d+).*/.exec(p.body)
-                  || /.*@Result:(\s+\d+-\d+-\d+),\s+(.+).*/.exec(p.body)
-                  || /.*@Result:(\s+\d+-\d+-\d+)\s+(.+).*/.exec(p.body);
+            const ret = /.*@Result:\s+(\d+-\d+-\d+),\s+(\d+-\d+-\d+).*/.exec(p.body)
+                  || /.*@Result:\s+(\d+-\d+-\d+)\s+(\d+-\d+-\d+).*/.exec(p.body)
+                  || /.*@Result:\s+(\d+-\d+-\d+),\s+(.+).*/.exec(p.body)
+                  || /.*@Result:\s+(\d+-\d+-\d+)\s+(.+).*/.exec(p.body);
 
             if (!ret)
                 return { start: null, end: null };
 
-            const start = moment(ret[1]);
-            const end   = moment(ret[2]);
+            const start = ret[1].match(/\d+-\d+-\d+/) ? moment(ret[1]) : null;
+            const end   = ret[2].match(/\d+-\d+-\d+/) ? moment(ret[2]) : null;
 
             return { start: start, end: end.isValid() ? end : null };
         };
