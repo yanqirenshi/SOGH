@@ -146,6 +146,18 @@ export default class Project extends GraphQLNode {
             return ret ? ret[1] : null;
         };
 
+        const val2moment = (val)=> {
+            if (!val)
+                return null;
+
+            if (!val.match(/\d+-\d+-\d+/))
+                return null;
+
+            const m = moment(val);
+
+            return m.isValid() ? m : null;
+        };
+
         const schedulePlan = (p) => {
             const ret = /.*@Plan:(\s+\d+-\d+-\d+),\s+(\d+-\d+-\d+).*/.exec(p.body)
                   || /.*@Plan:(\s+\d+-\d+-\d+)\s+(\d+-\d+-\d+).*/.exec(p.body);
@@ -153,10 +165,7 @@ export default class Project extends GraphQLNode {
             if (!ret)
                 return { start: null, end: null };
 
-            const start = ret[1].match(/\d+-\d+-\d+/) ? moment(ret[1]) : null;
-            const end   = ret[2].match(/\d+-\d+-\d+/) ? moment(ret[2]) : null;
-
-            return { start: start, end: end.isValid() ? end : null };
+            return { start: val2moment(ret[1]), end: val2moment(ret[2]) };
         };
 
         const scheduleResult = (p) => {
@@ -168,10 +177,7 @@ export default class Project extends GraphQLNode {
             if (!ret)
                 return { start: null, end: null };
 
-            const start = ret[1].match(/\d+-\d+-\d+/) ? moment(ret[1]) : null;
-            const end   = ret[2].match(/\d+-\d+-\d+/) ? moment(ret[2]) : null;
-
-            return { start: start, end: end.isValid() ? end : null };
+            return { start: val2moment(ret[1]), end: val2moment(ret[2]) };
         };
 
         const type = (p) => {
