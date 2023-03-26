@@ -1,4 +1,5 @@
 import GraphQLNode from '../GraphQLNode.js';
+import moment from 'moment';
 
 // id
 // number
@@ -36,5 +37,43 @@ export default class Milestone extends GraphQLNode {
     }
     dueOn () {
         return this._core.dueOn || null;
+    }
+    term () {
+        const regex = /^.+(\d{4}-\d{2}-\d{2})\s+〜\s+(\d{4}-\d{2}-\d{2})$/;
+
+        const ret = this.title().trim().match(regex);
+
+        const from = this.str2moment(ret[1]);
+        const to = this.str2moment(ret[2]);
+
+        if (!from || !to || from.isBefore(to))
+            return null;
+
+        return {
+            from: from.format('YYYY-MM-DD'),
+            to: to.format('YYYY-MM-DD'),
+        };
+    }
+    isInTerm (str) {
+        const term = this.term();
+
+        if (!term)
+            return false;
+
+        const m = this.str2moment(str);
+
+        if (!m)
+            return false;
+
+        return m.isSameOrAfter(term.from) && m.isSameOrBefore(term.to);
+    }
+    str2moment (str) {
+        if (!str) return null;
+
+        const m = moment(str);
+
+        if (!m.isValid()) return null;
+
+        return m;
     }
 }
