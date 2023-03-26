@@ -46,7 +46,7 @@ export default class Milestone extends GraphQLNode {
         const from = this.str2moment(ret[1]);
         const to = this.str2moment(ret[2]);
 
-        if (!from || !to || from.isBefore(to))
+        if (!from || !to || to.isBefore(from))
             return null;
 
         return {
