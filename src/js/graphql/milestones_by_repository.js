@@ -5,6 +5,12 @@ const query = `{
     milestones(${attr.pagenation}, states: OPEN) {
       nodes {
         ${attr.milestone}
+        repository {
+          ${attr.repository}
+          owner {
+            ${attr.user}
+          }
+        }
       }
       pageInfo {
         endCursor

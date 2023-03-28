@@ -4,6 +4,12 @@ const query = `{
   node(id: "@id") {
     ... on Milestone {
       ${attr.milestone}
+      repository {
+        ${attr.repository}
+        owner {
+          ${attr.user}
+        }
+      }
     }
   }
 }
