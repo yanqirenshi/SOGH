@@ -7,7 +7,7 @@ const query = `{
       repository {
         ${attr.repository}
         owner {
-          ${attr.user}
+          ${attr.owner}
         }
       }
     }

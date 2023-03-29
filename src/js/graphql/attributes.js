@@ -169,3 +169,10 @@ export const page_info = `
 hasNextPage
 endCursor
 `;
+
+export const owner = `
+id
+login
+avatarUrl
+url
+`;
