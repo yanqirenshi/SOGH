@@ -446,6 +446,29 @@ export default class Loader {
 
         getter();
     }
+    getMilestonesByRepositoryAndNumber (owner, repo_name, number, cb) {
+        if (!this.api.v4._token || !owner || !repo_name || !number)
+            cb(null);
+
+        const api = this.api.v4;
+
+        const base_query = query.milestone_by_repository_and_number
+              .replace('@milestone_number', number)
+              .replace('@name', repo_name)
+              .replace('@owner', owner);
+
+        const getter = (endCursor) => {
+            let query = this.ensureEndCursor(base_query, endCursor);
+
+            api.fetch(query, (results) => {
+                cb(new model.Milestone(
+                    {...results.data.repository.milestone}
+                ));
+            });
+        };
+
+        getter();
+    }
     getMilestonesByRepository (repository, cb) {
         if (!this.api.v4._token)
             cb([]);

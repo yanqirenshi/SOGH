@@ -27,6 +27,7 @@ import repository from './graphql/repository.js';
 import search_issues from './graphql/search_issues.js';
 import update_issue_body from './graphql/update_issue_body.js';
 import viwer from './graphql/viwer.js';
+export {default as milestone_by_repository_and_number} from './graphql/milestone_by_repository_and_number.js';
 
 export {
     addComment,

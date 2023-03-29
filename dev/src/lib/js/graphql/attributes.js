@@ -53,6 +53,7 @@ description
 createdAt
 updatedAt
 closedAt
+progressPercentage
 `;
 
 export const project = `
