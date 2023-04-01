@@ -76,7 +76,7 @@ export default class Loader {
 
         return '{ ' + x.filter(d=>d!==null).join(', ') + ' }';
     }
-    getIssuesByMilestone (milestone, cb) {
+    getIssuesByMilestone (milestone, cb_finished, cb_fetched, cb_error) {
         if (!this.api.v4._token)
             cb([]);
 
@@ -91,18 +91,25 @@ export default class Loader {
         const getter = (endCursor) => {
             let query = this.ensureEndCursor(base_query, endCursor);
 
-            api.fetch(query, (results) => {
-                const data = results.data.node.issues;
-                const page_info = data.pageInfo;
+            api.fetch(
+                query,
+                (results) => {
+                    const data = results.data.node.issues;
+                    const page_info = data.pageInfo;
 
-                for(const issue of data.nodes)
-                    issues.push(new model.Issue(issue));
+                    for(const issue of data.nodes)
+                        issues.push(new model.Issue(issue));
 
-                if (page_info.hasNextPage)
-                    getter(page_info.endCursor);
-                else
-                    cb(issues);
-            });
+                    if (cb_fetched)
+                        cb_fetched(issues);
+
+                    if (page_info.hasNextPage)
+                        getter(page_info.endCursor);
+                    else
+                        cb_finished(issues);
+                },
+                (error)=> cb_error && cb_error(error),
+            );
         };
 
         getter();
