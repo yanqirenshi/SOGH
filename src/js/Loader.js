@@ -78,7 +78,7 @@ export default class Loader {
     }
     getIssuesByMilestone (milestone, cb_finished, cb_fetched, cb_error) {
         if (!this.api.v4._token)
-            cb([]);
+            cb_finished([]);
 
         if (!milestone) return;
 
@@ -97,11 +97,16 @@ export default class Loader {
                     const data = results.data.node.issues;
                     const page_info = data.pageInfo;
 
-                    for(const issue of data.nodes)
-                        issues.push(new model.Issue(issue));
+                    const issues_tmp = [];
+                    for(const node of data.nodes) {
+                        const issue = new model.Issue(node);
+
+                        issues.push(issue);
+                        issues_tmp.push(issue);
+                    }
 
                     if (cb_fetched)
-                        cb_fetched(issues);
+                        cb_fetched(issues_tmp, issues);
 
                     if (page_info.hasNextPage)
                         getter(page_info.endCursor);
