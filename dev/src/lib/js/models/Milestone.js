@@ -39,7 +39,7 @@ export default class Milestone extends GraphQLNode {
         return this._core.dueOn || null;
     }
     term () {
-        const regex = /^.+(\d{4}-\d{2}-\d{2})\s+〜\s+(\d{4}-\d{2}-\d{2})$/;
+        const regex = /^.*(\d{4}-\d{2}-\d{2})\s+〜\s+(\d{4}-\d{2}-\d{2})$/;
 
         const ret = this.title().trim().match(regex);
 
