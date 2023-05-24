@@ -2,7 +2,10 @@ export default class GraphQLNode {
     constructor (data) {
         this._core = data;
     }
-    core () {
+    core (v) {
+        if (arguments.length===1)
+            this._core = v;
+
         return this._core;
     }
     id () {
