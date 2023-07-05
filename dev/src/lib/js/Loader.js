@@ -1112,33 +1112,42 @@ export default class Loader {
         const getter = (endCursor) => {
             let query = this.ensureEndCursor(base_query, endCursor);
 
-            api.fetch(query, (results) => {
-                if ('errors' in results) {
-                    cb_error({
-                        errors: results.errors,
-                        issues: [],
-                    });
-                    return;
-                }
+            api.fetch(
+                query,
+                (results) => {
+                    if ('errors' in results) {
+                        cb_error({
+                            errors: results.errors,
+                            issues: [],
+                        });
+                        return;
+                    }
 
-                const data = results.data.search.edges;
-                const page_info = results.data.search.pageInfo;
+                    const data = results.data.search.edges;
+                    const page_info = results.data.search.pageInfo;
 
-                const new_issues = data.map(d=> new model.Issue(d.node));
+                    const new_issues = data.map(d=> new model.Issue(d.node));
 
-                if (cb_success_onetime)
-                    cb_success_onetime(new_issues);
+                    if (cb_success_onetime)
+                        cb_success_onetime(new_issues);
 
-                issues = issues.concat(new_issues);
+                    issues = issues.concat(new_issues);
 
-                if (page_info.hasNextPage) {
-                    // 次のデータが存在する場合
-                    getter(page_info.endCursor);
-                } else {
-                    // 終り
-                    cb_success_all(issues);
-                }
-            });
+                    if (page_info.hasNextPage) {
+                        // 次のデータが存在する場合
+                        getter(page_info.endCursor);
+                    } else {
+                        // 終り
+                        cb_success_all(issues);
+                    }
+                },
+                (error) => {
+                    if (cb_error)
+                        cb_error({
+                            errors: error,
+                            issues: [],
+                        });
+                });
         };
 
         getter();
