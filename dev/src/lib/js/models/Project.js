@@ -21,6 +21,9 @@ export default class Project extends GraphQLNode {
         this._purchase = null;
         this._phase = null;
 
+        this._apply = null;
+        this._timing = null;
+
         this.addAnotetionValue(data);
 
         this._issues = [];
@@ -116,6 +119,12 @@ export default class Project extends GraphQLNode {
     release () {
         return this._release || null;
     }
+    apply () {
+        return this._apply || null;
+    }
+    timing () {
+        return this._timing || null;
+    }
     addAnotetionValue (project) {
         const priority = (p) => {
             const ret = /.*@Priority:\s+(\S).*/.exec(p.body);
@@ -144,40 +153,6 @@ export default class Project extends GraphQLNode {
             const ret = /.*@assignee:\s+(\S+).*/.exec(p.body);
 
             return ret ? ret[1] : null;
-        };
-
-        const val2moment = (val)=> {
-            if (!val)
-                return null;
-
-            if (!val.match(/\d+-\d+-\d+/))
-                return null;
-
-            const m = moment(val);
-
-            return m.isValid() ? m : null;
-        };
-
-        const schedulePlan = (p) => {
-            const ret = /.*@Plan:(\s+\d+-\d+-\d+),\s+(\d+-\d+-\d+).*/.exec(p.body)
-                  || /.*@Plan:(\s+\d+-\d+-\d+)\s+(\d+-\d+-\d+).*/.exec(p.body);
-
-            if (!ret)
-                return { start: null, end: null };
-
-            return { start: val2moment(ret[1]), end: val2moment(ret[2]) };
-        };
-
-        const scheduleResult = (p) => {
-            const ret = /.*@Result:\s+(\d+-\d+-\d+),\s+(\d+-\d+-\d+).*/.exec(p.body)
-                  || /.*@Result:\s+(\d+-\d+-\d+)\s+(\d+-\d+-\d+).*/.exec(p.body)
-                  || /.*@Result:\s+(\d+-\d+-\d+),\s+(.+).*/.exec(p.body)
-                  || /.*@Result:\s+(\d+-\d+-\d+)\s+(.+).*/.exec(p.body);
-
-            if (!ret)
-                return { start: null, end: null };
-
-            return { start: val2moment(ret[1]), end: val2moment(ret[2]) };
         };
 
         const type = (p) => {
@@ -238,8 +213,8 @@ export default class Project extends GraphQLNode {
         this._priority = priority(project);
         this._assignee = assignee(project);
 
-        this._plan = schedulePlan(project);
-        this._result = scheduleResult(project);
+        this._plan = this.anotetionValueSchedulePlan(project);
+        this._result = this.anotetionValueScheduleResult(project);
 
         this._release = release(project);
         this._scope = scope(project);
@@ -250,7 +225,57 @@ export default class Project extends GraphQLNode {
         this._purchase = purchase(project);
         this._phase = phase(project);
 
+        this._apply = this.anotetionValueApply(project);
+        this._timing = this.anotetionValueTiming (project);
+
         return project;
+    }
+    val2moment (val) {
+        if (!val)
+            return null;
+
+        if (!val.match(/\d+-\d+-\d+/))
+            return null;
+
+        const m = moment(val);
+
+        return m.isValid() ? m : null;
+    }
+    anotetionValueSchedulePlan (project) {
+        const ret = /.*@Plan:(\s+\d+-\d+-\d+),\s+(\d+-\d+-\d+).*/.exec(project.body)
+              || /.*@Plan:(\s+\d+-\d+-\d+)\s+(\d+-\d+-\d+).*/.exec(project.body);
+
+        if (!ret)
+            return { start: null, end: null };
+
+        return {
+            start: this.val2moment(ret[1]),
+            end:   this.val2moment(ret[2]),
+        };
+    }
+    anotetionValueScheduleResult (project) {
+        const ret = /.*@Result:\s+(\d+-\d+-\d+),\s+(\d+-\d+-\d+).*/.exec(project.body)
+              || /.*@Result:\s+(\d+-\d+-\d+)\s+(\d+-\d+-\d+).*/.exec(project.body)
+              || /.*@Result:\s+(\d+-\d+-\d+),\s+(.+).*/.exec(project.body)
+              || /.*@Result:\s+(\d+-\d+-\d+)\s+(.+).*/.exec(project.body);
+
+        if (!ret)
+            return { start: null, end: null };
+
+        return {
+            start: this.val2moment(ret[1]),
+            end:   this.val2moment(ret[2]),
+        };
+    }
+    anotetionValueApply (project) {
+        const ret = /.*@Apply:\s+(\S+).*/.exec(project.body);
+
+        return ret ? ret[1] : null;
+    }
+    anotetionValueTiming (project) {
+        const ret = /.*@Timing:\s+(\S+).*/.exec(project.body);
+
+        return ret ? ret[1] : null;
     }
     colorByPriority () {
         if (this.closed())
