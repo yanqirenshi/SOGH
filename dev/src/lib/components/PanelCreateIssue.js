@@ -52,8 +52,12 @@ const style = {
 
 export default function PanelCreateIssue (props) {
     const data = props.source;
-    const repo = props.sogh.active();
     const callback = props.callback;
+    const repo = props.sogh.active();
+    const projects = props.projects;
+    const labels = props.labels;
+    const assignees = props.assignees;
+    const milestones = props.milestones;
 
     const change = (e) => {
         const new_value = e.target.value;
@@ -76,7 +80,9 @@ export default function PanelCreateIssue (props) {
 
           <div style={style.body}>
             <div style={style.body.projects}>
-              <Projects source={data} projects={repo.projects} callback={callback} />
+              <Projects source={data}
+                        projects={projects || repo.projects}
+                        callback={callback} />
             </div>
 
             <div style={style.body.description}>
@@ -84,16 +90,22 @@ export default function PanelCreateIssue (props) {
             </div>
 
             <div style={style.body.labels}>
-              <Labels source={data} labels={repo.labels} callback={callback} />
+              <Labels source={data}
+                      labels={labels || repo.labels}
+                      callback={callback} />
             </div>
           </div>
 
           <div style={style.tail}>
             <div style={style.tail.assignees}>
-              <Assignees source={data} assignees={repo.assignees} callback={callback} />
+              <Assignees source={data}
+                         assignees={assignees || repo.assignees}
+                         callback={callback} />
             </div>
             <div style={style.tail.milestones}>
-              <Milestones source={data} milestones={repo.milestones} callback={callback} />
+              <Milestones source={data}
+                          milestones={milestones || repo.milestones}
+                          callback={callback} />
             </div>
           </div>
         </div>
